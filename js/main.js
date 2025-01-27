@@ -582,9 +582,9 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
         // ------------
 
 // --------------
-        const newX = camera.scrollX + 20; // Tọa độ map dựa trên góc trái màn hình
-        const newY = camera.scrollY + camera.height - 30; // Góc dưới màn hình
-        const newX2 = camera.scrollX + camera.width - 20
+        const newX = camera.scrollX + 55; // Tọa độ map dựa trên góc trái màn hình
+        const newY = camera.scrollY + camera.height - 55; // Góc dưới màn hình
+        const newX2 = camera.scrollX + camera.width - 55
         minimap.setPosition(-200, -200);
         gameObj.map.player.setPosition(newX, newY);
         gameObj.map.monsterPresent.setPosition(newX2, newY);
@@ -601,7 +601,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
         document.querySelector(".overlayBl").classList.toggle("hiddennn")
         joinBattle()
-        document.getElementById("battle-ui").style.display = "block"
+        // document.getElementById("battle-ui").style.display = "block"
         updateInfor()
         setTimeout(()=>{
             startGame()
