@@ -563,7 +563,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 this.cameras.main.startFollow(gameObj.map.player, true, 0.1, 0.1)
             }, 3000)
         } else {
-           
+            gameObj.map.monsterPresent = gameObj.map.monsters[0]
 
             document.getElementById("toggle-menu").classList.toggle("hiddennn")
     
