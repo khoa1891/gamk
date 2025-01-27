@@ -1912,13 +1912,11 @@ function khoi(a) {
     }
 }
 function endBattle() {
-    document.getElementById("skill-btn").style.display = 'none'
-    document.getElementById("surrender-btn").style.display = 'none'
-    document.getElementById("board-Time").style.display = 'none'
-    document.getElementById("board").style.display = 'none'
-    document.querySelectorAll(".game-containerBattle .stats").forEach(element => {
-        element.style.display = 'none';
-    });
+    document.querySelector(".containerBoardGame").classList.toggle("hiddennn")
+    document.getElementById("board").innerHTML = ''
+    document.getElementById("turn-info1").style.visibility = 'hidden'
+    document.getElementById("turn-info2").style.visibility = 'hidden'
+    document.getElementById("timer").style.visibility = 'hidden'
 }
 // endBattle()
 const skillsButton = document.getElementById('skill-btn');
