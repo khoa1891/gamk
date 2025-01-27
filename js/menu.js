@@ -3,7 +3,9 @@
 //     document.getElementById("menu").classList.remove("hidden")
 // }
 let overlayB = 0, overlayBlack = document.querySelector(".overlayBlack")
+let pp = 0
 function toggleMenuBoard() {
+  if (pp == 0) {iii(); pp++}
     document.querySelector(".menuBoard").classList.toggle("hiddennn")
     overlayBlack.classList.toggle("hiddennn")
 }
