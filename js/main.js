@@ -79,71 +79,71 @@ function preload() {
     this.load.image('hat', 'https://examples.phaser.io/assets/sprites/hat.png');
     this.load.image('shirt', 'https://examples.phaser.io/assets/sprites/shirt.png');
     // Tải hình ảnh cho nhân vật, quái vật, ghế và vật thể
-    this.load.image('player', '../img/blank.png');
+    this.load.image('player', './img/blank.png');
     this.load.image('monster', 'https://labs.phaser.io/assets/sprites/monkey.png');
     this.load.image('chair', 'https://labs.phaser.io/assets/sprites/chair.png');
     this.load.image('obstacle', 'https://labs.phaser.io/assets/sprites/block.png');  // Chướng ngại vật tĩnh
 
 
     // this.load.image('frame1', 'path/to/frame1.png');
-    this.load.image('frame1', '../img/ha11.png');
-    this.load.image('frame2', '../img/ha22.png');
-    this.load.image('frame3', '../img/ha33.png');
+    this.load.image('frame1', './img/ha11.png');
+    this.load.image('frame2', './img/ha22.png');
+    this.load.image('frame3', './img/ha33.png');
     // trang phục nam
-    this.load.image('frame4', '../img/ha44.png');
-    this.load.image('frame5', '../img/ha55.png');
-    this.load.image('frame6', '../img/ha66.png');
+    this.load.image('frame4', './img/ha44.png');
+    this.load.image('frame5', './img/ha55.png');
+    this.load.image('frame6', './img/ha66.png');
 
 
     // nũ
     // this.load.image('frame1', 'path/to/frame1.png');
-    this.load.image('frame7', '../img/ha140.png');
-    this.load.image('frame8', '../img/ha150.png');
-    this.load.image('frame9', '../img/ha160.png');
+    this.load.image('frame7', './img/ha140.png');
+    this.load.image('frame8', './img/ha150.png');
+    this.load.image('frame9', './img/ha160.png');
     // trang phục nữ
-    this.load.image('frame10', '../img/ha99.png');
-    this.load.image('frame11', '../img/ha77.png');
-    this.load.image('frame12', '../img/ha88.png');
+    this.load.image('frame10', './img/ha99.png');
+    this.load.image('frame11', './img/ha77.png');
+    this.load.image('frame12', './img/ha88.png');
     this.load.image('arrow', 'https://labs.phaser.io/assets/sprites/arrow.png');
     // vũ khí hoả
-    this.load.image('frame13', '../img/ha170.png');
-    this.load.image('frame14', '../img/ha180.png');
-    this.load.image('frame15', '../img/ha190.png');
+    this.load.image('frame13', './img/ha170.png');
+    this.load.image('frame14', './img/ha180.png');
+    this.load.image('frame15', './img/ha190.png');
     // // vũ khí thủy
-    // this.load.image('frame13', '../img/ha170.png');
-    // this.load.image('frame14', '../img/ha180.png');
-    // this.load.image('frame15', '../img/ha190.png');
+    // this.load.image('frame13', './img/ha170.png');
+    // this.load.image('frame14', './img/ha180.png');
+    // this.load.image('frame15', './img/ha190.png');
     // // vũ khí mộc
-    // this.load.image('frame13', '../img/ha170.png');
-    // this.load.image('frame14', '../img/ha180.png');
-    // this.load.image('frame15', '../img/ha190.png');
+    // this.load.image('frame13', './img/ha170.png');
+    // this.load.image('frame14', './img/ha180.png');
+    // this.load.image('frame15', './img/ha190.png');
     // // vũ khí kim
-    // this.load.image('frame13', '../img/ha170.png');
-    // this.load.image('frame14', '../img/ha180.png');
-    // this.load.image('frame15', '../img/ha190.png');
+    // this.load.image('frame13', './img/ha170.png');
+    // this.load.image('frame14', './img/ha180.png');
+    // this.load.image('frame15', './img/ha190.png');
     // // vũ khí thổ
-    // this.load.image('frame13', '../img/ha170.png');
-    // this.load.image('frame14', '../img/ha180.png');
-    // this.load.image('frame15', '../img/ha190.png');
+    // this.load.image('frame13', './img/ha170.png');
+    // this.load.image('frame14', './img/ha180.png');
+    // this.load.image('frame15', './img/ha190.png');
     // vũ khí cánh
-    this.load.image('frame28', '../img/ha320.png');
-    this.load.image('frame29', '../img/ha330.png');
-    this.load.image('frame30', '../img/ha340.png');
+    this.load.image('frame28', './img/ha320.png');
+    this.load.image('frame29', './img/ha330.png');
+    this.load.image('frame30', './img/ha340.png');
     // thú cưỡi
-    this.load.image('frame31', '../img/ha350.png');
-    this.load.image('frame32', '../img/ha360.png');
-    this.load.image('frame33', '../img/ha370.png');
+    this.load.image('frame31', './img/ha350.png');
+    this.load.image('frame32', './img/ha360.png');
+    this.load.image('frame33', './img/ha370.png');
     // pet
-    this.load.image('frame34', '../img/ha380.png');
-    this.load.image('frame35', '../img/ha390.png');
-    this.load.image('frame36', '../img/ha400.png');
+    this.load.image('frame34', './img/ha380.png');
+    this.load.image('frame35', './img/ha390.png');
+    this.load.image('frame36', './img/ha400.png');
     // nhà
-    this.load.image('house1', '../img/ha401.png');
-    this.load.image('house2', '../img/ha402.png');
+    this.load.image('house1', './img/ha401.png');
+    this.load.image('house2', './img/ha402.png');
 
 
     // Tải sprite sheet
-    // this.load.atlas('boyNuz', '../img/boiNuzNuz.png', '../img/boiNuz.json');
+    // this.load.atlas('boyNuz', './img/boiNuzNuz.png', './img/boiNuz.json');
 
 }
 
@@ -1220,7 +1220,7 @@ var equip = {
 
 var board = [], hàng = 10, cột = 8, listOfArrays = []
 var currTile = undefined, otherTile = undefined
-var fiveBlock = 'https://github.com/kun18911/gameBenhVienQuyDu/blob/main/asset/../img/bomb5.png?raw=true'
+var fiveBlock = 'https://github.com/kun18911/gameBenhVienQuyDu/blob/main/asset/./img/bomb5.png?raw=true'
 var blank = 'https://github.com/ImKennyYip/candy-crush/blob/master/images/blank.png?raw=true'
 var normal_Class = ['gold', 'yingyang', 'heart', 'sword', 'water', 'soulRock']
 var srcValue = []; function createTag(x) {return document.createElement(x)}
@@ -1251,7 +1251,7 @@ function checkValid() {
 function làm_Tròn(number, decimalPlaces) {var factor = Math.pow(10, decimalPlaces); return Math.round(number * factor) / factor}
 
 function randomCandy() {
-    return `../img/${normal_Class[Math.floor(Math.random() * normal_Class.length)]}.png`
+    return `./img/${normal_Class[Math.floor(Math.random() * normal_Class.length)]}.png`
 }
 
 const square45 = 32.5 // 45
@@ -1283,12 +1283,12 @@ function startGame() {
         tileDad.style.left = `${square45 * c}px`
         tileDad.classList.add('fc', 'tileDad'); tileDad.id = `a${r}-${c}`;
         // ---------------
-        // tile.src = '../img/blank.png'; 
+        // tile.src = './img/blank.png'; 
         tile.src = randomCandy();
         tile.classList.add("fc", 'offBoom'); tile.id = `${r}-${c}`;
         tile.filterr = 'undefined'; tile.onclick = click_Affect; row.push(tile); 
         // ----------------
-        fill.src = '../img/none.png'; fill.style.pointerEvents = 'none'; fill.style.zIndex = 3
+        fill.src = './img/none.png'; fill.style.pointerEvents = 'none'; fill.style.zIndex = 3
         // --------------- 
         board_table.appendChild(tileDad).appendChild(tile); tileDad.appendChild(fill);  
         return tile;
@@ -1585,9 +1585,9 @@ function nổChuyền(tile, type) {
         tile.classList.replace(tile.classList[1], 'deleted');
         tile.filterr = 'undefined';
         // document.getElementById(`a${tile.id}`).remove();
-        getFill(tile.id).src = '../img/none.png'; tile.style.opacity = 0;
+        getFill(tile.id).src = './img/none.png'; tile.style.opacity = 0;
         setTimeout(() => {
-            tile.src = '../img/blank.png'; tile.style.opacity = 1;
+            tile.src = './img/blank.png'; tile.style.opacity = 1;
         }, 250);
         setTimeout(() => {
             khoi("a"+ tile.id)
@@ -1766,8 +1766,8 @@ function reCreate() {
     clearInterval(boardPointt.countdown);
     for (let r = 1; r <= hàng; r++) {
         for (let c = 0; c < cột; c++) {
-            board[r][c].src = '../img/blank.png'
-            getFill(board[r][c].id).src = '../img/none.png'
+            board[r][c].src = './img/blank.png'
+            getFill(board[r][c].id).src = './img/none.png'
             board[r][c].filterr = 'undefined'
             board[r][c].className = ''
             board[r][c].classList.add("fc", 'offBoom');

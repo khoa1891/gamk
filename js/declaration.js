@@ -896,7 +896,7 @@ function filterPic() {
     filterPicArray.forEach(i=>{
         i.tile.src = i.src; i.tile.filterr = i.suffix
         i.tile.classList.replace(i.tile.classList[1], 'offBoom')
-        getFill(i.tile.id).src = `../img/filter${i.suffix}.png`
+        getFill(i.tile.id).src = `./img/filter${i.suffix}.png`
     })
     filterPicArray = []; 
 }
