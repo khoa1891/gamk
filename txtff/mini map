@@ -1,0 +1,45 @@
+// Cấu hình minimap
+var minimapWidth = 160;
+var minimapHeight = 120;
+var minimapX = 620;
+var minimapY = 20;
+
+// Tạo minimap với viền và nền mờ
+let minimap = this.add.graphics();
+minimap.lineStyle(4, 0xffffff, 1);
+minimap.strokeRect(minimapX, minimapY, minimapWidth, minimapHeight);
+minimap.fillStyle(0x000000, 0.5);
+minimap.fillRect(minimapX, minimapY, minimapWidth, minimapHeight);
+
+// Phóng to nhân vật và quái vật trên minimap
+function drawMinimap() {
+    minimap.clear();
+
+    // Vẽ nền minimap
+    minimap.fillStyle(0x000000, 0.5);
+    minimap.fillRect(minimapX, minimapY, minimapWidth, minimapHeight);
+
+    // Vẽ Player trên minimap
+    minimap.fillStyle(0x00ff00, 1); // Màu cho player
+    minimap.fillCircle(Math.max(minimapX, Math.min(minimapX + minimapWidth, player.x / 4 + minimapX)), 
+                       Math.max(minimapY, Math.min(minimapY + minimapHeight, player.y / 4 + minimapY)), 5);
+
+    // Vẽ Monsters trên minimap
+    monsters.forEach(monster => {
+        minimap.fillStyle(0xff0000, 1); // Màu cho monster
+        minimap.fillCircle(Math.max(minimapX, Math.min(minimapX + minimapWidth, monster.x / 4 + minimapX)), 
+                           Math.max(minimapY, Math.min(minimapY + minimapHeight, monster.y / 4 + minimapY)), 5);
+    });
+}
+
+// Tạo phím ẩn/hiện minimap
+let minimapVisible = true;
+this.input.keyboard.on('keydown-M', () => {
+    minimapVisible = !minimapVisible; // Đổi trạng thái hiển thị của minimap
+    minimap.setVisible(minimapVisible); // Ẩn/hiện minimap
+});
+
+// Cập nhật minimap trong mỗi lần vẽ
+this.events.on('update', () => {
+    drawMinimap();
+});

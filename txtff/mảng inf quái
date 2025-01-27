@@ -1,0 +1,97 @@
+function deepCopy(obj) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj; // Không sao chép nếu là giá trị cơ bản
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map(deepCopy); // Sao chép mảng
+    }
+
+    const copiedObj = {};
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            copiedObj[key] = deepCopy(obj[key]); // Đệ quy sao chép các thuộc tính
+        }
+    }
+    return copiedObj;
+}
+var a = 1; // Map hiện tại
+let monsInF = {
+    1: {
+        'quần_thể_1': {
+            name: 'Lính Mỹ',
+            level: null,
+            _level() {
+                if (this.level === null) {
+                    this.level = Math.floor(Math.random() * 3) + 1; // Random từ 1 đến 3 một lần
+                }
+                return this.level;
+            },
+            idle: 'idle',
+            idleCloth: 'idleCloth',
+            run: 'run',
+            runCloth: 'runCloth',
+            num: 2, // Số lượng quái
+            mi() {
+                return this.level;
+            },
+        },
+        'quần_thể_2': {
+            name: 'tay sai cho Mỹ',
+            level: null,
+            _level() {
+                if (this.level === null) {
+                    this.level = Math.floor(Math.random() * 3) + 3; // Random từ 3 đến 5 một lần
+                }
+                return this.level;
+            },
+            idle: 'idle',
+            idleCloth: 'idleCloth',
+            run: 'run',
+            runCloth: 'runCloth',
+            num: 7, // Số lượng quái
+            mi() {
+                return this.level;
+            },
+        }
+    }
+};
+
+// Mảng chứa tất cả các quái vật được tạo
+let createdMonsters = [];
+
+// Hàm tạo quái vật
+function createMonsters(map) {
+    const currentMap = monsInF[map];
+    for (const groupKey in currentMap) {
+        const group = currentMap[groupKey];
+        for (let i = 0; i < group.num; i++) {
+            // Tạo quái vật mới với thuộc tính và phương thức riêng biệt
+            const monster = {
+                name: group.name,
+                level: deepCopy(group)._level(), // Lấy level từ getter
+                idle: group.idle,
+                idleCloth: group.idleCloth,
+                run: group.run,
+                runCloth: group.runCloth,
+                mi() {
+                    return this.level;
+                }
+            };
+            createdMonsters.push(monster); // Lưu quái vật vào mảng
+        }
+    }
+}
+
+// Gọi hàm để tạo quái vật
+createMonsters(a);
+
+// Kiểm tra kết quả
+console.log(createdMonsters);
+
+// Kiểm tra phương thức mi của từng quái vật
+createdMonsters.forEach(monster => {
+    console.log(`${monster.name} có level: ${monster.mi()}`); // Sử dụng dấu ` để tạo template string
+});
+
+// getBox(tile.id).classList.replace(getBox(tile.id).classList[0], cls)

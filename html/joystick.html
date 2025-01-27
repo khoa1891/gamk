@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Game Map</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+</head>
+
+<body>
+    <script>
+        class MainScene extends Phaser.Scene {
+            constructor() {
+                super('MainScene');
+            }
+
+            preload() {
+                // Tải hình ảnh nhân vật
+                this.load.image('player', 'path_to_character_image.png'); // Thay đường dẫn ảnh nhân vật
+            }
+
+            create() {
+                // Tạo joystick cố định ở góc dưới màn hình
+                this.joystickBase = this.add.circle(100, this.cameras.main.height - 100, 70, 0x888888, 0.3).setScrollFactor(0).setInteractive();
+                // this.joystickBase = this.add.circle(this.cameras.main.width - 100, this.cameras.main.height - 100, 70, 0x888888, 0.3).setScrollFactor(0).setInteractive();
+                this.joystick = this.add.circle(100, this.cameras.main.height - 100, 40, 0x6666ff, 0.5).setScrollFactor(0).setInteractive();
+
+                // Khởi tạo nhân vật
+                this.player = this.physics.add.sprite(100, 100, 'player');
+                this.player.setScale(0.5);
+
+                // Đặt camera theo dõi nhân vật
+                this.cameras.main.startFollow(this.player);
+
+                // Tạo các bản đồ
+                this.maps = [];
+                for (let i = 0; i < 4; i++) {
+                    let map = this.addMap(i);
+                    this.maps.push(map);
+                }
+
+                // Khởi tạo map đầu tiên
+                this.currentMap = 0;
+                this.loadMap(this.currentMap);
+
+                // Điều khiển joystick
+                this.input.on('pointermove', this.handleJoystickMove, this);
+                this.input.on('pointerup', this.resetJoystick, this);
+            }
+
+            // Hàm tạo map với quái vật và ô chuyển
+            addMap(mapIndex) {
+                let map = this.add.container();
+
+                // Tạo các quái vật
+                map.enemies = [];
+                for (let i = 0; i < 3; i++) {
+                    let enemy = this.add.rectangle(200 + i * 100, 200, 30, 30, 0xff0000);
+                    map.add(enemy);
+                    map.enemies.push(enemy);
+                }
+
+                // Tạo ô chuyển map
+                map.portal = this.add.rectangle(400, 500, 50, 50, 0xffff00); // màu vàng
+                map.add(map.portal);
+
+                // Ẩn map ban đầu
+                map.setVisible(false);
+                return map;
+            }
+
+            loadMap(index) {
+                // Ẩn tất cả map
+                this.maps.forEach(map => map.setVisible(false));
+                // Hiển thị map hiện tại
+                this.maps[index].setVisible(true);
+            }
+
+            handleJoystickMove(pointer) {
+                if (!pointer.isDown) return;
+
+                // Tính toán hướng di chuyển từ joystick
+                let dx = pointer.x - this.joystickBase.x;
+                let dy = pointer.y - this.joystickBase.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Giới hạn joystick nhỏ bên trong joystick lớn
+                let maxDistance = 70; // Bán kính joystick lớn
+                if (distance > maxDistance) {
+                    dx = (dx / distance) * maxDistance;
+                    dy = (dy / distance) * maxDistance;
+                }
+
+                // Cập nhật vị trí joystick nhỏ
+                this.joystick.setPosition(this.joystickBase.x + dx, this.joystickBase.y + dy);
+
+                // Tính góc di chuyển và di chuyển nhân vật
+                let angle = Math.atan2(dy, dx);
+                this.player.setVelocity(Math.cos(angle) * 100, Math.sin(angle) * 100);
+            }
+
+            resetJoystick() {
+                // Đặt lại joystick về vị trí trung tâm
+                this.joystick.setPosition(this.joystickBase.x, this.joystickBase.y);
+                this.player.setVelocity(0, 0);
+            }
+
+            update() {
+                // Kiểm tra va chạm với quái vật
+                let map = this.maps[this.currentMap];
+                map.enemies.forEach(enemy => {
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), enemy.getBounds())) {
+                        console.log('Đụng quái!');
+                    }
+                });
+
+                // Kiểm tra va chạm với ô chuyển map
+                if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), map.portal.getBounds())) {
+                    console.log('Đụng ô chuyển map!');
+                    this.currentMap = (this.currentMap + 1) % this.maps.length; // Chuyển đến map tiếp theo
+                    this.loadMap(this.currentMap); // Gọi hàm loadMap để hiển thị map mới
+                }
+
+                // Giữ joystick cố định ở vị trí góc dưới màn hình
+                this.joystickBase.setPosition(100, this.cameras.main.height - 100);
+                if (this.joystick.x === this.joystickBase.x && this.joystick.y === this.joystickBase.y) {
+                    this.joystick.setPosition(100, this.cameras.main.height - 100);
+                }
+            }
+        }
+
+        // Cấu hình game
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            scene: MainScene,
+            physics: {
+                default: 'arcade',
+                arcade: { debug: false }
+            }
+        };
+
+        // Khởi tạo game
+        new Phaser.Game(config);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/chessBattle.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/boardGame.css">
+</head>
+
+<body>
+   
+
+    <!-- Menu Button -->
+    <!-- <button id="toggle-menu" class="menu-button">≡</button> -->
+
+    <!-- <button class="menu-button">Menu</button> -->
+    <!-- <style>
+
+.menu-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: #007BFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.menu-button:hover {
+    background: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.menu-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+    </style> -->
+       <!-- Popup UI -->
+    
+
+    <!-- Menu Button ≡ -->
+    <div id="toggle-menu" class="menu-button" onclick="toggleMenuBoard()">Menu</div>
+    <!-- Option Menu -->
+    <div id="menu" class="menuBoard hiddennn">
+        <button onclick="toggleMenu()">Hành trang</button>
+        <button onclick="toggleMenu7()">Bản thân</button>
+        <button onclick="toggleMenu2()">Trang bị</button>
+        <button onclick="toggleMenu4()">Kĩ năng</button>
+        <button onclick="toggleMenu5()">Tiềm năng</button>
+        <button>Linh thú</button>
+        <button>Thú cưỡi</button>
+        <button>Bản đồ</button>
+        <button>Cài đặt</button>
+    </div>
+    <div class="overlayBlack hiddennn"></div>
+    <div class="overlayVio hiddennn "></div>
+    <div class="overlayBl hiddennn ">Xin chờchờ...</div>
+
+    <div class="containerTogether containerGear hiddennn">
+        <div class="header">
+            <div class="dropdown-container">
+                <button class="dropdown-btn" onclick="toggleDropdown()">Tất cả</button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <button onclick="selectOption('all', 'Tất cả')">Tất cả</button>
+                    <button onclick="selectOption('nhienlieu', 'Nhiên liệu')">Nhiên liệu</button>
+                    <button onclick="selectOption('position', 'Position')">Position</button>
+                    <button onclick="selectOption('trangphuc', 'Trang phục')">Trang phục</button>
+                    <button onclick="selectOption('vukhi', 'Vũ khí')">Vũ khí</button>
+                    <button onclick="selectOption('phukien', 'Phụ kiện')">Phụ kiện</button>
+                    <button onclick="selectOption('giay', 'Giày')">Giày</button>
+                    <button onclick="selectOption('pet', 'Pet')">Pet</button>
+                    <button onclick="selectOption('thucuoi', 'Thú cưỡi')">Thú cưỡi</button>
+                </div>
+            </div>
+            <div class="text-center">Hành trang</div>
+            <button class="add-btn" onclick="addCell()">Thêm ô</button>
+            <button class="close-btnGear" id="closeBtnGear" onclick="toggleMenu()">x</button>
+        </div>
+        <div class="table-container" id="table-container"></div>
+        <div class="footer">
+            <div>Xu: <span id="xu">10000</span></div>
+            <div>Đồng: <span id="dong">9</span></div>
+        </div>
+    </div>
+    <!-- <button class="menu-btn"
+    id='menu-btn' onclick="toggleMenu()">Htrag</button> -->
+    <!-- <button class="menu-btn2" onclick="toggleMenu2()">Trbi</button> -->
+    <!-- <button class="menu-btn2" onclick="toggleMenu4()" style="bottom: 2%; left: 22%;">Skill</button> -->
+    <!-- <button class="menu-btn2" onclick="toggleMenu5()" style="bottom: 2%">Tnag</button> -->
+    <!-- <button class="menu-btn" id="shopBtn1" onclick="toggleMenu6()" style="bottom: 2%;
+    left: 7%;
+    width: 50px;">infor</button> -->
+    <!-- <button class="menu-btn" id='shopBtn1' onclick="toggleMenu3()">shop1</button> -->
+    <div class="modalGear" id="modalGear">
+        <p id="modal-Gear-text"></p>
+        <button onclick="closeModal()">Đóng</button>
+    </div>
+    <div class="question-box-Gear">
+        <p class="question-text-Gear">Bạn có muốn mua sản phẩm này không?</p>
+        <div class="button-group">
+            <button class="btn yes-btn" onclick="yesBtnCell()">Có</button>
+            <button class="btn no-btn" onclick="noBtnCell()">Không</button>
+        </div>
+    </div>
+       <div class="question-box-Shop">
+        <p class="question-text-Shop">Bạn có muốn mua sản phẩm này không?</p>
+        <div class="button-group">
+            <button class="btn yes-btnShop" >Có</button>
+            <button class="btn no-btnShop" onclick="noBtnShop()">Không</button>
+        </div>
+    </div>
+    <div class="containerEquip hiddennn" id="equipmentContainer">
+        <div class="headerEquip" style="text-align: center">
+            Trang Bị
+            <button class="close-btnEquip" id="closeBtnEquip" onclick="toggleMenu2()">x</button>
+        </div>
+        <div class="griddd">
+            <div class="equippp emptyGear">Nhẫn</div>
+            <div class="equippp emptyGear">Cánh</div>
+            <div class="equippp emptyGear">Mũ</div>
+            <div class="equippp emptyGear" id="slot-ao">Áo</div>
+            <div class="equippp emptyGear hiddennn"></div>
+            <div class="equippp emptyGear">Vũ Khí</div>
+            <div class="equippp emptyGear" id="slot-quan">Quần</div>
+            <div class="equippp emptyGear hiddennn"></div>
+            <div class="equippp emptyGear">Dây chuyền</div>
+            <div class="equippp emptyGear">Pet</div>
+            <div class="equippp emptyGear">Thú cưỡi</div>
+            <div class="equippp emptyGear">Giày</div>
+        </div>
+    </div>
+  <div class="popupGear" id="popupGear">
+    <div id="popup-contentGear" style="white-space: pre-line;"></div>
+    <button id="use-buttonGear">Dùng</button>
+    <button id="equip-buttonGear">Mặc</button>
+    <button id="Buy-buttonShop">Mua</button>
+    <button id="close-popupGear">Đóng</button>
+  </div>
+  <!-- shop -->
+  
+  <div class="containerTogether containerShop hiddennn" id="containerShop1">
+    <div class="header">
+        <div class="containerShopText">
+            <button class="dropdown-btn" id="shopLeft" onclick="toggleDropdown()">&#9664;</button>
+            <div class="text-center" id="shop1">Shop 1</div>
+            <button class="dropdown-btn" id="shopRight" onclick="toggleDropdown()">&#9654;</button>
+        </div>
+        <button class="close-btnGear" id="closeBtnShop1">x</button>
+    </div>
+    <div class="table-container" id="table-containerShop1"></div>
+    <div class="footer">
+        <div>Xu: <span id="xuShop1">33</span></div>
+        <div>Đồng: <span id="dong">9</span></div>
+    </div>
+
+
+
+
+   
+    </div>
+
+<!--infor-->
+<div class="info-cardCont hiddennn">
+    </button>
+
+            <button class="close-btnGear" id="closeBtnInfo" onclick=toggleMenu()>x</button>
+    <div class="avatarCard"></div>
+    <div class="infoCard">
+        <!-- Nội dung sẽ được điền bởi JavaScript -->
+    </div>
+</div>
+
+
+
+ <!-- Kỹ năng -->
+<div class="popup__contentSkill skills hiddennn" style="visibility: visible;
+   opacity: 1;
+   transition: opacity 0.5s ease, visibility 0.5s ease;">
+    <div style="text-align: center; font-weight: bold">Kỹ Năng</div>
+    <button class="close-btnGear" id="closeBtnSkill" onclick="toggleMenu4()">x</button>
+    <button id="closeBtnPointSkill" style="font-size: 13px; left: -10px !important">Điểm Kỹ Năng: <span
+            id="skillPoints">10</span></button>
+    <div class="skill-box">
+        <div id="skill1" class="skill"></div>
+        <div id="skill2" class="skill"></div>
+        <div id="skill3" class="skill"></div>
+    </div>
+    <div class="skill-names">
+        <div id="skill1Name" class="skill-name"></div>
+        <div id="skill2Name" class="skill-name"></div>
+        <div id="skill3Name" class="skill-name"></div>
+    </div>
+    <div id="skillDescription" class="skill-description">
+        <p style=" height: 50px; overflow-y: auto;">Chọn kỹ năng để xem mô tả.</p>
+    </div>
+    <script>
+        const skillDescription = document.getElementById('skillDescription');
+        const skillPointsDisplay = document.getElementById('skillPoints');
+        let skillPoints = 10;
+        // Dữ liệu kỹ năng
+        const skills = [
+            { name: 'Tăng sức mạnh', description: 'Tăng cường sức mạnh tấn công của nhân vật.', level: 1 },
+            { name: 'Chữa lành', description: 'Hồi phục một lượng máu cho nhân vật.', level: 1 },
+            { name: 'Độc tố', description: 'Gây độc lên kẻ thù, làm giảm dần máu của chúng.', level: 1 }
+        ];
+        // Cập nhật tên kỹ năng bên ngoài
+        function updateSkillNames() {
+            document.getElementById('skill1Name').textContent = skills[0].name;
+            document.getElementById('skill2Name').textContent = skills[1].name;
+            document.getElementById('skill3Name').textContent = skills[2].name;
+        }
+        // Hiển thị mô tả khi chọn kỹ năng
+        function showSkillDescription2(skillIndex) {
+            const skill = skills[skillIndex];
+            skillDescription.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
+       <p>${skill.description}</p>
+       <button onclick="levelUpSkill2(${skillIndex})" id="levelUpButton">Cộng điểm</button>`;
+            updateLevelUpButton();  // Cập nhật nút sau mỗi lần chọn kỹ năng
+        }
+        // Nâng cấp kỹ năng
+        function levelUpSkill2(skillIndex) {
+            if (skillPoints > 0) {
+                skills[skillIndex].level++;
+                skillPoints--;
+                skillPointsDisplay.textContent = skillPoints;
+                showSkillDescription2(skillIndex);  // Cập nhật lại mô tả sau khi nâng cấp
+            } else {
+                alert('Không đủ điểm kỹ năng!');
+            }
+            updateLevelUpButton(); // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
+        }
+        // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
+        function updateLevelUpButton() {
+            const levelUpButton = document.getElementById('levelUpButton');
+            if (skillPoints === 0) {
+                levelUpButton.disabled = true;
+            } else {
+                levelUpButton.disabled = false;
+            }
+        }
+        // Gán sự kiện cho các kỹ năng
+        document.getElementById('skill1').addEventListener('click', () => showSkillDescription2(0));
+        document.getElementById('skill2').addEventListener('click', () => showSkillDescription2(1));
+        document.getElementById('skill3').addEventListener('click', () => showSkillDescription2(2));
+        updateSkillNames();
+
+    </script>
+
+
+
+
+</div>
+<!-- Tiềm năng -->
+<div class="containerPotential hiddennn">
+    <!-- <div class="popup__content board"> -->
+    <div style="text-align: center; font-weight: bold">Tiềm Năng</div>
+    <button class="close-btnGear" id="closeBtnPotential" onclick="toggleMenu5()">x</button>
+
+    <div class="stat-rowPotential">
+        <span style="
+left: 15%;
+position: absolute; 
+">Thể Lực</span>
+        <span class="stat-value pointPotentialRight" id="stat-strength">0</span>
+        <button class="btn-addPotentialRight" id="btn-strength" onclick="addPoint('strength')">+</button>
+    </div>
+    <div class="stat-rowPotential">
+        <span style="
+left: 15%;
+position: absolute;
+">Sức Mạnh</span>
+        <span class="stat-value pointPotentialRight" id="stat-power">0</span>
+        <button class="btn-addPotentialRight" id="btn-power" onclick="addPoint('power')">+</button>
+    </div>
+    <div class="stat-rowPotential">
+        <span style="
+left: 15%;
+position: absolute;
+">Giáp</span>
+        <span class="stat-value pointPotentialRight" id="stat-armor">0</span>
+        <button class="btn-addPotentialRight" id="btn-armor" onclick="addPoint('armor')">+</button>
+    </div>
+    <div class="stat-rowPotential">
+        <span style="
+left: 15%;
+position: absolute;
+">X (Haha)</span>
+        <span class="stat-value pointPotentialRight" id="stat-x">0</span>
+        <button class="btn-addPotentialRight" id="btn-x" onclick="addPoint('x')">+</button>
+    </div>
+    <div class="points-display">
+        Điểm Tiềm Năng: <span id="points">10</span>
+    </div>
+
+</div>
+
+    <div class="containerBoardGame">
+        <div class="containerBoardGame2">
+            <!-- Nút Kỹ năng và Đầu hàng -->
+            <style>
+                .container2BoardGame {
+                    width: 285px;
+                    padding: 0px 14px;
+                    padding-bottom: -7px;
+                    background-color: #6a4c9c;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    position: relative;
+                    height: 43px !important;
+                }
+
+                /* .container2 *{
+       
+   } */
+
+                .controlsBoardGame {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 7px;
+                }
+
+                .controlsBoardGame button {
+                    background-color: #fff;
+                    width: 70px;
+                    border: none;
+                    color: black;
+                    padding: 0 5px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    margin-bottom: 0;
+
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .circle-containerBoardGame {
+                    padding: 0 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 5px;
+                }
+
+                .arrowBoardGame {
+                    width: 30px;
+                    height: 30px;
+                    background-color: #fff;
+                    border-radius: 30%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 20px;
+                    font-weight: bold;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    cursor: pointer;
+                }
+
+                .circleBoardGame {
+                    width: 30px;
+                    height: 30px;
+                    background-color: #fff;
+                    border-radius: 40%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 17px;
+                    font-weight: bold;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .status-rowBoardGame {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 5px;
+                    margin-top: 5px;
+                }
+
+                .statusBoardGame {
+                    flex: 1;
+                    padding: 5px;
+                    background-color: #2e0854;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    font-size: 13px !important;
+
+                }
+
+                .barBoardGame {
+                    line-height: 8px !important;
+                    position: relative;
+                    height: 8px;
+                    border-radius: 5px;
+                    background-color: #555;
+                    overflow: visible;
+
+
+                }
+
+                .bar-fillBoardGame {
+                    height: 100%;
+                    border-radius: 5px;
+                    transition: width 0.5s ease-in-out;
+
+                }
+
+                .health-barBoardGame .bar-fillBoardGame {
+                    background: linear-gradient(to right, #4d94ff, #6a0dad, #000);
+
+                }
+
+                .mana-barBoardGame .bar-fillBoardGame {
+                    background: linear-gradient(90deg, #00bcd4, #007bff);
+                }
+
+
+                .armor-barBoardGame {
+                    text-align: center;
+                    font-size: 12px;
+                    background-color: #000;
+                    color: #fff;
+                    border-radius: 5px;
+                    transition: transform 0.3s ease, background-color 0.3s ease;
+                    height: 8px !important;
+                    line-height: 8px;
+                    width: 45px !important;
+                    margin-left: 19px;
+                    margin-bottom: -1px;
+
+
+
+
+
+                }
+
+                .statusBoardGame * {
+                    font-size: 9px !important;
+                    /* Áp dụng cho tất cả các phần tử con trong .container */
+                    width: 80px
+                }
+
+                .armor-barBoardGame.active {
+                    transform: scale(1.1);
+                    background-color: #ff9800;
+                }
+
+                .bar-labelBoardGame {
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 10px;
+                    color: #fff;
+                    line-height: 8px;
+                }
+
+                .buttonsBoardGame {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 10px;
+                }
+
+                .buttonBoardGame {
+                    flex: 1;
+                    padding: 10px;
+                    background-color: #6a0dad;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    color: #fff;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+
+                .buttonBoardGame:hover {
+                    background-color: #4b0082;
+                }
+
+                .low-healthBoardGame .bar-fillBoardGame {
+
+
+                    box-shadow: 0 0 10px 4px #ff4500, 0 0 20px 6px #ff6347;
+                    animation: low-health-blink 1s infinite;
+                    background: linear-gradient(90deg, #ff0000, #8b0000);
+                }
+
+                @keyframes low-health-blink {
+
+                    0%,
+                    100% {
+                        opacity: 1;
+                    }
+
+                    50% {
+                        opacity: 0.5;
+                    }
+                }
+
+                /* Hiệu ứng chớp nháy */
+                @keyframes blinkingBoardGame {
+
+                    0%,
+                    100% {
+                        box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.8);
+                    }
+
+                    50% {
+                        box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.5);
+                    }
+                }
+
+                /* Áp dụng hiệu ứng cho thanh máu khi hấp hối */
+                .full1BoardGame {
+                    animation: blinkingBoardGame 1s infinite;
+                }
+
+                /* Hiệu ứng chớp nháy cho thanh mana đầy */
+                @keyframes manaFullBlinking {
+
+                    0%,
+                    100% {
+                        box-shadow: 0 0 10px 5px rgba(0, 191, 255, 0.8);
+                    }
+
+                    50% {
+                        box-shadow: 0 0 20px 10px rgba(0, 191, 255, 0.5);
+                    }
+                }
+
+                /* Áp dụng hiệu ứng cho thanh mana khi đầy */
+                .full2BoardGame {
+                    animation: manaFullBlinking 1s infinite;
+                }
+
+                .mana-barBoardGame .bar-fillBoardGame {
+                    background: linear-gradient(90deg, #0d47a1, #2196f3, #26c6da, #80deea);
+                }
+
+                .health-barBoardGame .bar-fillBoardGame {
+                    background: linear-gradient(90deg, #4a148c, #ff0000, #000000);
+                }
+            </style>
+            <div class="controlsBoardGame">
+                <button id="skillButtonBoardGame">Kỹ năng</button>
+                <div class="circle-containerBoardGame">
+                    <div class="arrowBoardGame" id="arrowLeftBoardGame">&larr;</div>
+                    <div class="circleBoardGame" id="circleBoardGame">19s</div>
+                    <div class="arrowBoardGame" id="arrowRightBoardGame">&rarr;</div>
+                </div>
+                <button id="surrenderButtonBoardGame">Đầu hàng</button>
+            </div>
+
+            <!-- Hình tròn và mũi tên -->
+
+        </div>
+        <div id="boardd">
+            <!-- Các ô vuông 8x8 sẽ được tạo bởi JavaScript -->
+        </div>
+
+        <!-- Status Rows -->
+        <div class="status-rowBoardGame">
+            <!-- Player Info -->
+            <div class="statusBoardGame" style="margin-right: 48px;">
+                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="barBoardGame health-barBoardGame">
+                    <div class="full1BoardGame bar-fillBoardGame" style="width: 50%;"></div>
+                    <span class="bar-labelBoardGame">500/1000</span>
+                </div>
+
+                <div class="barBoardGame mana-barBoardGame full2BoardGame">
+                    <div class="bar-fillBoardGame " style="width: 30%;"></div>
+                    <span class="bar-labelBoardGame">30/100</span>
+                </div>
+            </div>
+            <!-- Enemy Info -->
+            <div class="statusBoardGame">
+                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="barBoardGame health-barBoardGame">
+                    <div class="bar-fillBoardGame" style="width: 70%;"></div>
+                    <span class="bar-labelBoardGame">700/1000</span>
+                </div>
+
+                <div class="barBoardGame mana-barBoardGame">
+                    <div class="bar-fillBoardGame" style="width: 40%;"></div>
+                    <span class="bar-labelBoardGame">40/100</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</body>
+<script src="../js/declaration.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/endG.js"></script>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser3-rex-plugins@1.1.9/dist/rexvirtualjoystickplugin.min.js"></script>
+
+    <link rel="stylesheet" href="css/chessBattle.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #monsterName {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            border-radius: 5px;
+            display: none; /* Ẩn bảng tên mặc định */
+        }
+    </style>
+</head>
+<body>
+    <!-- Bảng tên quái vật -->
+    <div id="monsterName">Monster Name</div>
+    <div id="board"></div>
+
+<script src="phaser/declare.js"></script>
+<script src="phaser/utils.js"></script>
+<script src="phaser/mapA.js"></script>
+
+
+<script src="phaser/battle.js"></script>
+<script src="phaser/autoFightMon.js"></script>
+<!-- khởi động game -->
+<script src="phaser/startGame.js"></script>
+    <!-- Chạy mã Phaser khi trang đã tải xong -->
+    <!-- <script>
+        window.onload = function () {
+            const game = new Phaser.Game(config);
+        };
+    </script> -->
+</body>
+</html>

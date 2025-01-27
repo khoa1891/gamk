@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Game with Phaser</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        let mapWidth = 500;
+        let mapHeight = 5000;
+        let player, joystickBase, joystick, cursors, enemies;
+        let lastDirection = null; // Lưu hướng di chuyển cuối cùng
+
+        // Hàm preload
+        function preload() {}
+
+        // Hàm create
+        function create() {
+            // Tạo bản đồ chính
+            const map = this.add.rectangle(0, 0, mapWidth, mapHeight, 0xffa500);
+            map.setOrigin(0);
+            this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+
+            // Tạo người chơi
+            player = this.add.circle(250, 250, 20, 0x3498db);
+            this.physics.add.existing(player);
+            player.body.setCollideWorldBounds(true);
+
+            // Tạo quái vật
+            createEnemy(this, 100, 100, 2);
+            createEnemy(this, 400, 200, 12);
+            createEnemy(this, 300, 350, 17);
+
+            // Camera theo dõi người chơi
+            this.cameras.main.startFollow(player, true, 0.08, 0.08);
+            this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
+const minimap = this.cameras.add(10, 10, 150, 100) // Vị trí và kích thước minimap (x, y, width, height)
+         .setZoom(0.3) // Thu nhỏ tỷ lệ (tùy chỉnh theo kích thước bản đồ)
+         .setScroll(0, 0) // Vị trí góc nhìn của minimap
+         .setBackgroundColor(0x000000); // Màu nền minimap
+ 
+     // Giới hạn minimap camera trong vùng bản đồ
+     minimap.setBounds(0, 0, mapWidth, mapHeight);
+
+    minimap.startFollow(player); // Camera minimap theo dõi nhân vật
+ 
+     // Hiển thị khung bao quanh minimap
+    // const frame = this.add.rectangle(110, 85, 210, 160, 0xffffff)
+    // .setDepth(1000) // Đảm bảo hiển thị trên minimap
+    // .setOrigin(0.5, 0.5)
+    // .setStrokeStyle(2, 0x000000);
+  // Tạo khung bao quanh minimap
+  this.minimapFrame = this.add.graphics();
+  this.minimapFrame.lineStyle(3, 0xffffff); // Đường viền trắng
+  this.minimapFrame.strokeRect(10, 10, 150, 100); // Vẽ khung bao quanh minimap
+  this.minimapFrame.setScrollFactor(0); 
+  minimap.ignore(this.minimapFrame);
+            // Tạo joystick
+            joystickBase = this.add.circle(160, this.cameras.main.height - 100, 50, 0x000000, 0.3).setInteractive();
+            joystick = this.add.circle(160, this.cameras.main.height - 100, 25, 0xffffff, 0.5).setInteractive();
+            joystickBase.setScrollFactor(0);
+            joystick.setScrollFactor(0);
+
+            // Sự kiện joystick
+            this.input.on('pointermove', (pointer) => handleJoystickMove(pointer, this));
+            this.input.on('pointerup', resetJoystick);
+
+            // Tạo phím điều khiển
+            cursors = this.input.keyboard.createCursorKeys();
+        }
+
+        // Hàm update
+        function update() {
+            let isMoving = false;
+
+            if (cursors.left.isDown) {
+                player.body.setVelocityX(-200);
+                if (lastDirection !== "left") {
+                    console.log("Trái");
+                    lastDirection = "left";
+                }
+                isMoving = true;
+            } else if (cursors.right.isDown) {
+                player.body.setVelocityX(200);
+                if (lastDirection !== "right") {
+                    console.log("Phải");
+                    lastDirection = "right";
+                }
+                isMoving = true;
+            } else {
+                player.body.setVelocityX(0);
+            }
+
+            if (cursors.up.isDown) {
+                player.body.setVelocityY(-200);
+                isMoving = true;
+            } else if (cursors.down.isDown) {
+                player.body.setVelocityY(200);
+                isMoving = true;
+            } else {
+                player.body.setVelocityY(0);
+            }
+
+            // Nếu không di chuyển, đặt lại hướng
+            if (!isMoving) {
+                lastDirection = null;
+            }
+        }
+
+        // Xử lý joystick di chuyển
+        
+
+function handleJoystickMove(pointer, scene) {
+    if (!pointer.isDown) return;
+
+    let dx = pointer.x - joystickBase.x;
+    let dy = pointer.y - joystickBase.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Giới hạn joystick di chuyển trong bán kính 50px
+    if (distance > 50) {
+        dx = (dx / distance) * 50;
+        dy = (dy / distance) * 50;
+    }
+
+    joystick.setPosition(joystickBase.x + dx, joystickBase.y + dy);
+
+
+    // Tính vận tốc dựa trên khoảng cách và góc
+    const angle = Math.atan2(dy, dx);
+    const speed = 100; // Giữ vận tốc cố định để tránh rung lắc
+    player.body.setVelocity(
+        Math.cos(angle) * speed,
+        Math.sin(angle) * speed
+    );
+
+    // Log hướng di chuyển
+    if (Math.cos(angle) > 0.5) {
+        console.log("Phải");
+    } else if (Math.cos(angle) < -0.5) {
+        console.log("Trái");
+    }
+}
+
+function resetJoystick() {
+    joystick.setPosition(joystickBase.x, joystickBase.y);
+    player.body.setVelocity(0, 0);
+    lastDirection = null; // Reset hướng di chuyển
+}
+
+        // Tạo quái vật
+        function createEnemy(scene, x, y, health) {
+            const enemy = scene.add.circle(x, y, 20, 0x8e44ad);
+            scene.physics.add.existing(enemy);
+            enemy.body.setCollideWorldBounds(true);
+            enemy.body.setBounce(1); // Bật lại khi va chạm
+        }
+
+    
+        // Cấu hình Phaser
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            scene: { preload, create, update },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 0 },
+                    debug: false
+                }
+            }
+        };
+
+        const game = new Phaser.Game(config);
+
+        // Cập nhật kích thước khi thay đổi kích thước cửa sổ
+        window.addEventListener('resize', () => {
+            game.scale.resize(window.innerWidth, window.innerHeight);
+            joystickBase.setPosition(100, game.scale.height - 100);
+            joystick.setPosition(100, game.scale.height - 100);
+        });
+    </script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop-up Đầu Hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup.hidden {
+            display: none;
+        }
+
+        .popup-content {
+            background: linear-gradient(145deg, #7b2cbf, #d7385e);
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .popup-buttons button {
+            background-color: #480ca8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-buttons button:hover {
+            background-color: #d7385e;
+        }
+
+        #openPopup {
+            background-color: #7b2cbf;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #openPopup:hover {
+            background-color: #d7385e;
+        }
+    </style>
+</head>
+<body>
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <p>Bạn có muốn đầu hàng?</p>
+            <div class="popup-buttons">
+                <button id="yesBtn">Có</button>
+                <button id="noBtn">Không</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="openPopup">Mở Pop-up</button>
+
+    <script>
+        const popup = document.getElementById('popup');
+        const openPopup = document.getElementById('openPopup');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        // Mở pop-up
+        openPopup.addEventListener('click', () => {
+            popup.classList.remove('hidden');
+        });
+
+        // Đóng pop-up khi nhấn "Có" hoặc "Không"
+        yesBtn.addEventListener('click', () => {
+            alert('Bạn đã chọn đầu hàng!');
+            popup.classList.add('hidden');
+        });
+
+        noBtn.addEventListener('click', () => {
+            popup.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

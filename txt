@@ -1,0 +1,25 @@
+// this.overlay.setPosition(-9999, -9999);
+
+
+// Tùy chọn thêm:
+// setDeadZone(width, height): Thiết lập một vùng chết trong camera, nghĩa là nhân vật cần ra khỏi vùng này thì camera mới di chuyển.
+// Ví dụ:
+
+// javascript
+// Sao chép mã
+// this.cameras.main.setDeadZone(200, 150);
+
+
+
+
+// Đảm bảo setInteractive hợp lý:
+
+// Nếu minimap có depth cao nhưng bạn không muốn nó ngăn sự kiện click bên dưới, hãy dùng:
+// javascript
+// Sao chép
+// Chỉnh sửa
+// minimap.ignoreInteractive = true; // Ngăn minimap xử lý sự kiện
+
+// setActive(false)	Không	Không	Minimap bị tắt hoàn toàn.
+
+// setVisible(false) hoặc .setActive(false): Ẩn minimap và dừng mọi hoạt động.

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser Move Character</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        class MainScene extends Phaser.Scene {
+            constructor() {
+                super('MainScene');
+                this.isAtCorner = false; // Biến trạng thái
+            }
+
+            preload() {
+                // Tải ảnh hoặc sprite cho nhân vật
+                this.load.image('player', 'https://via.placeholder.com/50');
+            }
+
+            create() {
+                // Tạo nhân vật tại vị trí mặc định (giữa màn hình)
+                const startX = this.cameras.main.width / 2;
+                const startY = this.cameras.main.height / 2;
+                this.player = this.add.sprite(startX, startY, 'player');
+
+                // Lưu vị trí ban đầu từ nhân vật hiện tại
+                this.initialPosition = { x: this.player.x, y: this.player.y };
+
+                // Hiển thị vị trí ban đầu trong console để kiểm tra
+                console.log('Vị trí ban đầu:', this.initialPosition);
+
+                // Lắng nghe sự kiện nhấn phím (ví dụ: phím M)
+                this.input.keyboard.on('keydown-M', () => {
+                    if (this.isAtCorner) {
+                        // Trả nhân vật về vị trí ban đầu
+                        this.player.setPosition(this.initialPosition.x, this.initialPosition.y);
+                        console.log('Quay về vị trí ban đầu:', this.initialPosition);
+                    } else {
+                        // Di chuyển nhân vật đến góc dưới cùng bên trái
+                        const newX = 10; // Cách trái 10px
+                        const newY = 50; // Cách dưới 10px
+                        this.player.setPosition(newX, newY);
+                        console.log('Di chuyển tới góc dưới trái:', { x: newX, y: newY });
+                    }
+
+                    // Đổi trạng thái
+                    this.isAtCorner = !this.isAtCorner;
+                });
+            }
+
+            update() {
+                // Có thể thêm logic cập nhật liên tục ở đây nếu cần
+            }
+        }
+
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            scene: MainScene
+        };
+
+        const game = new Phaser.Game(config);
+    </script>
+</body>
+</html>

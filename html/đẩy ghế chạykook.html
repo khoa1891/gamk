@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đẩy Ghế</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: false,
+        },
+      },
+      scene: {
+        preload: preload,
+        create: create,
+        update: update,
+      },
+    };
+
+    const game = new Phaser.Game(config);
+
+    let player, cursors, chairs, walls;
+
+    function preload() {
+      this.load.image('player', 'https://via.placeholder.com/32/0000FF');
+      this.load.image('chair', 'https://via.placeholder.com/32/FF0000');
+      this.load.image('wall', 'https://via.placeholder.com/32/888888');
+      this.load.image('arrow', 'https://labs.phaser.io/assets/sprites/arrow.png');
+    }
+
+    function create() {
+      // Tạo nhân vật
+      player = this.physics.add.sprite(100, 300, 'player');
+      player.setCollideWorldBounds(true);
+
+      // Tạo ghế
+      chairs = this.physics.add.group();
+      chairs.create(200, 300, 'chair').setImmovable(true);
+      chairs.create(232, 300, 'chair').setImmovable(true);
+      chairs.create(264, 300, 'chair').setImmovable(true);
+
+      // Tạo tường
+      walls = this.physics.add.staticGroup();
+      walls.create(50, 300, 'wall');
+      walls.create(400, 300, 'wall');
+
+      // Xử lý va chạm
+      this.physics.add.collider(player, chairs, pushChair, null, this);
+      this.physics.add.collider(chairs, walls);
+      this.physics.add.collider(chairs, chairs);
+
+      // Tạo bàn phím
+      cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    function update() {
+      // Điều khiển nhân vật
+      player.setVelocity(0);
+
+      if (cursors.left.isDown) {
+        player.setVelocityX(-150);
+      } else if (cursors.right.isDown) {
+        player.setVelocityX(150);
+      }
+
+      if (cursors.up.isDown) {
+        player.setVelocityY(-150);
+      } else if (cursors.down.isDown) {
+        player.setVelocityY(150);
+      }
+    }
+
+    function pushChair(player, chair) {
+      const direction = new Phaser.Math.Vector2(
+        chair.x - player.x,
+        chair.y - player.y
+      ).normalize();
+
+      const newX = chair.x + direction.x * 32;
+      const newY = chair.y + direction.y * 32;
+
+      // Kiểm tra nếu có vật cản
+      let canMove = true;
+      chairs.getChildren().forEach(otherChair => {
+        if (otherChair !== chair && otherChair.getBounds().contains(newX, newY)) {
+          canMove = false;
+        }
+      });
+
+      walls.getChildren().forEach(wall => {
+        if (wall.getBounds().contains(newX, newY)) {
+          canMove = false;
+        }
+      });
+
+      // Di chuyển ghế nếu không có vật cản
+      if (canMove) {
+        chair.x = newX;
+        chair.y = newY;
+      }
+    }
+  </script>
+</body>
+</html>

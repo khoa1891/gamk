@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Mobile</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .game-screen {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .menu-button {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            font-size: 18px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 49;
+        }
+        .menu {
+            position: absolute;
+            bottom: 60px;
+            left: 10px;
+            width: 160px;
+            max-height: 300px;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            z-index: 49;
+        }
+        .menu button {
+            padding: 10px;
+            font-size: 16px;
+            background: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .menu.hidden {
+            display: none;
+        }
+
+        .popup__container{
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #3333333d;
+            z-index: 50;
+        }
+        .popup__container.active{
+            display: flex;
+        }
+        .popup__wrapper{
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 16px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup___btn-close{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: green;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0 8px 0 8px;
+            user-select: none;
+        }
+
+
+        /* Hành trang */
+        .inventory {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        .slot {
+            width: 40px;
+            height: 40px;
+            background: #e8e8e8;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .money {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #555;
+        }
+        .popup-inventory {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            text-align: center;
+            width: 260px;
+            z-index: 100;
+        }
+        .popup-inventory.active {
+            display: block;
+        }
+        .popup-inventory .message {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .popup-inventory .message.success {
+            color: green;
+        }
+        .popup-inventory .message.error {
+            color: red;
+        }
+        .popup-inventory .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .popup-inventory .actions button {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+/* Tiềm năng */
+        .board {
+            width: 100%;
+            height: 353px;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stat-row span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-value {
+            font-size: 20px;
+            margin: 0 15px;
+            width: 30px;
+            text-align: center;
+        }
+        .btn-add {
+            padding: 5px 10px;
+            font-size: 18px;
+            color: white;
+            background: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-add:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        .points-display {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+        /* Trang bị */
+        .equipment-board {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .item {
+            padding: 15px;
+            background: #ffeb99;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        .item.hidden {
+            visibility: hidden; /* Tàng hình mà vẫn giữ khoảng trống */
+        }
+        /* Kỹ năng */
+        .skills{
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .skill-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .skill {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6a5acd, #8a2be2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .skill:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #8a2be2, #6a5acd);
+        }
+        .skill-description {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .stat-box {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-box span {
+            color: #00aaff;
+        }
+        .skill-names {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .skill-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #6a5acd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .skill-name:hover {
+            color: #8a2be2;
+        }
+    </style>
+</head>
+<body>
+<!-- Game Container -->
+<div class="game-container">
+    <!-- Main Game Screen -->
+    <div class="game-screen">
+        <h1>Game Mobile</h1>
+        <p>Đây là khu vực hiển thị nội dung chính của trò chơi.</p>
+    </div>
+
+    <!-- Popup UI -->
+    <div class="popup__container">
+        <div class="popup__wrapper">
+            <div class="popup___btn-close">X</div>
+            <!-- Hành trang -->
+            <div  class="popup__content inventory">
+                <h1>Hành Trang</h1>
+                <div class="slots" id="slots"></div>
+                <button id="addSlot">Thêm ô hành trang</button>
+                <div class="money">Vàng: <span id="gold">100</span> | Ruby: <span id="ruby">50</span></div>
+            </div>
+            <div class="popup-inventory" id="popup-inventory">
+                <div class="message" id="popupMessage"></div>
+                <div class="actions" id="popupActions"></div>
+            </div>
+            <!-- Trang bị -->
+            <div class="popup__content equipment-board">
+                <div class="title">Trang Bị</div>
+                <div class="grid">
+                    <div class="item">Vũ Khí</div>
+                    <div class="item">Nón</div>
+                    <div class="item">Áo</div>
+                    <div class="item">Quần</div>
+                    <div class="item hidden">Ô 5</div>  <!-- Ô tàng hình -->
+                    <div class="item">Giày</div>
+                    <div class="item">Cánh</div>
+                    <div class="item hidden">Ô 8</div>  <!-- Ô tàng hình -->
+                    <div class="item">Nhẫn</div>
+                    <div class="item">Dây Chuyền</div>
+                    <div class="item">Pet</div>
+                    <div class="item">Thú</div>
+                </div>
+            </div>
+            <!-- Tiềm năng -->
+            <div class="popup__content board">
+                <div class="title">Tiềm Năng</div>
+                <div class="stat-row">
+                    <span>Thể Lực</span>
+                    <span class="stat-value" id="stat-strength">0</span>
+                    <button class="btn-add" id="btn-strength" onclick="addPoint('strength')">+</button>
+                </div>
+                <div class="stat-row">
+                    <span>Sức Mạnh</span>
+                    <span class="stat-value" id="stat-power">0</span>
+                    <button class="btn-add" id="btn-power" onclick="addPoint('power')">+</button>
+                </div>
+                <div class="stat-row">
+                    <span>Giáp</span>
+                    <span class="stat-value" id="stat-armor">0</span>
+                    <button class="btn-add" id="btn-armor" onclick="addPoint('armor')">+</button>
+                </div>
+                <div class="stat-row">
+                    <span>X (Haha)</span>
+                    <span class="stat-value" id="stat-x">0</span>
+                    <button class="btn-add" id="btn-x" onclick="addPoint('x')">+</button>
+                </div>
+                <div class="points-display">
+                    Điểm Tiềm Năng Hiện Có: <span id="points">10</span>
+                </div>
+            </div>
+            <!-- Kỹ năng -->
+            <div class="popup__content skills">
+                <h2>Kỹ Năng</h2>
+                <div class="skill-names">
+                    <div id="skill1Name" class="skill-name"></div>
+                    <div id="skill2Name" class="skill-name"></div>
+                    <div id="skill3Name" class="skill-name"></div>
+                </div>
+                <div class="skill-box">
+                    <div id="skill1" class="skill"></div>
+                    <div id="skill2" class="skill"></div>
+                    <div id="skill3" class="skill"></div>
+                </div>
+                <div id="skillDescription" class="skill-description">
+                    <p>Chọn kỹ năng để xem mô tả.</p>
+                </div>
+                <div class="stat-box">
+                    <span id="skillPoints">Điểm Kỹ Năng: 10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Button -->
+    <button id="toggle-menu" class="menu-button">≡</button>
+    <!-- Option Menu -->
+    <div id="menu" class="menu hidden">
+        <button onclick="showOption('inventory')">Hành trang</button>
+        <button onclick="showOption('equipment-board')">Trang bị</button>
+        <button onclick="showOption('skills')">Kĩ năng</button>
+        <button onclick="showOption('board')">Tiềm năng</button>
+        <button onclick="showOption('Linh thú')">Linh thú</button>
+        <button onclick="showOption('Thú cưỡi')">Thú cưỡi</button>
+        <button onclick="showOption('Bản đồ')">Bản đồ</button>
+        <button onclick="showOption('Cài đặt')">Cài đặt</button>
+    </div>
+</div>
+
+<!-- Main script -->
+<script>
+    // Toggle Menu
+    document.getElementById('toggle-menu').addEventListener('click', () => {
+        const menu = document.getElementById('menu');
+        menu.classList.toggle('hidden');
+    });
+    // Show Option Action
+    function showOption(option) {
+        const popupContainer = document.querySelector(".popup__container")
+        popupContainer.classList.add('active')
+        const btnClosePopup = document.querySelector(".popup___btn-close")
+        const poupContent = document.querySelectorAll(".popup__content")
+        poupContent.forEach(content=>{
+            content.style.display = 'none';
+            
+        })
+        const isContent = document.querySelector(`.popup__content.${option}`)
+        if(isContent){
+            isContent.style.display = 'block';
+        }else{
+            console.error(`Bạn nhập class của content ${option} không có`)
+        }
+        btnClosePopup.addEventListener('click', ()=>{
+            popupContainer.classList.remove('active')
+        })
+        
+    }
+    </script>
+    <!-- Tiềm năng script -->
+    <script>
+        let points = 10;
+        function addPoint(stat) {
+            if (points <= 0) return;
+            const statValue = document.getElementById(`stat-${stat}`);
+            const currentValue = parseInt(statValue.textContent);
+            statValue.textContent = currentValue + 1;
+            points--;
+            document.getElementById("points").textContent = points;
+            // Disable buttons if points reach 0
+            if (points <= 0) {
+                document.querySelectorAll(".btn-add").forEach(btn => btn.disabled = true);
+            }
+        }
+    </script>
+    <!-- Hành trang script -->
+    <script>
+        const slotsContainer = document.getElementById("slots");
+        const addSlotButton = document.getElementById("addSlot");
+        const popup = document.getElementById("popup-inventory");
+        const popupMessage = document.getElementById("popupMessage");
+        const popupActions = document.getElementById("popupActions");
+        const goldDisplay = document.getElementById("gold");
+        let gold = 10000
+        const slotPrices = [20, 30, 40, 50, 60, 70, 80, 90, 100, 120];
+        let openedSlots = 10;
+        // Khởi tạo các ô trống ban đầu
+        function initializeSlots(count) {
+            for (let i = 0; i < count; i++) {
+                createSlot();
+            }
+        }
+        // Tạo một ô trống
+        function createSlot() {
+            const slot = document.createElement("div");
+            slot.classList.add("slot");
+            slotsContainer.appendChild(slot);
+        }
+        // Hiển thị popup
+        function showPopup(message, type = "info", actions = []) {
+            popupMessage.textContent = message;
+            popupMessage.className = `message ${type}`;
+            popupActions.innerHTML = "";
+            actions.forEach(action => {
+                const btn = document.createElement("button");
+                btn.textContent = action.label;
+                btn.onclick = action.onClick;
+                popupActions.appendChild(btn);
+            });
+            popup.classList.add("active");
+        }
+        // Ẩn popup
+        function hidePopup() {
+            popup.classList.remove("active");
+        }
+        // Xử lý khi bấm nút thêm ô
+        addSlotButton.addEventListener("click", () => {
+            const currentPrice = slotPrices[(openedSlots - 10) % slotPrices.length];
+            showPopup(
+                `Bạn có muốn thêm ô hành trang? Cần ${currentPrice} vàng.`,
+                "info",
+                [
+                    { label: "Có", onClick: handleConfirm },
+                    { label: "Không", onClick: hidePopup }
+                ]
+            );
+        });
+        // Xử lý khi xác nhận mua
+        function handleConfirm() {
+            const currentPrice = slotPrices[(openedSlots - 10) % slotPrices.length];
+            if (gold >= currentPrice) {
+                gold -= currentPrice;
+                goldDisplay.textContent = gold;
+                openedSlots++;
+                createSlot();
+                showPopup("Ô hành trang đã được mở!", "success", [{ label: "OK", onClick: hidePopup }]);
+            } else {
+                showPopup("Bạn không đủ tiền!", "error", [{ label: "OK", onClick: hidePopup }]);
+            }
+        }
+        // Khởi tạo giao diện ban đầu
+        initializeSlots(openedSlots);
+    </script>
+    <!-- Kỹ năng -->
+    <script>
+        const skillDescription = document.getElementById('skillDescription');
+        const skillPointsDisplay = document.getElementById('skillPoints');
+        let skillPoints = 10;
+        // Dữ liệu kỹ năng
+        const skills = [
+            { name: 'Tăng sức mạnh', description: 'Tăng cường sức mạnh tấn công của nhân vật.', level: 1 },
+            { name: 'Chữa lành', description: 'Hồi phục một lượng máu cho nhân vật.', level: 1 },
+            { name: 'Độc tố', description: 'Gây độc lên kẻ thù, làm giảm dần máu của chúng.', level: 1 }
+        ];
+        // Cập nhật tên kỹ năng bên ngoài
+        function updateSkillNames() {
+            document.getElementById('skill1Name').textContent = skills[0].name;
+            document.getElementById('skill2Name').textContent = skills[1].name;
+            document.getElementById('skill3Name').textContent = skills[2].name;
+        }
+        // Hiển thị mô tả khi chọn kỹ năng
+        function showSkillDescription(skillIndex) {
+            const skill = skills[skillIndex];
+            skillDescription.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
+                <p>${skill.description}</p>
+                <button onclick="levelUpSkill(${skillIndex})" id="levelUpButton">Cộng điểm kỹ năng</button>`;
+            updateLevelUpButton();  // Cập nhật nút sau mỗi lần chọn kỹ năng
+        }
+        // Nâng cấp kỹ năng
+        function levelUpSkill(skillIndex) {
+            if (skillPoints > 0) {
+                skills[skillIndex].level++;
+                skillPoints--;
+                skillPointsDisplay.textContent = `Điểm Kỹ Năng: ${skillPoints}`;
+                showSkillDescription(skillIndex);  // Cập nhật lại mô tả sau khi nâng cấp
+            } else {
+                alert('Không đủ điểm kỹ năng!');
+            }
+            updateLevelUpButton(); // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
+        }
+        // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
+        function updateLevelUpButton() {
+            const levelUpButton = document.getElementById('levelUpButton');
+            if (skillPoints === 0) {
+                levelUpButton.disabled = true;
+            } else {
+                levelUpButton.disabled = false;
+            }
+        }
+        // Gán sự kiện cho các kỹ năng
+        document.getElementById('skill1').addEventListener('click', () => showSkillDescription(0));
+        document.getElementById('skill2').addEventListener('click', () => showSkillDescription(1));
+        document.getElementById('skill3').addEventListener('click', () => showSkillDescription(2));
+        updateSkillNames();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1022 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
+}
+body, html {
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.game-screen {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.menu-button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    font-size: 18px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 11;
+}
+.menuBoard {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+    width: 160px;
+    max-height: 300px;
+    background: white;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    z-index: 11;
+    position: absolute;
+    opacity: 1;
+
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.menuBoard button {
+    padding: 10px;
+    font-size: 16px;
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+}
+.hiddennn {
+    visibility: hidden !important;
+    /* Ẩn ô */
+    opacity: 0 !important;
+    /* Ẩn ô */
+    pointer-events: none;
+}
+
+.popup__container{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3333333d;
+    z-index: 50;
+}
+.popup__container.active{
+    display: flex;
+}
+.popup__wrapper{
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup___btn-close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    background: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 8px 0 8px;
+    user-select: none;
+}
+
+
+/* Hành trang */
+.inventory {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+}
+h1 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+}
+.slots {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+.slot {
+    width: 40px;
+    height: 40px;
+    background: #e8e8e8;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: 0.3s ease;
+}
+button:hover {
+    background: #0056b3;
+}
+.money {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #555;
+}
+.popup-inventory {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    text-align: center;
+    width: 260px;
+    z-index: 100;
+}
+.popup-inventory.active {
+    display: block;
+}
+.popup-inventory .message {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.popup-inventory .message.success {
+    color: green;
+}
+.popup-inventory .message.error {
+    color: red;
+}
+.popup-inventory .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.popup-inventory .actions button {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+/* Tiềm năng */
+.board {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.stat-row span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+.stat-value {
+    font-size: 20px;
+    margin: 0 15px;
+    width: 30px;
+    text-align: center;
+}
+.btn-add {
+    padding: 5px 10px;
+    font-size: 18px;
+    color: white;
+    background: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.btn-add:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+.points-display {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #555;
+}
+/* Trang bị */
+.equipment-board {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+.item {
+    padding: 15px;
+    background: #ffeb99;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+.item.hidden {
+    visibility: hidden; /* Tàng hình mà vẫn giữ khoảng trống */
+}
+/* Kỹ năng */
+.skills{
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.skill-box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.skill {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #6a5acd, #8a2be2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.skill:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, #8a2be2, #6a5acd);
+}
+.skill-description {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #333;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.stat-box {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+.stat-box span {
+    color: #00aaff;
+}
+.skill-names {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.skill-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #6a5acd;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.skill-name:hover {
+    color: #8a2be2;
+}
+/* Fullscreen overlay */
+.overlayBlack {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width of viewport */
+    height: 100vh; /* Full height of viewport */
+    background: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+    z-index: 10; /* Ensure it's above other elements */
+    position: absolute;
+    opacity: 1;
+
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.overlayVio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width of viewport */
+    height: 100vh; /* Full height of viewport */
+    background: #7b178d; /* Black with 50% opacity */
+    z-index: 10; /* Ensure it's above other elements */
+    position: absolute;
+    opacity: 1;
+
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+.overlayBl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width of viewport */
+    height: 100vh; /* Full height of viewport */
+    background: black; /* Black with 50% opacity */
+    z-index: 10; /* Ensure it's above other elements */
+    position: absolute;
+    opacity: 1;
+
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+/* mobile */
+/* body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+} */
+.success {
+    color: green;
+}
+.error {
+    color: red;
+}
+.modalGear {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    display: none;
+    z-index: 12;
+}
+.containerTogether {
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    position: absolute;
+    visibility: visible;
+    /* Ẩn bảng khi chưa nhấn phím */
+    opacity: 1;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 11;
+}
+
+.containerSkill {
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    position: absolute;
+    visibility: visible;
+    /* Ẩn bảng khi chưa nhấn phím */
+    opacity: 1;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+}
+.header .dropdown-container {
+    position: relative;
+}
+#shopBtn1 {
+left: 7%;
+width: 50px;
+}
+.header .dropdown-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.header .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+}
+.header .dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    text-align: left;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+.header .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+}
+.header .text-center {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+}
+.header .add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 30px;
+}
+.header .add-btn:hover {
+    background-color: #0056b3;
+}
+.table-container {
+    height: 120px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    gap: 5px;
+}
+.table-container .cell {
+    width: 40px;
+    height: 40px;
+    background-color: #6a8fb7;
+    /* background-color: #007bff;#6a8fb7 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.menu-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    bottom: 9%;
+    left: 21%;
+    position: absolute;
+}
+.menu-btn2 {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    bottom: 9%;
+    left: 53%;
+    position: absolute;
+}
+/* Hộp câu hỏi */
+.question-box-Gear {
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px 30px;
+    max-width: 260px;
+    display: none;
+    position: absolute;
+    z-index: 12;
+}
+/* Văn bản câu hỏi */
+.question-text-Gear {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 20px;
+}
+/* Nhóm nút */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+/* Nút chung */
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+/* Nút "Có" */
+.yes-btn {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+.yes-btn:hover {
+    background-color: #43a047;
+}
+/* Nút "Không" */
+.no-btn {
+    background-color: #f44336;
+    color: #ffffff;
+}
+.no-btn:hover {
+    background-color: #e53935;
+}
+/*hop cau hoi mua hang*/
+.question-box-Shop {
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px 30px;
+    max-width: 260px;
+    display: none;
+    z-index: 2;
+}
+/* Văn bản câu hỏi */
+.question-text-Shop {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 20px;
+}
+/* Nút "Có" */
+.yes-btnShop {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+.yes-btnShop:hover {
+    background-color: #43a047;
+}
+/* Nút "Không" */
+.no-btnShop {
+    background-color: #f44336;
+    color: #ffffff;
+}
+.no-btnShop:hover {
+    background-color: #e53935;
+}
+/* -------------- trang bị*/
+.griddd {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+.griddd div {
+    width: 60px;
+    height: 60px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    /* opacity: 0.8; */
+}
+.hiddennn {
+    visibility: hidden !important;
+    /* Ẩn ô */
+    opacity: 0 !important;
+    /* Ẩn ô */
+    pointer-events: none;
+}
+.empty {
+    background-color: #e1e1e1;
+    color: #888;
+}
+.equippp {
+    background-color: #4CAF50;
+}
+.containerEquip {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    visibility: visible;
+    /* Ẩn bảng khi chưa nhấn phím */
+    width: 225px;
+    height: 355px;
+    opacity: 1;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    /* Thêm hiệu ứng khi bảng xuất hiện */
+    left: 50%;
+    top: 50%;
+    z-index: 11;
+    transform: translate(-50%, -50%);
+}
+.close-btnEquip {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #FF0000;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.close-btnGear {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #FF0000;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.emptyGear {
+    background-color: #eaeaea !important;
+    color: #aaa !important;
+    /* background-color: #ccc;
+    color: #fff; */
+    /* opacity: 0.8; */
+}
+ .popupGear {
+position: absolute;
+background-color: white;
+border: 1px solid black;
+padding: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+display: none;
+z-index: 1000;
+}
+.popupGear button {
+margin-top: 10px;
+}
+.tileDad {
+    position: absolute;
+    height: 32.5px;
+    width: 32.5px;
+    z-index: 2;
+    transition: top 0.25s ease-in-out, left 0.25s ease-in-out
+    /* transition: all 0.4s ease-in-out */
+}
+.tileeDad {
+    position: absolute;
+    pointer-events: none;
+    height: 32.5px;
+    width: 32.5px;
+    z-index: 55;
+    /* transition: top 0.4s ease-in-out */
+}
+
+
+    .info-cardCont {
+    width: 280px; /* Chiều rộng cố định */
+    background-color: #fff;
+    height: 360px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+    text-align: center;
+    padding-bottom: 10px;
+    position: absolute;
+    opacity: 1;
+z-index: 11;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.avatarCard {
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: #ddd;
+}
+
+.infoCard {
+    width: 260px;
+    padding: 15px;
+    max-height: 210px; /* Chiều cao tối đa */
+    overflow-y: auto; /* Kích hoạt cuộn dọc */
+    overflow-x: hidden; /* Ngăn cuộn ngang */
+    margin-bottom: 10px;
+    word-wrap: break-word; /* Tự động xuống dòng */
+    overflow-wrap: break-word; /* Hỗ trợ ngắt dòng trên trình duyệt cũ */
+    box-sizing: border-box; /* Đảm bảo padding không gây tràn */
+    white-space: normal; /* Đảm bảo văn bản xuống dòng */
+    margin-left: 15px;
+    text-align: left;
+}
+
+.infoCard p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.infoCard p span {
+    font-weight: bold;
+    color: #555;
+}
+
+/* .info-cardCont:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+} */
+
+/* shop  */
+.containerShopText {
+display: flex; /* Sử dụng flexbox để bố trí các phần tử ngang */
+align-items: center; /* Căn giữa theo chiều dọc */
+justify-content: space-between; /* Căn đều hai nút và nhãn tên */
+width: 250px; /* Độ rộng của container */
+margin: 0 auto; /* Canh giữa container */
+padding: 10px;
+background-color: #f9f9f9;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.pointPotentialRight {
+
+right: 70px;
+position: absolute;
+
+}
+
+/* Tiềm năng */
+.containerPotential {
+position: absolute;
+
+height: 255px;
+z-index: 11;
+width: 250px;
+background: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+text-align: center;
+visibility: visible;
+
+
+   opacity: 1;
+   transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.title {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 20px;
+color: #333;
+}
+.stat-rowPotential { height: 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin: 10px 0;
+padding: 10px;
+background: #f9f9f9;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.stat-row span {
+font-size: 18px;
+font-weight: bold;
+color: #333;
+}
+.stat-value {
+font-size: 20px;
+margin: 0 15px;
+width: 30px;
+text-align: center;
+}
+.btn-addPotentialRight {
+padding: 5px 10px;
+font-size: 18px;
+color: white;
+background: #28a745;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: background 0.3s;
+right: 25px;
+
+position: absolute;
+}
+.btn-add:disabled {
+background: gray;
+cursor: not-allowed;
+}
+.points-display {
+margin-top: 20px;
+font-size: 18px;
+font-weight: bold;
+color: #555;
+}
+    /* Kỹ năng */
+.popup__contentSkill{
+   
+   width: 250px;
+   z-index: 11;
+   background: #fff;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+   text-align: center;
+   position: absolute;
+}
+
+.skill-box {
+   margin-top: 15px;
+margin-left: 10px;
+display: flex
+;
+align-items: center;
+width: 240px;
+justify-content: space-between;
+}
+.skill {
+   width: 50px;
+   height: 50px;
+   background: linear-gradient(135deg, #6a5acd, #8a2be2);
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 10px;
+   font-size: 16px;
+   cursor: pointer;
+   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+   transition: transform 0.3s ease, background 0.3s ease;
+}
+.skill:hover {
+   transform: translateY(-5px);
+   background: linear-gradient(135deg, #8a2be2, #6a5acd);
+}
+.skill-description {
+   margin-top: -13px;
+   font-size: 16px;
+   height: 133px;
+   color: #333;
+   background: #f8f8f8;
+   padding: 20px;
+   border-radius: 8px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.stat-box {
+   margin-top: 20px;
+   font-size: 18px;
+   font-weight: bold;
+   color: #333;
+}
+.stat-box span {
+   color: #00aaff;
+}
+.skill-names {
+   margin-top: 15px;
+margin-left: -4px;
+display: flex;
+align-items: flex-start;
+width: 275px;
+justify-content: space-between;
+}
+.skill-name {
+font-weight: bold;
+font-size: 16px;
+width: 84px;
+color: #6a5acd;
+cursor: pointer;
+transition: color 0.3s ease;
+}
+.skill-name:hover {
+   color: #8a2be2;
+}
+#skillDescription h3 { font-size: 15px}
+#closeBtnPointSkill {
+   top: 17px;
+left: 17px;
+position: absolute;
+background-color: #FF0000;
+color: #fff;
+border: none;
+padding: 5px 10px;
+font-size: 14px;
+cursor: pointer;
+border-radius: 5px;
+}
+#skillDescription p { height: 82px; overflow-y: auto}  
+#skillDescription h3 { margin-bottom: 5px; margin-top: 6px}
