@@ -582,9 +582,9 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
         // ------------
 
 // --------------
-        const newX = camera.scrollX + 10; // Tọa độ map dựa trên góc trái màn hình
-        const newY = camera.scrollY + camera.height - 10; // Góc dưới màn hình
-        const newX2 = camera.scrollX + camera.width - 10
+        const newX = camera.scrollX + 20; // Tọa độ map dựa trên góc trái màn hình
+        const newY = camera.scrollY + camera.height - 30; // Góc dưới màn hình
+        const newX2 = camera.scrollX + camera.width - 20
         minimap.setPosition(-200, -200);
         gameObj.map.player.setPosition(newX, newY);
         gameObj.map.monsterPresent.setPosition(newX2, newY);
@@ -619,6 +619,9 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     });
 
 
+}
+function iii() {
+    oo.input.keyboard.emit('keydown-M');
 }
 function createChar(scene) {
     gameObj.map.body = scene.add.sprite(0, 0, 'body');
