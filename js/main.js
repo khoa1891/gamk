@@ -567,7 +567,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
             document.getElementById("toggle-menu").classList.toggle("hiddennn")
     
-            createBattleUI()
+            // createBattleUI()
     this.input.keyboard.emit('keydown-A');
 
     document.querySelector(".overlayBl").classList.toggle("hiddennn")
@@ -580,7 +580,6 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
         this.cameras.main.stopFollow();
         const camera = this.cameras.main; // Camera hiện tại
         // ------------
-console.log(99)
 // --------------
         const newX = camera.scrollX + 55; // Tọa độ map dựa trên góc trái màn hình
         const newY = camera.scrollY + camera.height - 55; // Góc dưới màn hình
