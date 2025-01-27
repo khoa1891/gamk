@@ -1193,21 +1193,21 @@ function getNum(a, b) {
     }
 }
 
-function updateInfor() {
-    var i = 0
-    for (const type of ['char', 'mon']) {
-        let a = i == 0? gameObj.map.charr.obj: gameObj.map.monn.obj
-        document.getElementById(`${type}-health`).textContent = +a.hpCur.toFixed(2)
-        document.getElementById(`${type}-mana`).textContent = +a.manaCur.toFixed(2)
-        document.getElementById(`${type}-max-armor`).textContent = +a.armorMax.toFixed(2)
-        document.getElementById(`${type}-armor-cur`).textContent = +a.armorCur.toFixed(2)
-        document.getElementById(`${type}-dame`).textContent = +a.dame.toFixed(2)
+// function updateInfor() {
+//     var i = 0
+//     for (const type of ['char', 'mon']) {
+//         let a = i == 0? gameObj.map.charr.obj: gameObj.map.monn.obj
+//         document.getElementById(`${type}-health`).textContent = +a.hpCur.toFixed(2)
+//         document.getElementById(`${type}-mana`).textContent = +a.manaCur.toFixed(2)
+//         document.getElementById(`${type}-max-armor`).textContent = +a.armorMax.toFixed(2)
+//         document.getElementById(`${type}-armor-cur`).textContent = +a.armorCur.toFixed(2)
+//         document.getElementById(`${type}-dame`).textContent = +a.dame.toFixed(2)
 
-        document.getElementById(`${type}-health2`).textContent = +a.hpMax.toFixed(2)
-        document.getElementById(`${type}-mana2`).textContent = +a.manaMax.toFixed(2)
-        i++
-    }
-}
+//         document.getElementById(`${type}-health2`).textContent = +a.hpMax.toFixed(2)
+//         document.getElementById(`${type}-mana2`).textContent = +a.manaMax.toFixed(2)
+//         i++
+//     }
+// }
 var equip = {
     "shirt": {
         dame: 5,
@@ -1266,11 +1266,13 @@ var boardPointt = {
     timer: 5,
     countdown: 0,
     
-    get turnInfo() {return document.getElementById("turn-info")},
+    get turnInfo1() {return document.getElementById("turn-info1")},
+    get turnInfo2() {return document.getElementById("turn-info2")},
 
     get timerDisplay () {return  document.getElementById("timer")},
 
-    get remainingTurnsDisplay () {return  document.getElementById("remaining-turns")}
+    get remainingTurnsDisplay1 () {return  document.getElementById("remaining-turns1")},
+    get remainingTurnsDisplay2 () {return  document.getElementById("remaining-turns2")}
 }
 function startGame() {
     var board_table = document.getElementById("boardd");
@@ -1298,15 +1300,15 @@ function startGame() {
     // -----------------------
 
     // startG có nghĩa là báo hiệu đầu game
-    // if (boardPointt.start == true) {
-    //     if (checkValid()) { setTimeout(() => { destroyCandy() }, 1000) }
-    //     else {
-    //         // ko thì kiểm tra có nước đi khả thi ko
-    //         if (canSwap() ) {
-    //             setTimeout(() => { startTime() }, 500)                
-    //         } else { reCreate() } 
-    //     }
-    // }
+    if (boardPointt.start == true) {
+        if (checkValid()) { setTimeout(() => { destroyCandy() }, 1000) }
+        else {
+            // ko thì kiểm tra có nước đi khả thi ko
+            if (canSwap() ) {
+                setTimeout(() => { startTime() }, 500)                
+            } else { reCreate() } 
+        }
+    }
 }
   
 
@@ -1785,6 +1787,7 @@ function reCreate() {
 const fiveLL = 5
 
 function startTime() {
+    boardPointt.timerDisplay.style.visibility = "visible"
     boardPointt.timer = fiveLL; boardPointt.remainingTurns = 1;
 
     boardPointt.currentTurn = Math.random() < 0.5 ? "Nhân vật" : "Quái";
@@ -1800,13 +1803,21 @@ function startTime() {
 
 function updateTimeInfo() {
         // boardPointt.remainingTurnsDisplay.style.display = 'block'
-        boardPointt.remainingTurnsDisplay.textContent = `Số lượt còn lại: ${boardPointt.remainingTurns}` 
+        if (boardPointt.currentTurn == "Nhân vật") {
+            // lượt còn
+            boardPointt.remainingTurnsDisplay1.textContent = boardPointt.remainingTurns 
+            //lượt của
+            boardPointt.turnInfo1.style.visibility = "visible"
+            boardPointt.turnInfo2.style.visibility = "hidden"
+        } else {
+            // lượt còn
+            boardPointt.remainingTurnsDisplay2.textContent = boardPointt.remainingTurns 
+            //lượt của
+            boardPointt.turnInfo2.style.visibility = "visible"
+            boardPointt.turnInfo1.style.visibility = "hidden"
+        }
 
-    boardPointt.turnInfo.textContent = `Lượt của: ${boardPointt.currentTurn}`;
-    boardPointt.currentTurn == "Quái"?  boardPointt.turnInfo.style.color = 'red'
-        : boardPointt.turnInfo.style.color = 'green';
-
-    boardPointt.timerDisplay.textContent = `Thời gian: ${boardPointt.timer} giây`;
+    boardPointt.timerDisplay.textContent = `${boardPointt.timer}s`;
     
 }
 function startCountdown() {
@@ -1815,7 +1826,7 @@ function startCountdown() {
     boardPointt.countdown = setInterval(() => {
 
         boardPointt.timer--;
-        boardPointt.timerDisplay.textContent = `Thời gian: ${boardPointt.timer} giây`;
+        boardPointt.timerDisplay.textContent = `${boardPointt.timer}s`;
 
         if (boardPointt.timer == 0) {
             clearInterval(boardPointt.countdown)
@@ -2026,3 +2037,68 @@ function chooseSkill(skillIndex, thi, thi2) {
 document.getElementById('skill1').addEventListener('click', () => showSkillDescription(1, gameObj.map.charr, gameObj.map.monn));
 document.getElementById('skill2').addEventListener('click', () => showSkillDescription(2, gameObj.map.charr, gameObj.map.monn));
 document.getElementById('skill3').addEventListener('click', () => showSkillDescription(3, gameObj.map.charr, gameObj.map.monn));
+
+
+
+
+
+const popupBoardGame = document.getElementById('popupBoardGame');
+        const openPopupBoardGame = document.getElementById('openPopupBoardGame');
+        const yesBtnBoardGame = document.getElementById('yesBtnBoardGame');
+        const noBtnBoardGame = document.getElementById('noBtnBoardGame');
+
+        // Mở pop-up
+        openPopupBoardGame.addEventListener('click', () => {
+            popupBoardGame.classList.toggle('hiddennn');
+        });
+        function toggleYesNoBoard() {
+            popupBoardGame.classList.toggle('hiddennn');
+        }
+
+        // Đóng pop-up khi nhấn "Có" hoặc "Không"
+        function yesBoardGame() {
+            popupBoardGame.classList.add('hiddennn');
+        }
+
+        function noBoardGame() {
+            popupBoardGame.classList.add('hiddennn');
+        }
+
+        function updateInfor() {
+            const charHpFill = document.querySelector('.charHpFill');
+            const monHpFill = document.querySelector('.monHpFill');
+            const charHpText = document.querySelector('.charHpText');
+            const monHpText = document.querySelector('.monHpText');
+      
+            const charManaFill = document.querySelector('.charManaFill');
+            const monManaFill = document.querySelector('.monManaFill');
+            const charManaText = document.querySelector('.charManaText');
+            const monManaText = document.querySelector('.monManaText');
+      
+            const charArmor = document.querySelector('.charArmor');
+            const monArmor = document.querySelector('.monArmor');
+      
+            
+            charHpFill.style.width = (gameObj.map.charr.obj.hpCur / gameObj.map.charr.obj.hpMax) * 100 + '%';
+            monHpFill.style.width = (gameObj.map.monn.obj.hpCur / gameObj.map.monn.obj.hpMax) * 100 + '%';
+            charHpText.textContent = `${formatNumber(gameObj.map.charr.obj.hpCur)}/${formatNumber(gameObj.map.charr.obj.hpMax)}`;
+            monHpText.textContent = `${formatNumber(gameObj.map.monn.obj.hpCur)}/${formatNumber(gameObj.map.monn.obj.hpMax)}`;
+          
+            charManaFill.style.width = (gameObj.map.charr.obj.manaCur / gameObj.map.charr.obj.manaMax) * 100 + '%';
+            monManaFill.style.width = (gameObj.map.monn.obj.manaCur / gameObj.map.monn.obj.manaMax) * 100 + '%';
+            charManaText.textContent = `${formatNumber(gameObj.map.charr.obj.manaCur)}/${formatNumber(gameObj.map.charr.obj.manaMax)}`;
+            monManaText.textContent = `${formatNumber(gameObj.map.monn.obj.manaCur)}/${formatNumber(gameObj.map.monn.obj.manaMax)}`;
+      
+            charArmor.textContent = `🛡️: ${gameObj.map.charr.obj.armorCur}`
+            monArmor.textContent = `🛡️: ${gameObj.map.monn.obj.armorCur}`
+            // Check if health is below 15%
+          //   if ((current / max) <= 0.15) {
+          //     barContainer.classList.add('low-health');
+          //   } else {
+          //     barContainer.classList.remove('low-health');
+          //   }
+          }
+      
+          function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }

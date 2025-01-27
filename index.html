@@ -347,7 +347,7 @@ position: absolute;
                     border: none;
                     color: black;
                     padding: 0 5px;
-                    font-size: 14px;
+                    font-size: 13px;
                     cursor: pointer;
                     border-radius: 5px;
                     margin-bottom: 0;
@@ -371,10 +371,12 @@ position: absolute;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 20px;
+                    font-size: 15px;
                     font-weight: bold;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     cursor: pointer;
+                    visibility: hidden
+
                 }
 
                 .circleBoardGame {
@@ -388,6 +390,7 @@ position: absolute;
                     font-size: 17px;
                     font-weight: bold;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    visibility: hidden
                 }
 
                 .status-rowBoardGame {
@@ -446,10 +449,10 @@ position: absolute;
     border-radius: 5px;
     transition: transform 0.3s ease, background-color 0.3s ease;
     height: 11px !important;
-    line-height: 11px;
+    line-height: 19px;
     width: 70px !important;
     margin-left: 21px;
-    margin-bottom: -1px;
+    margin-bottom: 0px;
                 }
 
                 .statusBoardGame * {
@@ -465,7 +468,7 @@ position: absolute;
 
                 .bar-labelBoardGame {
                     position: absolute;
-                    top: 0;
+                    top: 5px;
                     left: 50%;
                     transform: translateX(-50%);
                     font-size: 10px;
@@ -562,11 +565,11 @@ position: absolute;
             <div class="controlsBoardGame">
                 <button id="skillButtonBoardGame">Kỹ năng</button>
                 <div class="circle-containerBoardGame">
-                    <div class="arrowBoardGame" id="arrowLeftBoardGame">&larr;</div>
-                    <div class="circleBoardGame" id="circleBoardGame">19s</div>
-                    <div class="arrowBoardGame" id="arrowRightBoardGame">&rarr;</div>
+                    <div class="arrowBoardGame" id="turn-info1" style="color:green">&larr;<span id="remaining-turns1"></span></div>
+                    <div class="circleBoardGame" id="timer">19s</div>
+                    <div class="arrowBoardGame" id="turn-info2" style="color:red"><span id="remaining-turns2"></span>&rarr;</div>
                 </div>
-                <button id="surrenderButtonBoardGame">Đầu hàng</button>
+                <button id="surrenderButtonBoardGame" onclick="toggleYesNoBoard()">Đầu hàng</button>
             </div>
 
             <!-- Hình tròn và mũi tên -->
@@ -580,32 +583,42 @@ position: absolute;
         <div class="status-rowBoardGame">
             <!-- Player Info -->
             <div class="statusBoardGame" style="margin-right: 15px;">
-                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="armor-barBoardGame charArmor">Giáp: 0</div>
                 <div class="barBoardGame health-barBoardGame">
-                    <div class="full1BoardGame bar-fillBoardGame" style="width: 50%;"></div>
-                    <span class="bar-labelBoardGame">500/1000</span>
+                    <div class="full1BoardGame bar-fillBoardGame charHpFill" style="width: 50%;"></div>
+                    <span class="bar-labelBoardGame charHpText">500/1000</span>
                 </div>
 
-                <div class="barBoardGame mana-barBoardGame full2BoardGame">
-                    <div class="bar-fillBoardGame " style="width: 30%;"></div>
-                    <span class="bar-labelBoardGame">30/100</span>
+                <div class="barBoardGame mana-barBoardGame full2BoardGame" style="top:1px">
+                    <div class="bar-fillBoardGame charManaFill" style="width: 30%;"></div>
+                    <span class="bar-labelBoardGame charManaText">30/100</span>
                 </div>
             </div>
             <!-- Enemy Info -->
             <div class="statusBoardGame">
-                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="armor-barBoardGame monArmor">Giáp: 0</div>
                 <div class="barBoardGame health-barBoardGame">
-                    <div class="bar-fillBoardGame" style="width: 70%;"></div>
-                    <span class="bar-labelBoardGame">700/1000</span>
+                    <div class="bar-fillBoardGame monHpFill" style="width: 70%;"></div>
+                    <span class="bar-labelBoardGame monHpText">700/1000</span>
                 </div>
 
-                <div class="barBoardGame mana-barBoardGame">
-                    <div class="bar-fillBoardGame" style="width: 40%;"></div>
-                    <span class="bar-labelBoardGame">40/100</span>
+                <div class="barBoardGame mana-barBoardGame" style="top:1px">
+                    <div class="bar-fillBoardGame monManaFill" style="width: 40%;"></div>
+                    <span class="bar-labelBoardGame monManaText">40/100</span>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <div id="popupBoardGame" class="popupBoardGame hiddennn">
+        <div class="popup-contentBoardGame">
+            <p>Bạn có muốn đầu hàng?</p>
+            <div class="popup-buttonsBoardGame">
+                <button id="yesBtnBoardGame" style="margin-bottom: 0 !important" onclick="yesBoardGame()">Có</button>
+                <button id="noBtnBoardGame" style="margin-bottom: 0 !important" onclick="noBoardGame()">Không</button>
+            </div>
+        </div>
     </div>
 
 

@@ -45,3 +45,65 @@ width: 285px;
 .grid-itemBoardGame:hover {
     background-color: #ddd;
 }
+
+/* ---------------------------- */
+.popupBoardGame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    visibility: visible;
+
+
+   opacity: 1;
+   transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.popup-contentBoardGame {
+    background: linear-gradient(145deg, #7b2cbf, #d7385e);
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.popup-buttonsBoardGame {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.popup-buttonsBoardGame button {
+    background-color: #480ca8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-buttonsBoardGame button:hover {
+    background-color: #d7385e;
+}
+
+#openPopupBoardGame {
+    background-color: #7b2cbf;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#openPopupBoardGame:hover {
+    background-color: #d7385e;
+}

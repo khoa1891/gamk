@@ -191,10 +191,10 @@ width: 285px;
                     border-radius: 5px;
                     transition: transform 0.3s ease, background-color 0.3s ease;
                     height: 8px !important;
-                    line-height: 8px;
+                    line-height: 18px;
                     width: 45px !important;
                     margin-left: 19px;
-                    margin-bottom: -1px;
+                    margin-bottom: 0px;
 
 
 
@@ -330,28 +330,28 @@ width: 285px;
         <div class="status-rowBoardGame">
             <!-- Player Info -->
             <div class="statusBoardGame" style="margin-right: 48px;">
-                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="armor-barBoardGame charArmor">Giáp: 0</div>
                 <div class="barBoardGame health-barBoardGame">
-                    <div class="full1BoardGame bar-fillBoardGame" style="width: 50%;"></div>
-                    <span class="bar-labelBoardGame">500/1000</span>
+                    <div class="full1BoardGame bar-fillBoardGame charHpFill" style="width: 50%;"></div>
+                    <span class="bar-labelBoardGame charHpText">500/1000</span>
                 </div>
 
-                <div class="barBoardGame mana-barBoardGame full2BoardGame">
-                    <div class="bar-fillBoardGame " style="width: 30%;"></div>
-                    <span class="bar-labelBoardGame">30/100</span>
+                <div class="barBoardGame mana-barBoardGame full2BoardGame" style="top:1px">
+                    <div class="bar-fillBoardGame charManafill" style="width: 30%;"></div>
+                    <span class="bar-labelBoardGame charmanaText">30/100</span>
                 </div>
             </div>
             <!-- Enemy Info -->
             <div class="statusBoardGame">
-                <div class="armor-barBoardGame">Giáp: 0</div>
+                <div class="armor-barBoardGame monArmor">Giáp: 0</div>
                 <div class="barBoardGame health-barBoardGame">
-                    <div class="bar-fillBoardGame" style="width: 70%;"></div>
-                    <span class="bar-labelBoardGame">700/1000</span>
+                    <div class="bar-fillBoardGame monHpFill" style="width: 70%;"></div>
+                    <span class="bar-labelBoardGame monHpText">700/1000</span>
                 </div>
 
-                <div class="barBoardGame mana-barBoardGame">
-                    <div class="bar-fillBoardGame" style="width: 40%;"></div>
-                    <span class="bar-labelBoardGame">40/100</span>
+                <div class="barBoardGame mana-barBoardGame" style="top:1px">
+                    <div class="bar-fillBoardGame monManaFill" style="width: 40%;"></div>
+                    <span class="bar-labelBoardGame monManaText">40/100</span>
                 </div>
             </div>
         </div>
@@ -365,7 +365,7 @@ width: 285px;
         <button class="button" onclick="increaseHealth()">Tăng Máu</button>
       </div>
 
-    <!-- <script>
+     <script>
         // Tạo bảng 8x8
         const gridContainer = document.querySelector('.grid-container');
         for (let i = 0; i < 64; i++) {
@@ -434,22 +434,45 @@ width: 285px;
         // Initial UI update
         updateUI();
         function updateBar(selector, current, max) {
-      const bar = document.querySelector(selector + ' .bar-fill');
-      const label = document.querySelector(selector + ' .bar-label');
-      const barContainer = document.querySelector(selector);
+      const charHpFill = document.querySelector('.charHpFill');
+      const monHpFill = document.querySelector('.monHpFill');
+      const charHpText = document.querySelector('.charHpText');
+      const monHpText = document.querySelector('.monHpText');
+
+      const charManaFill = document.querySelector('.charManaFill');
+      const monManaFill = document.querySelector('.monManaFill');
+      const charManaText = document.querySelector('.charManaText');
+      const monManaText = document.querySelector('.monManaText');
+
+      const charArmor = document.querySelector('.charArmor');
+      const monArmor = document.querySelector('.monArmor');
+
       
-      bar.style.width = (current / max) * 100 + '%';
-      label.textContent = `${current}/${max}`;
+      charHpFill.style.width = (gameObj.map.charr.obj.hpCur / gameObj.map.charr.obj.hpMax) * 100 + '%';
+      monHpFill.style.width = (gameObj.map.monn.obj.hpCur / gameObj.map.monn.obj.hpMax) * 100 + '%';
+      charHpText.textContent = `${formatNumber(gameObj.map.charr.obj.hpCur)}/${formatNumber(gameObj.map.charr.obj.hpMax)}`;
+      monHpText.textContent = `${formatNumber(gameObj.map.monn.obj.hpCur)}/${formatNumber(gameObj.map.monn.obj.hpMax)}`;
     
+      charManaFill.style.width = (gameObj.map.charr.obj.manaCur / gameObj.map.charr.obj.manaMax) * 100 + '%';
+      monManaFill.style.width = (gameObj.map.monn.obj.manaCur / gameObj.map.monn.obj.manaMax) * 100 + '%';
+      charManaText.textContent = `${formatNumber(gameObj.map.charr.obj.manaCur)}/${formatNumber(gameObj.map.charr.obj.manaMax)}`;
+      monManaText.textContent = `${formatNumber(gameObj.map.monn.obj.manaCur)}/${formatNumber(gameObj.map.monn.obj.manaMax)}`;
+
+      charArmor.textContent = `🛡️: ${gameObj.map.charr.obj.armorCur}`
+      monArmor.textContent = `🛡️: ${gameObj.map.monn.obj.armorCur}`
       // Check if health is below 15%
-      if ((current / max) <= 0.15) {
-        barContainer.classList.add('low-health');
-      } else {
-        barContainer.classList.remove('low-health');
-      }
+    //   if ((current / max) <= 0.15) {
+    //     barContainer.classList.add('low-health');
+    //   } else {
+    //     barContainer.classList.remove('low-health');
+    //   }
     }
+
+    function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
     
-      </script> -->
+      </script>      
 </body>
 </html>
 
