@@ -6,7 +6,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: true
         }
     },
     dom: {
@@ -217,8 +217,8 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
             // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
             monster.setBounce(1);
             monster.setCollideWorldBounds(true);
-            monster.setSize(40, 50)
-            monster.setScale(0.725);
+            monster.setSize(25, 35)
+            monster.setScale(0.5);
             monster.setOrigin(0.5, 0.5);
             monster.setDepth(11)
             monster.isAlive = true
@@ -243,8 +243,8 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
             // áo
             let body = this.add.sprite(0, 0, 'body');
-            body.setSize(40, 50)
-            body.setScale(0.725);
+            body.setSize(25, 35)
+            body.setScale(0.5);
             body.setOrigin(0.5, 0.5);
 
             gameObj.map.monstersBody.push(body)
@@ -259,7 +259,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
             // Add physics body for the entire character
             monBody = this.physics.add.existing(monContainer);
-            monContainer.body.setSize(40, 50).setCollideWorldBounds(true);
+            monContainer.body.setSize(25, 35).setCollideWorldBounds(true);
 
 
             // // Tạo tên cho quái vật
@@ -624,35 +624,32 @@ function iii() {
 }
 function createChar(scene) {
     gameObj.map.body = scene.add.sprite(0, 0, 'body');
-    gameObj.map.body.setSize(40, 50)
-    gameObj.map.body.setScale(0.725);
+    gameObj.map.body.setSize(25, 35)
+    gameObj.map.body.setScale(0.5);
+    // gameObj.map.body.setSize(40, 50)
+    // gameObj.map.body.setScale(0.725);
     gameObj.map.body.setOrigin(0.5, 0.5);
 
     gameObj.map.weapon = scene.add.sprite(0, 0, 'body');
-    gameObj.map.weapon.setSize(40, 50)
-    gameObj.map.weapon.setScale(0.725);
+    gameObj.map.weapon.setSize(25, 35)
+    gameObj.map.weapon.setScale(0.5);
     gameObj.map.weapon.setOrigin(0.5, 0.5);
 
     
     gameObj.map.mount = scene.add.sprite(0, 0, 'body');
-    gameObj.map.mount.setSize(40, 50)
-    gameObj.map.mount.setScale(0.725);
+    gameObj.map.mount.setSize(25, 35)
+    gameObj.map.mount.setScale(0.5);
     gameObj.map.mount.setOrigin(0.5, 0.5);
 
      
     gameObj.map.pet = scene.add.sprite(0, 0, 'body');
-    gameObj.map.pet.setSize(40, 50)
-    gameObj.map.pet.setScale(0.725);
+    gameObj.map.pet.setSize(25, 35)
+    gameObj.map.pet.setScale(0.5);
     gameObj.map.pet.setOrigin(0.5, 0.5);
 
     gameObj.map.wing = scene.add.sprite(0, 0, 'body');
-    gameObj.map.wing.setSize(40, 50)
-    gameObj.map.wing.setScale(0.725);
-    gameObj.map.wing.setOrigin(0.5, 0.5);
-
-    gameObj.map.wing = scene.add.sprite(0, 0, 'body');
-    gameObj.map.wing.setSize(40, 50)
-    gameObj.map.wing.setScale(0.725);
+    gameObj.map.wing.setSize(25, 35)
+    gameObj.map.wing.setScale(0.5);
     gameObj.map.wing.setOrigin(0.5, 0.5);
     gameObj.map.wing.setDepth(10)
 
@@ -673,12 +670,12 @@ function createChar(scene) {
 
     // Add physics body for the entire character
     characterBody = scene.physics.add.existing(gameObj.map.characterContainer);
-    gameObj.map.characterContainer.body.setSize(40, 50) // .setCollideWorldBounds(true);
+    gameObj.map.characterContainer.body.setSize(25, 35) // .setCollideWorldBounds(true);
 
     // Tạo nhân vật
     gameObj.map.player = scene.physics.add.sprite(400, 300, 'frame1');
-    gameObj.map.player.setSize(40, 50)
-    gameObj.map.player.setScale(0.725);
+    gameObj.map.player.setSize(25, 35)
+    gameObj.map.player.setScale(0.5);
     gameObj.map.player.setOrigin(0.5, 0.5);
     gameObj.map.player.setDepth(11)
 
