@@ -77,7 +77,7 @@ let monsInF = {
             idleCloth: 'idleCloth',
             run: 'run',
             runCloth: 'runCloth',
-            num: 1, // Số lượng quái
+            num: 10, // Số lượng quái
             mi() {
                 return this.level;
             },
@@ -131,7 +131,7 @@ let skillGame = {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
         S1: {
             name: 'Lưỡi Kim hahaha',
-            des: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
+            description: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
             mana: 75,
             dame: 28,
             level: 1,
@@ -144,7 +144,7 @@ let skillGame = {
         },
         S2: {
             name: 'Tường Bạch Kim',
-            des: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
+            description: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
             mana: 150,
             armorCur: 35,
             level: 1,
@@ -156,7 +156,7 @@ let skillGame = {
         },
         S3: {
             name: 'Thép Nóng Chảy',
-            des: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
+            description: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
             mana: 225,
             dame: 50,
             level: 1,
@@ -172,7 +172,7 @@ let skillGame = {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
         S1: {
             name: 'Lưỡi Kim',
-            des: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
+            description: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
             mana: 75,
             dame: 28,
             level: 1,
@@ -185,7 +185,7 @@ let skillGame = {
         },
         S2: {
             name: 'Tường Bạch Kim',
-            des: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
+            description: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
             mana: 150,
             armorCur: 35,
             level: 1,
@@ -197,7 +197,7 @@ let skillGame = {
         },
         S3: {
             name: 'Thép Nóng Chảy',
-            des: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
+            description: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
             mana: 225,
             dame: 50,
             level: 1,
@@ -212,7 +212,7 @@ let skillGame = {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
         S1: {
             name: 'Lưỡi Kim',
-            des: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
+            description: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
             mana: 75,
             dame: 28,
             level: 1,
@@ -225,7 +225,7 @@ let skillGame = {
         },
         S2: {
             name: 'Tường Bạch Kim',
-            des: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
+            description: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
             mana: 150,
             armorCur: 35,
             level: 1,
@@ -237,7 +237,7 @@ let skillGame = {
         },
         S3: {
             name: 'Thép Nóng Chảy',
-            des: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
+            description: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
             mana: 225,
             dame: 50,
             level: 1,
@@ -252,7 +252,7 @@ let skillGame = {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
         S1: {
             name: 'Lưỡi Kim',
-            des: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
+            description: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
             mana: 75,
             dame: 28,
             level: 1,
@@ -265,7 +265,7 @@ let skillGame = {
         },
         S2: {
             name: 'Tường Bạch Kim',
-            des: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
+            description: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
             mana: 150,
             armorCur: 35,
             level: 1,
@@ -277,7 +277,7 @@ let skillGame = {
         },
         S3: {
             name: 'Thép Nóng Chảy',
-            des: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
+            description: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
             mana: 225,
             dame: 50,
             level: 1,
@@ -292,7 +292,7 @@ let skillGame = {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
         S1: {
             name: 'Lưỡi Kim',
-            des: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
+            description: 'Tấn công mục tiêu bằng một lưỡi dao sắc bén, gây sát thương vật lý lớn',
             mana: 75,
             dame: 28,
             level: 1,
@@ -305,7 +305,7 @@ let skillGame = {
         },
         S2: {
             name: 'Tường Bạch Kim',
-            des: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
+            description: 'Tạo một bức tường kim loại bảo vệ bản thân hoặc đồng đội, giảm 40% sát thương nhận vào trong 3 lượt',
             mana: 150,
             armorCur: 35,
             level: 1,
@@ -317,7 +317,7 @@ let skillGame = {
         },
         S3: {
             name: 'Thép Nóng Chảy',
-            des: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
+            description: 'Phóng ra luồng thép nóng chảy tấn công tất cả kẻ địch, gây sát thương diện rộng và hiệu ứng thiêu đốt trong 2 lượt',
             mana: 225,
             dame: 50,
             level: 1,
@@ -377,13 +377,13 @@ class Character {
         }
     }
     useSkill(a, target) {
-        const skill = this.obj.skill[`S${a}`];
+        const skill = this.skill[`S${a}`];
         if (this.obj.manaCur < skill.mana) {
             console.log("mana ko đủ"); return;
         }
 
         this.obj.manaCur -= skill.mana
-        this.Object.keys(skill).forEach(item => {
+        Object.keys(skill).forEach(item => {
             // this.obj.dame += item.dame || 0;
             item == 'armorCur' ? (this.obj.armorCur += skill[item] || 0,
                 this.obj.armorCur = +this.obj.armorCur.toFixed(2)
@@ -391,7 +391,7 @@ class Character {
             item == 'hpCur' ? (this.obj.hpCur += skill[item] || 0,
                 this.obj.hpCur = +this.obj.hpCur.toFixed(2)
             ) : 1
-            if ((skill[item] || 0) != 0 && item == 'dame') { this.obj.fight(target, skill[item]) }
+            if ((skill[item] || 0) != 0 && item == 'dame') { this.fight(target, skill[item]) }
             // this.obj.dodge += item.dodge || 0;
         });
     }
@@ -505,6 +505,8 @@ this.armorCur = +this.armorCur.toFixed(2)
     };
 
     fight(target, aa, bb) {
+        console.log(target.obj.hpCur)
+        console.log(boardPointt.currentTurn)
         var dame
         if (aa == 0) {
             dame = (this.obj.dame / 3) * bb

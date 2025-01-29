@@ -4,4 +4,5 @@ setTimeout(()=>{
 console.log(98289)
 gameObj.map.monn = new Character(mong)
 // iii()
+updateSkillNames2();
 },5000)

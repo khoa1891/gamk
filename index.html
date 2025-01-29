@@ -57,7 +57,17 @@
     
 
     <!-- Menu Button ≡ -->
+    <style>
+        #fightMon {
+            left: 50%; transform: translateX(-50%); background: red;
+        }
+        #changeMon {
+            right: 10px; background: red;
+        }
+    </style>
     <div id="toggle-menu" class="menu-button" onclick="toggleMenuBoard()">Menu</div>
+    <div id="fightMon" class="menu-buttonn hiddennn" onclick="fightMonn()">Đánh</div>
+    <div id="changeMon" class="menu-buttonn hidennn">Đổi</div>
     <!-- Option Menu -->
     <div id="menu" class="menuBoard hiddennn">
         <button onclick="toggleMenu()">Hành trang</button>
@@ -96,8 +106,8 @@
         </div>
         <div class="table-container" id="table-container"></div>
         <div class="footer">
-            <div>Xu: <span id="xu">10000</span></div>
-            <div>Đồng: <span id="dong">9</span></div>
+            <div>Đồng: <span id="dongg">10000</span></div>
+            <div>Vàng: <span id="vangg">9</span></div>
         </div>
     </div>
     <!-- <button class="menu-btn"
@@ -191,10 +201,10 @@
 
 
  <!-- Kỹ năng -->
-<div class="popup__contentSkill skills hiddennn" style="visibility: visible;
+<div class="popup__contentSkill skills hiddennn " style="visibility: visible;
    opacity: 1;
    transition: opacity 0.5s ease, visibility 0.5s ease;">
-    <div style="text-align: center; font-weight: bold">Kỹ Năng</div>
+    <div style="text-align: center; font-weight: bold" onclick="toggleMenu42()">Kỹ Năng</div>
     <button class="close-btnGear" id="closeBtnSkill" onclick="toggleMenu4()">x</button>
     <button id="closeBtnPointSkill" style="font-size: 13px; left: -10px !important">Điểm Kỹ Năng: <span
             id="skillPoints">10</span></button>
@@ -217,9 +227,9 @@
         let skillPoints = 10;
         // Dữ liệu kỹ năng
         const skills = [
-            { name: 'Tăng sức mạnh', description: 'Tăng cường sức mạnh tấn công của nhân vật.', level: 1 },
-            { name: 'Chữa lành', description: 'Hồi phục một lượng máu cho nhân vật.', level: 1 },
-            { name: 'Độc tố', description: 'Gây độc lên kẻ thù, làm giảm dần máu của chúng.', level: 1 }
+            { name: 'Tăng sức mạnh', description: 'Tăng cường sức mạnh tấn công của nhân vật.', level: 1, mana: 75},
+            { name: 'Chữa lành', description: 'Hồi phục một lượng máu cho nhân vật.', level: 1, mana: 150 },
+            { name: 'Độc tố', description: 'Gây độc lên kẻ thù, làm giảm dần máu của chúng.', level: 1, mana: 225 }
         ];
         // Cập nhật tên kỹ năng bên ngoài
         function updateSkillNames() {
@@ -267,6 +277,81 @@
 
 
 
+</div>
+
+
+
+ <!-- Kỹ năng2 -->
+ <div class="popup__contentSkill2 skills2 hiddennn" style="visibility: visible;
+ opacity: 1;
+ transition: opacity 0.5s ease, visibility 0.5s ease;">
+  <div style="text-align: center; font-weight: bold">Kỹ Năng</div>
+  <button class="close-btnGear" id="closeBtnSkill2" onclick="toggleMenu42()">x</button>
+  <!-- <button id="closeBtnPointSkill2" style="font-size: 13px; left: -10px !important">Điểm Kỹ Năng: <span
+          id="skillPoints2">10</span></button> -->
+  <div class="skill-box">
+      <div id="skill12" class="skill"></div>
+      <div id="skill22" class="skill"></div>
+      <div id="skill32" class="skill"></div>
+  </div>
+  <div class="skill-names">
+      <div id="skill1Name2" class="skill-name"></div>
+      <div id="skill2Name2" class="skill-name"></div>
+      <div id="skill3Name2" class="skill-name"></div>
+  </div>
+  <div id="skillDescription22" style="height: 154px"class="skill-description">
+      <p style=" height: 50px; overflow-y: auto;">Chạm kỹ năng để xem mô tả.</p>
+  </div>
+  <script>
+      const skillDescription22 = document.getElementById('skillDescription22');
+      const skillPointsDisplay22 = document.getElementById('skillPoints2');
+      let skillPoints2 = 10;
+      // Dữ liệu kỹ năng
+    //   const skills = [
+    //       { name: 'Tăng sức mạnh', description: 'Tăng cường sức mạnh tấn công của nhân vật.', level: 1},
+    //       { name: 'Chữa lành', description: 'Hồi phục một lượng máu cho nhân vật.', level: 1 },
+    //       { name: 'Độc tố', description: 'Gây độc lên kẻ thù, làm giảm dần máu của chúng.', level: 1 }
+    //   ];
+      // Cập nhật tên kỹ năng bên ngoài
+      function updateSkillNames2() {
+          document.getElementById('skill1Name2').textContent = gameObj.map.charr.skill[`S1`].name;
+          document.getElementById('skill2Name2').textContent = gameObj.map.charr.skill[`S2`].name;
+          document.getElementById('skill3Name2').textContent = gameObj.map.charr.skill[`S3`].name;
+      }
+      // Hiển thị mô tả khi chọn kỹ năng
+      function showSkillDescription22(skillIndex) {
+          const skill = gameObj.map.charr.skill[`S${skillIndex+1}`];
+          skillDescription22.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
+     <p style="border: 1px solid #000;height: 93px;
+    overflow-y: auto;">${skill.description}</p>
+     <button onclick="useSkilllButton(${skill.mana}, ${skillIndex})" id="levelUpButton2" style="    bottom: 8px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);"></button>`;
+     document.getElementById("levelUpButton2").innerHTML = `Dùng | ${gameObj.map.charr.obj.manaCur}/${skill.mana}`
+        if (gameObj.map.charr.obj.manaCur >= skill.mana && boardPointt.currentTurn == 'Nhân vật') document.getElementById("levelUpButton2").classList.remove("useSkillBtn")
+        else document.getElementById("levelUpButton2").classList.add("useSkillBtn")
+        
+      }
+  
+      // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
+      function useSkilllButton(score, index) {
+        if (boardPointt.currentTurn == 'Nhân vật') {
+            console.log(score, gameObj.map.charr.obj.manaCur)
+            clearInterval(boardPointt.countdown)
+
+            toggleMenu42()
+            gameObj.map.charr.useSkill(index+1, gameObj.map.monn)
+        }
+
+      }
+      // Gán sự kiện cho các kỹ năng
+      document.getElementById('skill12').addEventListener('click', () => showSkillDescription22(0));
+      document.getElementById('skill22').addEventListener('click', () => showSkillDescription22(1));
+      document.getElementById('skill32').addEventListener('click', () => showSkillDescription22(2));
+    //   updateSkillNames2();
+
+  </script>
 </div>
 <!-- Tiềm năng -->
 <div class="containerPotential hiddennn">
@@ -563,7 +648,7 @@ position: absolute;
                 }
             </style>
             <div class="controlsBoardGame">
-                <button id="skillButtonBoardGame">Kỹ năng</button>
+                <button id="skillButtonBoardGame" onclick="toggleMenu42()">Kỹ năng</button>
                 <div class="circle-containerBoardGame">
                     <div class="arrowBoardGame" id="turn-info1" style="color:green">&larr;<span id="remaining-turns1"></span></div>
                     <div class="circleBoardGame" id="timer">19s</div>

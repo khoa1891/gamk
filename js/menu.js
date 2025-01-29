@@ -3,9 +3,9 @@
 //     document.getElementById("menu").classList.remove("hidden")
 // }
 let overlayB = 0, overlayBlack = document.querySelector(".overlayBlack")
-let pp = 0
+// let pp = 0
 function toggleMenuBoard() {
-  if (pp == 0) {iii(); pp++}
+  // if (pp == 0) {iii(); pp++}
     document.querySelector(".menuBoard").classList.toggle("hiddennn")
     overlayBlack.classList.toggle("hiddennn")
 }
@@ -56,7 +56,7 @@ for (const key in character) {
             }
         }
     
-        let xu = 99999
+      
         let oht = 6; // Số ô hiển thị
         let op = "all"; // Giá trị hiện tại của dropdown
 const popupGear = document.getElementById("popupGear");
@@ -114,7 +114,7 @@ function toggleMenu6() {
                 // cell.textContent = i;
                 tableContainer.appendChild(cell);
             }
-            document.getElementById('xu').innerText = xu
+            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu
         }
         function toggleMenu() {
             if (overlayB == 0) {
@@ -128,7 +128,8 @@ function toggleMenu6() {
                 overlayBlack.classList.toggle("hiddennn")
             }
             document.querySelector('.containerGear').classList.toggle('hiddennn');
-            document.getElementById('xu').innerText = xu
+            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu
+            document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc
         }
         function toggleMenu2() {
             if (overlayB == 0) {
@@ -154,7 +155,7 @@ function toggleMenu3() {
         function addCell() {
             let cost = 1000 + 500 * (oht - 6)
             document.querySelector('.question-box-Gear').style.display = 'block'
-            document.querySelector('.question-text-Gear').textContent = `Bạn có muốn mua thêm ôô, với giá ${cost} xu không?`;
+            document.querySelector('.question-text-Gear').textContent = `Bạn có muốn mua thêm ô, với giá ${cost} đồng không?`;
             // oht++;
             // renderTable();
         }
@@ -162,15 +163,15 @@ function toggleMenu3() {
             document.querySelector('.question-box-Gear').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
             let cost = 1000 + 500 * (oht - 6)
-            if (xu >= cost) {
-                xu -= cost
+            if (gameObj.map.charr.obj.xu >= cost) {
+                gameObj.map.charr.obj.xu -= cost
                 oht++;
                modalGearText.textContent = "Chúc mừng bạn đã mở thành công 1 ô mới!";
                 modalGearText.className = "success";
                 renderTable();
                 displayInventory()
             } else {
-                modalGearText.textContent = "Bạn không đủ xu để mở thêm ô! ";
+                modalGearText.textContent = "Bạn không đủ đồng để mở thêm ô! ";
                 modalGearText.className = "error";
             }
         }
@@ -276,7 +277,7 @@ function toggleMenu3() {
         } else {
             popupContentGear.textContent = `Tên: ${item.name}\nLoại: ${item.loại}\n` + 
             (item["số lượng"] ? `Số lượng: ${item["số lượng"]}\n` : "") + 
-            (item["cost"] ? `Giá bán: ${item["cost"]} xu` : "")
+            (item["cost"] ? `Giá bán: ${item["cost"]} đồng` : "")
         }
       popupGear.style.display = "block";
       popupGear.style.left = "50%";
@@ -391,7 +392,7 @@ function toggleMenu3() {
                 container.appendChild(cell);
                 cell.onclick = () => showPopup(Shop1[i-1], i - 1, "shop", 1);
             }
-            document.getElementById('xuShop1').innerText = xu
+            document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu
         }
 function shop1Board() {
     const container = document.getElementById('containerShop1');
@@ -401,22 +402,22 @@ function shop1Board() {
 function buyShopPopUp(item) {
     document.querySelector(".question-box-Shop").style.display= 'block'
     popupGear.style.display = "none"
-    document.querySelector(".question-text-Shop").innerText= `Bạn có muốn mua vật phẩm: ${item.name}, với giá ${item.cost} xu không?`
+    document.querySelector(".question-text-Shop").innerText= `Bạn có muốn mua vật phẩm: ${item.name}, với giá ${item.cost} đồng không?`
     document.querySelector(".yes-btnShop").onclick = () => yesBtnShop(item)
 }
  function yesBtnShop(item) {
             document.querySelector('.question-box-Shop').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
             let cost = item.cost
-            if (xu >= cost) {
-                xu -= cost
+            if (gameObj.map.charr.obj.xu >= cost) {
+                gameObj.map.charr.obj.xu -= cost
                  modalGearText.textContent = "Chúc mừng bạn đã mua thành công vật phẩm này";
                 modalGearText.className = "success";
-                document.getElementById('xuShop1').innerText = xu
+                document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu
               //console.log(item)
               addItemToInventory(item);
             } else {
-                modalGearText.textContent = "Bạn không đủ xu để mua vật phẩm!";
+                modalGearText.textContent = "Bạn không đủ đồng để mua vật phẩm!";
                 modalGearText.className = "error";
     }
 }
@@ -433,6 +434,11 @@ function toggleMenu4() {
         overlayBlack.classList.toggle("hiddennn")
     }
     document.querySelector('.popup__contentSkill').classList.toggle('hiddennn');
+
+}
+function toggleMenu42() {
+  document.querySelector('.popup__contentSkill2').classList.toggle('hiddennn');
+  document.getElementById("skillDescription22").innerHTML = 'Chạm kỹ năng để xem mô tả'
 
 }
 function noBtnShop() {
