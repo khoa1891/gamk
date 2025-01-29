@@ -417,6 +417,18 @@ button:hover {
     opacity: 1;
 
             transition: opacity 0.7s ease, visibility 0.7s ease;
+
+font-size: 24px;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+
+@keyframes bounce {
+0% { transform: translateY(0); }
+100% { transform: translateY(-7px); }
 }
 
 /* mobile */
@@ -798,9 +810,9 @@ margin-top: 10px;
 
 
     .info-cardCont {
-    width: 280px; /* Chiều rộng cố định */
+    width: 265px; /* Chiều rộng cố định */
     background-color: #fff;
-    height: 360px;
+    height: 368px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
@@ -813,8 +825,8 @@ z-index: 11;
 }
 
 .avatarCard {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     margin: 20px auto;
     border-radius: 50%;
     background-size: cover;
@@ -825,7 +837,7 @@ z-index: 11;
 .infoCard {
     width: 260px;
     padding: 15px;
-    max-height: 210px; /* Chiều cao tối đa */
+    max-height: 245px; /* Chiều cao tối đa */
     overflow-y: auto; /* Kích hoạt cuộn dọc */
     overflow-x: hidden; /* Ngăn cuộn ngang */
     margin-bottom: 10px;

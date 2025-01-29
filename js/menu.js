@@ -13,33 +13,75 @@ function toggleMenuBoard() {
 
 
     // Dữ liệu của nhân vật
-const character = {
-    avatar: "https://via.placeholder.com/100",
-    name: "Kun1891",
-    damage: "450",
-    health: "1200",
-    element: "Hệ Nước",
-    level: 1,
-    xu: 2000
-};
+// const character = {
+//     avatar: "https://via.placeholder.com/100",
+//     name: "Kun1891",
+//     damage: "450",
+//     health: "1200",
+//     element: "Hệ Nước",
+//     level: 1,
+//     xu: 2000
+// };
 
 // Đổ dữ liệu vào thẻ HTML
 const avatarDiv = document.querySelector('.avatarCard');
 const infoDiv = document.querySelector('.infoCard');
 
-// Gán hình nền cho avatar
-avatarDiv.style.backgroundImage = `url('${character.avatar}')`;
+  const excludedKeys = ['avatar',
+    'armorCur', 'manaCur', 'manaMax', 'hpPoint', 'damePoint', 'armorPoint', 'dodgePoint',
+    'S1p', 'S2p', 'S3p', 'equipment', 'soulRockT', 'xuT', 'potentialPoint', 'skillPoint', 'exp', 'hpCur'
+];
+function popupInfoAvtar() {
+  const displayMap = {
+    name: 'Tên',
+        sec: 'Giới tính', // hoặc 'female'
+        element: 'Hệ',
+        xu: "Đồng", kc: 'Vàng',
+        level: 'Cấp độ' , 
+        dame: 'Tấn công', dodge: 'Né tránh',
 
-// Tạo nội dung thông tin
-for (const key in character) {
-    if (key !== 'avatar') {
-        const p = document.createElement('p');
-        p.innerHTML = `<span>${key.charAt(0).toUpperCase() + key.slice(1)}:</span> ${character[key]}`;
-        infoDiv.appendChild(p);
-    }
+        hpMax: 'Máu', armorMax : 'Giáp',
+      soulRock: 'Hồn', 
+};
+
+function getExp(level) {
+  if (level < 7) {
+      return 650;
+  } else if (level === 7) {
+      return 800;
+  } else if (level === 9) {
+      return 950;
+  } else if (level >= 20) {
+      return 2600;
+  } else {
+      return 1000 + (level - 9) * 50; // Tăng dần theo cấp độ
+  }
 }
+  let character = charInF.inf
+  // Gán hình nền cho avatar
+  avatarDiv.style.backgroundImage = `url('${character.avatar}')`;
+  
+  // Tạo nội dung thông tin
+  for (const key in character) {
+      if (!excludedKeys.includes(key)) {
+          const p = document.createElement('p');
+          
+          if (key == 'level') { p.innerHTML = `<span>Cấp độ:</span> ${character[key]}___[${character['exp']}/${getExp(character['level'])}]`}
+          else if (key == 'hpMax') { p.innerHTML = `<span>Máu:</span> ${character['hpCur']} / ${character['hpMax']}`}
+          else {p.innerHTML = `<span>${displayMap[key]}:</span> ${character[key]}`;}
+          infoDiv.appendChild(p);
+      }
+  }
+}
+// ---------
 
+// -----------
 
+function popupAvatar() {
+  document.querySelector(".info-cardCont").classList.toggle("hiddennn")
+  document.querySelector(".infoCard").innerHTML = ''
+  popupInfoAvtar()
+}
 
        
         let points = 10;

@@ -455,8 +455,8 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
     // --------------------------------
      // Tạo joystick
-     joystickBase = this.add.circle(160, this.cameras.main.height - 100, 50, 0x000000, 0.3).setInteractive();
-     joystick = this.add.circle(160, this.cameras.main.height - 100, 25, 0xffffff, 0.5).setInteractive();
+     joystickBase = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height - 100, 50, 0x000000, 0.3).setInteractive();
+     joystick = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height - 100, 25, 0xffffff, 0.5).setInteractive();
      joystickBase.setScrollFactor(0);
      joystick.setScrollFactor(0);
 
@@ -1349,7 +1349,7 @@ function click_Affect() {
         boardPointt.click = false; currTile = this; focus(currTile, 'focus', 0); 
     } else // click chính nó
         if (boardPointt.click == false && this == currTile && boardPointt.currentTurn == "Nhân vật") { 
-        focus(this, 'outFocus', 0); focus(this, 'outFocus', 800); 
+        focus(this, 'focus', 0); focus(this, 'outFocus', 0); focus(this, 'outFocus', 800); 
         useTurn(boardPointt.timer) 
 
     } else // click lần 2 nếu làlà ô khác nó sẽ hoán đổi cờ 

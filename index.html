@@ -71,7 +71,7 @@
     <!-- Option Menu -->
     <div id="menu" class="menuBoard hiddennn">
         <button onclick="toggleMenu()">Hành trang</button>
-        <button onclick="toggleMenu7()">Bản thân</button>
+        <button onclick="popupAvatar()">Bản thân</button>
         <button onclick="toggleMenu2()">Trang bị</button>
         <button onclick="toggleMenu4()">Kĩ năng</button>
         <button onclick="toggleMenu5()">Tiềm năng</button>
@@ -82,7 +82,7 @@
     </div>
     <div class="overlayBlack hiddennn"></div>
     <div class="overlayVio hiddennn "></div>
-    <div class="overlayBl hiddennn ">Xin chờchờ...</div>
+    <div class="overlayBl hiddennn"><span style="animation: bounce 0.4s infinite alternate ease-in-out;">Xin chờ...</span></div>
 
     <div class="containerTogether containerGear hiddennn">
         <div class="header">
@@ -189,9 +189,8 @@
 
 <!--infor-->
 <div class="info-cardCont hiddennn">
-    </button>
 
-            <button class="close-btnGear" id="closeBtnInfo" onclick=toggleMenu()>x</button>
+            <button class="close-btnGear" id="closeBtnInfo" onclick="popupAvatar()">x</button>
     <div class="avatarCard"></div>
     <div class="infoCard">
         <!-- Nội dung sẽ được điền bởi JavaScript -->
@@ -336,12 +335,19 @@
   
       // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
       function useSkilllButton(score, index) {
+        const skill = gameObj.map.charr.skill[`S${index+1}`];
         if (boardPointt.currentTurn == 'Nhân vật') {
-            console.log(score, gameObj.map.charr.obj.manaCur)
+            // console.log(score, gameObj.map.charr.obj.manaCur)
             clearInterval(boardPointt.countdown)
 
             toggleMenu42()
-            gameObj.map.charr.useSkill(index+1, gameObj.map.monn)
+            
+            setTimeout(()=>{gameObj.map.charr.useSkill(index+1, gameObj.map.monn), updateInfor()}, 500)
+            setTimeout(()=>useTurn(), 2000)
+            
+        } else {
+            document.getElementById("levelUpButton2").innerHTML = `Chưa tới lượt`
+            setTimeout(()=>document.getElementById("levelUpButton2").innerHTML = `Dùng | ${gameObj.map.charr.obj.manaCur}/${skill.mana}`, 500)
         }
 
       }

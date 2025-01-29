@@ -95,3 +95,68 @@ createdMonsters.forEach(monster => {
 });
 
 // getBox(tile.id).classList.replace(getBox(tile.id).classList[0], cls)
+
+
+
+// map
+const map = this.add.image(0, 0, 'mapTexture').setOrigin(0, 0);
+map.setScale(2000 / map.width, 2000 / map.height);
+
+
+
+chẳng lẽ map2000 2000px là t vẽ 2000 2000 à
+ChatGPT đã nói:
+ChatGPT
+Không cần vẽ thủ công bản đồ 2000x2000px! 🚀
+Bạn có thể sử dụng Tilemap hoặc Scale để hiển thị bản đồ lớn mà không cần ảnh quá lớn.
+
+1️⃣ Cách 1: Scale hình ảnh bản đồ
+Nếu ảnh của bạn nhỏ hơn 2000x2000px, bạn có thể phóng to nó lên:
+
+javascript
+Sao chép
+Chỉnh sửa
+const map = this.add.image(0, 0, 'mapTexture').setOrigin(0, 0);
+map.setScale(2000 / map.width, 2000 / map.height);
+💡 Giải thích:
+
+map.width và map.height là kích thước gốc của ảnh.
+setScale(2000 / map.width, 2000 / map.height) giúp ảnh phủ toàn bộ vùng 2000x2000.
+2️⃣ Cách 2: Dùng Tilemap (Tiled Map)
+Cách này giúp bạn tạo bản đồ lớn từ nhiều ô nhỏ, tối ưu hơn khi xử lý.
+
+🔹 Bước 1: Tải bản đồ Tiled (JSON + Tileset)
+
+javascript
+Sao chép
+Chỉnh sửa
+this.load.tilemapTiledJSON('map', 'assets/map.json');
+this.load.image('tiles', 'assets/tileset.png'); 
+🔹 Bước 2: Tạo bản đồ từ Tileset
+
+javascript
+Sao chép
+Chỉnh sửa
+const map = this.make.tilemap({ key: 'map' });
+const tileset = map.addTilesetImage('tilesetName', 'tiles');
+const layer = map.createLayer('layerName', tileset, 0, 0);
+💡 Ưu điểm của Tilemap:
+✔ Không cần ảnh siêu lớn.
+✔ Chỉ render phần bản đồ cần thiết (tối ưu hiệu suất).
+✔ Có thể tạo map linh hoạt từ nhiều ô nhỏ.
+
+3️⃣ Cách 3: Lặp hình ảnh (Tile Sprite)
+Nếu muốn bản đồ lặp lại thay vì ảnh siêu lớn:
+
+javascript
+Sao chép
+Chỉnh sửa
+const map = this.add.tileSprite(0, 0, 2000, 2000, 'mapTexture').setOrigin(0, 0);
+💡 Tile Sprite giúp bạn tạo hiệu ứng nền lặp lại, không cần ảnh siêu lớn.
+
+🔥 Tóm lại:
+
+Ảnh nhỏ → Scale (setScale()).
+Ảnh lớn → Tilemap (tilemapTiledJSON).
+Nền lặp → Tile Sprite (tileSprite()).
+Bạn muốn cách nào? 🚀

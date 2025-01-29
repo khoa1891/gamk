@@ -505,8 +505,6 @@ this.armorCur = +this.armorCur.toFixed(2)
     };
 
     fight(target, aa, bb) {
-        console.log(target.obj.hpCur)
-        console.log(boardPointt.currentTurn)
         var dame
         if (aa == 0) {
             dame = (this.obj.dame / 3) * bb
