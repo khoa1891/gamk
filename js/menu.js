@@ -65,8 +65,8 @@ function getExp(level) {
   for (const key in character) {
       if (!excludedKeys.includes(key)) {
           const p = document.createElement('p');
-          
-          if (key == 'level') { p.innerHTML = `<span>Cấp độ:</span> ${character[key]}___[${character['exp']}/${getExp(character['level'])}]`}
+          if (key=='sec') {p.innerHTML = `<span>Giới tính:</span> ${character[key] == 'male'? 'nam': 'nữ'}`}
+          else if (key == 'level') { p.innerHTML = `<span>Cấp độ:</span> ${character[key]}___[${character['exp']}/${getExp(character['level'])}]`}
           else if (key == 'hpMax') { p.innerHTML = `<span>Máu:</span> ${character['hpCur']} / ${character['hpMax']}`}
           else {p.innerHTML = `<span>${displayMap[key]}:</span> ${character[key]}`;}
           infoDiv.appendChild(p);
@@ -78,22 +78,36 @@ function getExp(level) {
 // -----------
 
 function popupAvatar() {
+  if (overlayB == 0) {
+    document.getElementById("toggle-menu").style.zIndex = 9
+    document.querySelector(".menuBoard").classList.toggle("hiddennn")
+    overlayB = 1
+
+} else {
+    document.getElementById("toggle-menu").style.zIndex = 11
+    overlayB = 0
+    overlayBlack.classList.toggle("hiddennn")
+}
+
+
   document.querySelector(".info-cardCont").classList.toggle("hiddennn")
   document.querySelector(".infoCard").innerHTML = ''
   popupInfoAvtar()
 }
 
        
-        let points = 10;
         function addPoint(stat) {
-            if (points <= 0) return;
+            if (gameObj.map.charr.obj.potentialPoint <= 0) return;
             const statValue = document.getElementById(`stat-${stat}`);
+            gameObj.map.charr.obj[stat]++
             const currentValue = parseInt(statValue.textContent);
             statValue.textContent = currentValue + 1;
-            points--;
-            document.getElementById("points").textContent = points;
-            // Disable buttons if points reach 0
-            if (points <= 0) {
+            gameObj.map.charr.obj.potentialPoint--;
+            document.getElementById("pointPotential").textContent = gameObj.map.charr.obj.potentialPoint;
+
+            gameObj.map.charr.setScore()
+            // Disable buttons if gameObj.map.charr.obj.potentialPoint reach 0
+            if (gameObj.map.charr.obj.potentialPoint <= 0) {
                 document.querySelectorAll(".btn-add").forEach(btn => btn.disabled = true);
             }
         }
@@ -107,8 +121,8 @@ const popupGear = document.getElementById("popupGear");
     const equipButtonGear = document.getElementById("equip-buttonGear");
     const buyButtonShop = document.getElementById("Buy-buttonShop");
     const closePopupGear = document.getElementById("close-popupGear");
-    const slotAo = document.getElementById("slot-ao");
-    const slotQuan = document.getElementById("slot-quan");
+    const slotAo = document.getElementById("slot-áo");
+    const slotQuan = document.getElementById("slot-quần");
         const modalGearText = document.getElementById('modal-Gear-text');
         const tableContainer = document.getElementById('table-container');
         const dropdownMenu = document.getElementById('dropdown-menu');
@@ -129,6 +143,7 @@ function toggleMenu5() {
         overlayBlack.classList.toggle("hiddennn")
     }
     document.querySelector('.containerPotential').classList.toggle('hiddennn');
+    document.getElementById("pointPotential").textContent = gameObj.map.charr.obj.potentialPoint
 }
 
 function toggleMenu6() {
@@ -152,11 +167,11 @@ function toggleMenu6() {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.id = `slot-${i}`
-               cell.textContent = 'trống';
+            cell.textContent = 'trống'
                 // cell.textContent = i;
                 tableContainer.appendChild(cell);
             }
-            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu
+            // document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu
         }
         function toggleMenu() {
             if (overlayB == 0) {
@@ -248,12 +263,12 @@ function toggleMenu3() {
        
     
     let a = [
-      { loại: "hp", name: "máu 10", "số lượng": 2 },
-       { loại: "mana", name: "mana 10", "số lượng": 100 },
-      { loại: "áo", name: "áo xanh" },
-      { loại: "quần", name: "quần đỏ" },
-      { loại: "quần", name: "quần vàng" },
-      { loại: "quần", name: "quần hồng" },
+      { loại: "hp", name: "máu 10", "số lượng": 2, linkImg: './img/ha417.png'},
+       { loại: "mana", name: "mana 10", "số lượng": 100, linkImg: './img/ha417.png' },
+      { loại: "quần", name: "quần xanh", linkImg: './img/ha410.png', level: 1, dame:10, armorMax:10 },
+      { loại: "áo", name: "áo đỏ", linkImg: './img/ha412.png', level: 1, dame:10, dodge:10 },
+      { loại: "áo", name: "áo vàng", linkImg: './img/ha413.png', level: 1, dame:10, armorMax:10},
+      { loại: "áo", name: "áo hồng", linkImg: './img/ha417.png', level: 1, dame:10, hpMax:10},
     ];
     let inventory = []; // Hành trang
     const maxSlots = 6; // Số ô tối đa trong hành trang
@@ -294,23 +309,32 @@ function toggleMenu3() {
         let slot = document.getElementById(`slot-${i + 1}`);
         if (inventory[i]) {
           let item = inventory[i];
-          slot.textContent = item["số lượng"] ? `${item.name} (x${item["số lượng"]})` : item.name;
+          // slot.textContent = item["số lượng"] ? `${item.name} (x${item["số lượng"]})` : item.name;
+          slot.textContent = item["số lượng"] ? `x${item["số lượng"]}` : ''
           slot.onclick = () => showPopup(item, i, "inventory");
           slot.classList.remove("empty");
+
+            slot.style.backgroundColor = '#ff2a3e'
+            slot.style.backgroundImage = `url(${item.linkImg})`;
+            slot.style.backgroundPosition = '-2px -2px'
+            slot.style.backgroundSize = '45px'
         } else {
           slot.textContent = "Trống";
+          slot.style.backgroundColor = '#6a8fb7'
+          slot.onclick = null
+          slot.style.backgroundImage = ``;
           slot.classList.add("empty");
         }
       }
     }
     // Thêm vật phẩm thử nghiệm
-    addItemToInventory(a[0]);
-    addItemToInventory(a[1]);
-    addItemToInventory(a[2]);
-    addItemToInventory(a[3]);
-    addItemToInventory(a[4]);
-    addItemToInventory(a[5]);
-    displayInventory();
+    // addItemToInventory(a[0]);
+    // addItemToInventory(a[1]);
+    // addItemToInventory(a[2]);
+    // addItemToInventory(a[3]);
+    // addItemToInventory(a[4]);
+    // addItemToInventory(a[5]);
+    // displayInventory();
 
     function showPopup(item, index, context, type) {
         if (type == undefined) {
@@ -361,7 +385,7 @@ function toggleMenu3() {
         closePopupMenu();
       }
     }
-    function displayEquipment() {
+    function displayEquipment(slot) {
       if (equipment.áo) {
         slotAo.textContent = equipment.áo.name;
         slotAo.classList.remove("empty");
@@ -380,6 +404,22 @@ function toggleMenu3() {
         slotQuan.classList.add("empty");
         slotQuan.onclick = null;
       }
+      if (equipment[slot]) {
+        document.getElementById(`slot-${slot}`).textContent = "";
+              document.getElementById(`slot-${slot}`).classList.add("trangBiColor")
+              document.getElementById(`slot-${slot}`).style.backgroundImage = `url(${equipment[slot].linkImg})`;
+              document.getElementById(`slot-${slot}`).style.backgroundPosition = '3px 1px'
+              document.getElementById(`slot-${slot}`).style.backgroundSize = '55px'
+              
+
+          //  this.obj.equipment.forEach(item => {
+            gameObj.map.charr.obj.dame += equipment[slot].dame || 0;
+            gameObj.map.charr.obj.armorMax += equipment[slot].armorMax || 0;
+            gameObj.map.charr.obj.hpMax += equipment[slot].hpMax || 0;
+            gameObj.map.charr.obj.dodge += equipment[slot].dodge || 0;
+        // });
+
+      }
     }
     function equipItem(item, index) {
       const slot = item.loại === "áo" ? "áo" : "quần";
@@ -387,13 +427,19 @@ function toggleMenu3() {
         // Đưa trang bị cũ về hành trang
         inventory.splice(index, 1);
         inventory.splice(index, 0, equipment[slot]);
+        
+        gameObj.map.charr.obj.dame -= equipment[slot].dame || 0;
+        gameObj.map.charr.obj.armorMax -= equipment[slot].armorMax || 0;
+        gameObj.map.charr.obj.hpMax -= equipment[slot].hpMax || 0;
+        gameObj.map.charr.obj.dodge -= equipment[slot].dodge || 0;
+
         equipment[slot] = item;
       } else {
           equipment[slot] = item;
           inventory.splice(index, 1);
       }
       displayInventory();
-      displayEquipment();
+      displayEquipment(slot);
       closePopupMenu();
     }
     closePopupGear.onclick = closePopupMenu;
@@ -464,7 +510,8 @@ function buyShopPopUp(item) {
     }
 }
 function toggleMenu4() {
-
+  skillPointsDisplay.textContent = gameObj.map.charr.obj.skillPoint
+  updateSkillNames()
     if (overlayB == 0) {
         document.getElementById("toggle-menu").style.zIndex = 9
     document.querySelector(".menuBoard").classList.toggle("hiddennn")

@@ -3,6 +3,10 @@
     margin: 0;
     padding: 0;
     /* box-sizing: border-box; */
+    user-select: none; /* Ngăn chọn văn bản */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 body, html {
     height: 100%;
@@ -788,8 +792,12 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 display: none;
 z-index: 1000;
 }
+.trangBiColor {
+    background-color: #4893bd !important;
+}
 .popupGear button {
-margin-top: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
 }
 .tileDad {
     position: absolute;
@@ -812,7 +820,7 @@ margin-top: 10px;
     .info-cardCont {
     width: 265px; /* Chiều rộng cố định */
     background-color: #fff;
-    height: 368px;
+    height: 398px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
@@ -997,7 +1005,7 @@ justify-content: space-between;
 .skill-description {
    margin-top: -13px;
    font-size: 16px;
-   height: 133px;
+   height: 155px;
    color: #333;
    background: #f8f8f8;
    padding: 20px;

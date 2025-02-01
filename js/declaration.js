@@ -82,16 +82,18 @@ let monsInF = {
                 return this.level;
             },
             inf: {
-                name: 'haha',
+                name: 'Kuln1891',
                 sec: 'male', // hoặc 'female'
-                element: 'thủy',
+                element: 'hỏa',
                 xu: 0, kc: 0,
                 level: 1, exp: 0, 
                 dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
         
                 hpMax:0, manaMax: 300, armorMax : 0,
                 hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
-                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0
+                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+                potentialPoint: 0,
+                skillPoint: 0,
             },
         },
         // 'quần_thể_2': {
@@ -257,9 +259,9 @@ let skillGame = {
             dame: 28,
             level: 1,
             point: 0,
-            curSkill() {
+            curSkill(level) {
 
-                this.dame += (10 * (this.level - 1) + 4 * this.point)
+                this.dame = 28 + (10 * (level - 1) + 4 * this.point)
                 this.dame = +this.dame.toFixed(2)
             }
         },
@@ -270,8 +272,8 @@ let skillGame = {
             armorCur: 35,
             level: 1,
             point: 0,
-            curSkill() {
-                this.armorCur += (9 * (this.level - 1) + 4.3 * this.point)
+            curSkill(level) {
+                this.armorCur = 35+ (9 * (level - 1) + 4.3 * this.point)
                 this.armorCur = +this.armorCur.toFixed(2)
             }
         },
@@ -282,8 +284,8 @@ let skillGame = {
             dame: 50,
             level: 1,
             point: 0,
-            curSkill() {
-                this.dame += (14 * (this.level - 1) + 6 * this.point)
+            curSkill(level) {
+                this.dame = 50 + (14 * (level - 1) + 6 * this.point)
                 this.dame = +this.dame.toFixed(2)
             }
         }
@@ -299,7 +301,7 @@ let skillGame = {
             point: 0,
             curSkill() {
 
-                this.dame += (10 * (this.level - 1) + 4 * this.point)
+                this.dame = 28 + (10 * (this.level - 1) + 4 * this.point)
                 this.dame = +this.dame.toFixed(2)
             }
         },
@@ -311,7 +313,7 @@ let skillGame = {
             level: 1,
             point: 0,
             curSkill() {
-                this.armorCur += (9 * (this.level - 1) + 4.3 * this.point)
+                this.armorCur = 35 +(9 * (this.level - 1) + 4.3 * this.point)
                 this.armorCur = +this.armorCur.toFixed(2)
             }
         },
@@ -323,7 +325,7 @@ let skillGame = {
             level: 1,
             point: 0,
             curSkill() {
-                this.dame += (14 * (this.level - 1) + 6 * this.point)
+                this.dame = 50 + (14 * (this.level - 1) + 6 * this.point)
                 this.dame = +this.dame.toFixed(2)
             }
         }
@@ -336,16 +338,16 @@ class Character {
 
         this.skill = deepCopy(skillGame[obj.element])
         this.skill.S1.point = obj.S1p
-        this.skill.S1.level = obj.level
-        this.skill.S1.curSkill()
+        // this.skill.S1.level = obj.level
+        this.skill.S1.curSkill(this.obj.level)
 
         this.skill.S2.point = obj.S2p
-        this.skill.S2.level = obj.level
-        this.skill.S2.curSkill()
+        // this.skill.S2.level = obj.level
+        this.skill.S2.curSkill(this.obj.level)
 
         this.skill.S3.point = obj.S3p
-        this.skill.S3.level = obj.level
-        this.skill.S3.curSkill()
+        // this.skill.S3.level = obj.level
+        this.skill.S3.curSkill(this.obj.level)
         // ------
 
         this.equipment = []

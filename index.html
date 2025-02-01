@@ -146,10 +146,10 @@
             <div class="equippp emptyGear">Nhẫn</div>
             <div class="equippp emptyGear">Cánh</div>
             <div class="equippp emptyGear">Mũ</div>
-            <div class="equippp emptyGear" id="slot-ao">Áo</div>
+            <div class="equippp emptyGear" id="slot-áo">Áo</div>
             <div class="equippp emptyGear hiddennn"></div>
             <div class="equippp emptyGear">Vũ Khí</div>
-            <div class="equippp emptyGear" id="slot-quan">Quần</div>
+            <div class="equippp emptyGear" id="slot-quần">Quần</div>
             <div class="equippp emptyGear hiddennn"></div>
             <div class="equippp emptyGear">Dây chuyền</div>
             <div class="equippp emptyGear">Pet</div>
@@ -158,7 +158,10 @@
         </div>
     </div>
   <div class="popupGear" id="popupGear">
-    <div id="popup-contentGear" style="white-space: pre-line;"></div>
+    <div id="popup-contentGear" style="    white-space: pre-line;
+    height: 156px;
+    overflow-y: auto;
+    border: 1px solid #000;"></div>
     <button id="use-buttonGear">Dùng</button>
     <button id="equip-buttonGear">Mặc</button>
     <button id="Buy-buttonShop">Mua</button>
@@ -190,6 +193,9 @@
 <!--infor-->
 <div class="info-cardCont hiddennn">
 
+    <div class="text-center" style="font-weight: bold; margin-bottom:-8px;    font-size: 17px;
+    margin-top: 15px;">Bản thân</div>
+
             <button class="close-btnGear" id="closeBtnInfo" onclick="popupAvatar()">x</button>
     <div class="avatarCard"></div>
     <div class="infoCard">
@@ -205,7 +211,7 @@
    transition: opacity 0.5s ease, visibility 0.5s ease;">
     <div style="text-align: center; font-weight: bold" onclick="toggleMenu42()">Kỹ Năng</div>
     <button class="close-btnGear" id="closeBtnSkill" onclick="toggleMenu4()">x</button>
-    <button id="closeBtnPointSkill" style="font-size: 13px; left: -10px !important">Điểm Kỹ Năng: <span
+    <button id="closeBtnPointSkill" style="font-size: 13px; left: -10px !important">Điểm K.Năng: <span
             id="skillPoints">10</span></button>
     <div class="skill-box">
         <div id="skill1" class="skill"></div>
@@ -232,24 +238,27 @@
         ];
         // Cập nhật tên kỹ năng bên ngoài
         function updateSkillNames() {
-            document.getElementById('skill1Name').textContent = skills[0].name;
-            document.getElementById('skill2Name').textContent = skills[1].name;
-            document.getElementById('skill3Name').textContent = skills[2].name;
+            document.getElementById('skill1Name').textContent = gameObj.map.charr.skill[`S1`].name;
+          document.getElementById('skill2Name').textContent = gameObj.map.charr.skill[`S2`].name;
+          document.getElementById('skill3Name').textContent = gameObj.map.charr.skill[`S3`].name;
         }
         // Hiển thị mô tả khi chọn kỹ năng
         function showSkillDescription2(skillIndex) {
-            const skill = skills[skillIndex];
-            skillDescription.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
-       <p>${skill.description}</p>
-       <button onclick="levelUpSkill2(${skillIndex})" id="levelUpButton">Cộng điểm</button>`;
+            const skill = gameObj.map.charr.skill[`S${skillIndex+1}`];
+          skillDescription.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.point + 1}</h3>
+     <p style="border: 1px solid #000;height: 93px;
+    overflow-y: auto;">${skill.description}</p>
+       <button onclick="levelUpSkill2(${skillIndex})" style="margin-top: 10px;" id="levelUpButton">Cộng</button>`;
             updateLevelUpButton();  // Cập nhật nút sau mỗi lần chọn kỹ năng
         }
         // Nâng cấp kỹ năng
         function levelUpSkill2(skillIndex) {
-            if (skillPoints > 0) {
-                skills[skillIndex].level++;
-                skillPoints--;
-                skillPointsDisplay.textContent = skillPoints;
+            if (gameObj.map.charr.obj.skillPoint > 0) {
+                gameObj.map.charr.skill[`S${skillIndex+1}`].point++
+                gameObj.map.charr.obj[`S${skillIndex+1}p`]++
+                gameObj.map.charr.skill[`S${skillIndex+1}`].curSkill(gameObj.map.charr.obj.level)
+                gameObj.map.charr.obj.skillPoint--;
+                skillPointsDisplay.textContent = gameObj.map.charr.obj.skillPoint
                 showSkillDescription2(skillIndex);  // Cập nhật lại mô tả sau khi nâng cấp
             } else {
                 alert('Không đủ điểm kỹ năng!');
@@ -259,7 +268,7 @@
         // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
         function updateLevelUpButton() {
             const levelUpButton = document.getElementById('levelUpButton');
-            if (skillPoints === 0) {
+            if (gameObj.map.charr.obj.skillPoint === 0) {
                 levelUpButton.disabled = true;
             } else {
                 levelUpButton.disabled = false;
@@ -269,7 +278,7 @@
         document.getElementById('skill1').addEventListener('click', () => showSkillDescription2(0));
         document.getElementById('skill2').addEventListener('click', () => showSkillDescription2(1));
         document.getElementById('skill3').addEventListener('click', () => showSkillDescription2(2));
-        updateSkillNames();
+        // updateSkillNames();
 
     </script>
 
@@ -320,7 +329,7 @@
       // Hiển thị mô tả khi chọn kỹ năng
       function showSkillDescription22(skillIndex) {
           const skill = gameObj.map.charr.skill[`S${skillIndex+1}`];
-          skillDescription22.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
+          skillDescription22.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.point + 1}</h3>
      <p style="border: 1px solid #000;height: 93px;
     overflow-y: auto;">${skill.description}</p>
      <button onclick="useSkilllButton(${skill.mana}, ${skillIndex})" id="levelUpButton2" style="    bottom: 8px;
@@ -341,6 +350,12 @@
             clearInterval(boardPointt.countdown)
 
             toggleMenu42()
+            boardPointt.click = undefined
+        clearInterval(countdown);
+
+        if (currTile != undefined) {focus(currTile, 'focus', 0); }
+            
+            otherTile = undefined; currTile = undefined;
             
             setTimeout(()=>{gameObj.map.charr.useSkill(index+1, gameObj.map.monn), updateInfor()}, 500)
             setTimeout(()=>useTurn(), 2000)
@@ -370,35 +385,35 @@
 left: 15%;
 position: absolute; 
 ">Thể Lực</span>
-        <span class="stat-value pointPotentialRight" id="stat-strength">0</span>
-        <button class="btn-addPotentialRight" id="btn-strength" onclick="addPoint('strength')">+</button>
+        <span class="stat-value pointPotentialRight" id="stat-hpPoint">0</span>
+        <button class="btn-addPotentialRight" id="btn-hpPoint" onclick="addPoint('hpPoint')">+</button>
     </div>
     <div class="stat-rowPotential">
         <span style="
 left: 15%;
 position: absolute;
 ">Sức Mạnh</span>
-        <span class="stat-value pointPotentialRight" id="stat-power">0</span>
-        <button class="btn-addPotentialRight" id="btn-power" onclick="addPoint('power')">+</button>
+        <span class="stat-value pointPotentialRight" id="stat-damePoint">0</span>
+        <button class="btn-addPotentialRight" id="btn-damePoint" onclick="addPoint('damePoint')">+</button>
     </div>
     <div class="stat-rowPotential">
         <span style="
 left: 15%;
 position: absolute;
 ">Giáp</span>
-        <span class="stat-value pointPotentialRight" id="stat-armor">0</span>
-        <button class="btn-addPotentialRight" id="btn-armor" onclick="addPoint('armor')">+</button>
+        <span class="stat-value pointPotentialRight" id="stat-armorPoint">0</span>
+        <button class="btn-addPotentialRight" id="btn-armorPoint" onclick="addPoint('armorPoint')">+</button>
     </div>
     <div class="stat-rowPotential">
         <span style="
 left: 15%;
 position: absolute;
-">X (Haha)</span>
-        <span class="stat-value pointPotentialRight" id="stat-x">0</span>
-        <button class="btn-addPotentialRight" id="btn-x" onclick="addPoint('x')">+</button>
+">Né tránh</span>
+        <span class="stat-value pointPotentialRight" id="stat-dodgePoint">0</span>
+        <button class="btn-addPotentialRight" id="btn-dodgePoint" onclick="addPoint('dodgePoint')">+</button>
     </div>
     <div class="points-display">
-        Điểm Tiềm Năng: <span id="points">10</span>
+        Điểm Tiềm Năng: <span id="pointPotential">10</span>
     </div>
 
 </div>

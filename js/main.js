@@ -1249,6 +1249,7 @@ var equip = {
 
 
 // ----------------------play 
+{
 
 var board = [], hàng = 10, cột = 8, listOfArrays = []
 var currTile = undefined, otherTile = undefined
@@ -1271,7 +1272,7 @@ function checkValid() {
     for (let i = 1; i <= hàng; i++) {
         for (let j = 0; j < cột; j++) {
             if (j < cột - 2 && checkMatch(board[i][j], board[i][j + 1], board[i][j + 2])) return true;
-            if (i < hàng - 2 && checkMatch(board[i][j], board[i + 1][j], board[i + 2][j])) return true;
+            if (i <= hàng - 2 && checkMatch(board[i][j], board[i + 1][j], board[i + 2][j])) return true;
         }
     }
 
@@ -1285,7 +1286,7 @@ function làm_Tròn(number, decimalPlaces) {var factor = Math.pow(10, decimalPla
 function randomCandy() {
     return `./img/${normal_Class[Math.floor(Math.random() * normal_Class.length)]}.png`
 }
-
+const fiveLL = 20
 const square45 = 32.5 // 45
 var boardPointt = {
     // battle game
@@ -1293,7 +1294,7 @@ var boardPointt = {
     click: false,
     currentTurn: '',
     remainingTurns: 1,
-    timer: 5,
+    timer: fiveLL,
     countdown: 0,
     
     get turnInfo1() {return document.getElementById("turn-info1")},
@@ -1340,10 +1341,18 @@ function startGame() {
         }
     }
 }
-  
+
 
 // đơn giản là click vào ô thì tạo hiệu ứng cho ô dễ nhìn
 const focus = (tile, cls, time) => { setTimeout(()=>{ getBox(tile.id).classList.toggle(cls) }, time) }
+// const focus = (tile, cls, time) => { 
+//     if (!tile || !tile.id) return; // Kiểm tra tile hợp lệ
+//     const targetTile = tile; 
+//     setTimeout(() => { 
+//         let box = getBox(targetTile.id);
+//         if (box) box.classList.toggle(cls);
+//     }, time); 
+// }
 function click_Affect() {
     if (boardPointt.click && boardPointt.currentTurn == "Nhân vật") {
         boardPointt.click = false; currTile = this; focus(currTile, 'focus', 0); 
@@ -1383,7 +1392,7 @@ var pointChess = {
     sword: 0,
     yingyang: 0,
 }
-function destroyCandy(x) {
+function destroyCandy(r,c,y,x) {
     for (let r = 1; r <= hàng; r++) {
         let row = board[r];
         let candy1 = row[0], array = [candy1];
@@ -1412,7 +1421,27 @@ function destroyCandy(x) {
     }
 
     // quái đánh mới có cần tham số x, người đánh thì khỏi truyền
-    if (x != undefined) return listOfArrays
+    if (r != undefined) {
+        // var o = [
+        //     [1, 2, 3], 
+        //     [1, 2, 2, 4]
+        // ];
+        
+        let count3 = 0; // Đếm mảng con có 3 phần tử
+        let count4OrMore = 0; // Đếm mảng con có 4 phần tử trở lên
+        let boom = 0; // Đếm số lần số 2 xuất hiện
+        
+        listOfArrays.forEach(i => {
+            if (i.length === 3) count3++;
+            if (i.length >= 4) count4OrMore++;
+        
+            boom += i.filter(item => item.filterr != 'undefined').length; // Đếm số 2 trong từng mảng con
+        });
+        
+        moveMon.add([r, c, y, x, count3, count4OrMore, boom])
+        
+        return 
+    }
     // ko có viên nào liên tiếp trùng src thì nghỉ khỏe, dừng hàm ngay
     if (listOfArrays.length == 0) { // boardPointt.click = true
         useTurn();
@@ -1576,9 +1605,18 @@ function handsome() {
             key == 'water' && pointChess[key] > 0 ? (gameObj.map.charr.upMana(pointChess[key]), pointChess[key] = 0): 1
             key == 'heart' && pointChess[key] > 0? (gameObj.map.charr.upHp(pointChess[key]), pointChess[key] = 0): 1
             key == 'yingyang' && pointChess[key] > 0? (gameObj.map.charr.upArmorCur(pointChess[key]), pointChess[key] = 0): 1
-            key == 'sword' && pointChess[key] > 0? (gameObj.map.monn.obj.hpCur, gameObj.map.charr.fight(gameObj.map.monn, 0, pointChess[key]), pointChess[key] = 0): 1
+            key == 'sword' && pointChess[key] > 0? (gameObj.map.charr.fight(gameObj.map.monn, 0, pointChess[key]), pointChess[key] = 0): 1
             key == 'soulRock' && pointChess[key] > 0? (gameObj.map.charr.upSoulRockT(pointChess[key], gameObj.map.monn), pointChess[key] = 0): 1
             key == 'gold' && pointChess[key] > 0? (gameObj.map.charr.upGold(pointChess[key]), pointChess[key] = 0): 1
+        });
+    } else {
+        Object.keys(pointChess).forEach(key => {
+            key == 'water' && pointChess[key] > 0 ? (gameObj.map.monn.upMana(pointChess[key]), pointChess[key] = 0): 1
+            key == 'heart' && pointChess[key] > 0? (gameObj.map.monn.upHp(pointChess[key]), pointChess[key] = 0): 1
+            key == 'yingyang' && pointChess[key] > 0? (gameObj.map.monn.upArmorCur(pointChess[key]), pointChess[key] = 0): 1
+            key == 'sword' && pointChess[key] > 0? (gameObj.map.monn.fight(gameObj.map.charr, 0, pointChess[key]), pointChess[key] = 0): 1
+            key == 'soulRock' && pointChess[key] > 0? (gameObj.map.monn.upSoulRockT(pointChess[key], gameObj.map.charr), pointChess[key] = 0): 1
+            key == 'gold' && pointChess[key] > 0? (gameObj.map.monn.upGold(pointChess[key]), pointChess[key] = 0): 1
         });
     }
     updateInfor()
@@ -1725,7 +1763,18 @@ function slideCandyBoard() { // ✨
                         gameObj.map.charr.gainExp(gameObj.map.monn, true)
                         clearInterval(boardPointt.countdown)
                         setTimeout(() => { oo.input.keyboard.emit('keydown-M') }, 500)
-                    } else { setTimeout(()=>{ useTurn() }, 500) }
+                    } else { setTimeout(()=>{  //llll
+                        randomTimeMon()
+                        useTurn() 
+                    }, 500) }
+                } else if (boardPointt.currentTurn == "Quái") {
+                    if (gameObj.map.charr.obj.hpCur <= 0) {
+                        gameObj.map.charr.gainExp(gameObj.map.monn, false)
+                        clearInterval(boardPointt.countdown)
+                        setTimeout(() => { oo.input.keyboard.emit('keydown-M') }, 500)
+                    } else { setTimeout(()=>{ 
+                        useTurn() 
+                    }, 500) }
                 }
             }
         }
@@ -1873,9 +1922,11 @@ function resetJoystick(scene) {
 
 
 
-
-
-const fiveLL = 5
+let randomTMon
+function randomTimeMon() {
+    let numbers = [17, 16, 15, 14];
+    return randomTMon = numbers[Math.floor(Math.random() * numbers.length)];
+}
 
 function startTime() {
     boardPointt.timerDisplay.style.visibility = "visible"
@@ -1883,6 +1934,7 @@ function startTime() {
 
     boardPointt.currentTurn = Math.random() < 0.5 ? "Nhân vật" : "Quái";
     if (boardPointt.currentTurn == "Nhân vật") { boardPointt.click = true }
+    else { randomTimeMon() }  // llll
     boardPointt.start = false; 
 
     updateTimeInfo()
@@ -1917,6 +1969,9 @@ function startCountdown() {
 
         boardPointt.timer--;
         boardPointt.timerDisplay.textContent = `${boardPointt.timer}s`;
+    if (randomTMon == boardPointt.timer && boardPointt.currentTurn == "Quái") {
+        autoFightMon()
+    }
 
         if (boardPointt.timer == 0) {
             clearInterval(boardPointt.countdown)
@@ -1948,8 +2003,11 @@ function useTurn(aa) {
             if (aa == undefined) boardPointt.click = boardPointt.remainingTurns > 1 ? true : undefined
             else boardPointt.click = true
         } else {
-            if (aa == undefined) boardPointt.click = boardPointt.remainingTurns > 1 ? undefined : true
+            boardPointt.click = boardPointt.remainingTurns > 1 ? undefined : true
             // else boardPointt.click = true
+            if (boardPointt.remainingTurns > 1 ) {
+                randomTimeMon()
+            }
         }
 
         aa == undefined ? boardPointt.remainingTurns-- : 1
@@ -2015,130 +2073,13 @@ function endBattle() {
     boardPointt.click= null;
     boardPointt.currentTurn= '';
     boardPointt.remainingTurns = 1,
-    boardPointt.timer = 5;
+    boardPointt.timer = fiveLL
     boardPointt.countdown= 0;
     board = []; listOfArrays = []
     currTile = undefined, otherTile = undefined
 
     gameObj.map.winGame = null
 }
-const skillsButton = document.getElementById('skill-btn');
-const skillsPopup = document.getElementById('skillsPopup');
-const skillDescription2 = document.getElementById('skillDescription');
-const skillPointsDisplay2 = document.getElementById('skillPoints');
-const chooseButtonSkill = document.getElementById('chooseButton');
-var manaPointsDisplay
-var manaPointsDisplay2
-var manaPointsDisplay3
-
-// Cập nhật tên kỹ năng bên ngoài
-function updateSkillNames() {
-    document.getElementById('skill1Name').textContent = gameObj.map.charr.skill.S1.name
-    document.getElementById('skill2Name').textContent = gameObj.map.charr.skill.S2.name
-    document.getElementById('skill3Name').textContent = gameObj.map.charr.skill.S3.name
-}
-
-// Hiển thị mô tả khi chọn kỹ năng
-function showSkillDescription(skillIndex) {
-    chooseButtonSkill.classList.remove('active');
-    const skill = gameObj.map.charr.skill[`S${skillIndex}`]
-    skillDescription2.innerHTML = `<h3>${skill.name} - Cấp độ ${skill.level}</h3>
-    
-<p>${skill.description}</p>
-<span id="manaPoints3">Mana: <span id="manaPoints">50</span>/<span id="manaPoints2">50</span></span>
-`;
-
-chooseButtonSkill.classList.add('active');
-  chooseButtonSkill.disabled = gameObj.map.charr.manaCur < skill.mana;
-  chooseButtonSkill.onclick = () => chooseSkill(skillIndex, gameObj.map.charr, gameObj.map.monn)
-{/* <button onclick="levelUpSkill(${skillIndex})" id="levelUpButton">Cộng điểm kỹ năng</button> */}
-    // updateLevelUpButton(); // Cập nhật nút sau mỗi lần chọn kỹ năng
-    manaPointsDisplay = document.getElementById('manaPoints');
-    manaPointsDisplay2 = document.getElementById('manaPoints2');
-    manaPointsDisplay3 = document.getElementById('manaPoints3');
-    manaPointsDisplay.textContent = +gameObj.map.charr.manaCur.toFixed(2)
-    manaPointsDisplay2.textContent = skill.mana
-    gameObj.map.charr.manaCur >= skill.mana? manaPointsDisplay3.classList.add("manaPointGreen")
-        :manaPointsDisplay3.classList.add("manaPointRed")
-}
-
-// Nâng cấp kỹ năng
-function levelUpSkill(skillIndex) {
-    if (skillPoints > 0) {
-        skills[skillIndex].level++;
-        skillPoints--;
-        skillPointsDisplay2.textContent = `Điểm Kỹ Năng: ${skillPoints}`;
-        showSkillDescription(skillIndex); // Cập nhật lại mô tả sau khi nâng cấp
-    } else {
-        alert('Không đủ điểm kỹ năng!');
-    }
-    // updateLevelUpButton(); // Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
-}
-
-// Cập nhật trạng thái của nút "Cộng điểm kỹ năng"
-function updateLevelUpButton() {
-    const levelUpButton = document.getElementById('levelUpButton');
-    if (skillPoints === 0) {
-        levelUpButton.disabled = true;
-    } else {
-        levelUpButton.disabled = false;
-    }
-}
-
-// Ẩn bảng kỹ năng
-function hidePopup(popupId) {
-    const popup = document.getElementById(popupId);
-    popup.classList.remove('active');
-    chooseButtonSkill.classList.remove('active');
-
-    skillDescription2.innerHTML = `<p>Chọn kỹ năng để xem mô tả.</p>`;
-    // document.getElementById("choose-btn-skill").style.display = 'none'
-}
-
-// Hiển thị bảng kỹ năng
-// skillsButton.addEventListener('click', () => {
-//     skillsPopup.classList.add('active');
-//     updateSkillNames(); // Cập nhật tên kỹ năng khi bảng hiện
-// });
-
-// Chọn kỹ năng
-function chooseSkill(skillIndex, thi, thi2) {
-    const skill = gameObj.map.charr.skill[`S${skillIndex}`]
-    if (gameObj.map.charr.manaCur >= skill.mana) {
-        gameObj.map.charr.manaCur -= skill.mana;
-
-        //   manaPointsDisplay.textContent = manaPoints;
-        hidePopup('skillsPopup');
-        Object.keys(skill).forEach(item => {
-            // this.dame += item.dame || 0;
-            item == 'armorCur' ? (thi.armorCur += skill[item] || 0,
-                thi.armorCur = +thi.armorCur.toFixed(2)
-            ) : 1
-            item == 'hpCur' ? (thi.hpCur += skill[item] || 0,
-                thi.hpCur = +thi.hpCur.toFixed(2)
-            ) : 1
-            if ((skill[item] || 0) != 0 && item == 'dame') { thi.fight(thi2, skill[item]) }
-            this.dodge += item.dodge || 0;
-        });
-        updateInfor()
-
-
-        boardPointt.click = undefined
-        clearInterval(countdown);
-
-        if (currTile != undefined) {
-            focus(currTile, 'fc', 2, 0);
-            otherTile = undefined; currTile = undefined;
-        }
-        setTimeout(() => { useTurn() }, 2000)
-    }
-}
-// Gán sự kiện cho các kỹ năng
-document.getElementById('skill1').addEventListener('click', () => showSkillDescription(1, gameObj.map.charr, gameObj.map.monn));
-document.getElementById('skill2').addEventListener('click', () => showSkillDescription(2, gameObj.map.charr, gameObj.map.monn));
-document.getElementById('skill3').addEventListener('click', () => showSkillDescription(3, gameObj.map.charr, gameObj.map.monn));
-
-
 
 
 
@@ -2202,3 +2143,118 @@ const popupBoardGame = document.getElementById('popupBoardGame');
           function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       }
+
+    }
+// quái đánh
+// 3. cho quái đánh: -----------------------------------------------
+var pi = { a: 0 }
+function testValid() { // kiểm tra xem bàn cờ có đi đc nước nào ko?  
+    // r: row, c: collumn
+    for (var r = 0; r < hàng; r++) {
+        for (var c = 0; c < cột ; c++) {
+            changeSrcTest(r + 1 < hàng, 'test', r, c, 1, 0)// hoán đổi chính nó và viên dưới nó
+            changeSrcTest(c + 1 < cột, 'test', r, c, 0, 1)// hoán đổi chính nó và viên bên phải
+            // ps: chỉ cần đổi 2 hướng là biết, ko cần 4 hướng
+            if (pi.a > 0) { pi.a = 0; return true }; 
+        }
+    }
+    // ko còn nước đi nào là trả false nè
+    return false 
+} 
+function reBuild() {
+    document.getElementById("board").innerHTML = ''
+    setTimeout(()=>{startGame()}, 800)
+}
+
+let moveMon = new Set()
+// hoán đổi src và filter giả lập, rồi trả về cũ
+function fakeTurn() { 
+    function changeSrcTest(condition1, r, c, y, x) { 
+        if (condition1) {
+            // hàm hoán đổi src
+            function mimi() { 
+                // var img1 = board[r][c], img2 = board[r + y][c + x]
+                // 1. đổi src img cho nhau
+                [board[r][c].src, board[r + y][c + x].src] = [board[r + y][c + x].src, board[r][c].src];
+                // 2. đổi symbolClass img cho nhau
+                [board[r][c].filterr, board[r + y][c + x].filterr] = 
+                            [board[r + y][c + x].filterr, board[r][c].filterr];
+            }; 
+         
+            mimi() // mimi lần 1 là hoán đổi src và filter 2 viên
+            if (checkValid()) { destroyCandy(r, c, y, x) };
+            mimi() // mimi lần 2 là để trả src và filter về
+        }
+    }
+    for (var r = 1; r <= hàng; r++) {
+        for (var c = 0; c < cột; c++) { /**xuống*/ /**phải */
+            changeSrcTest(r + 1 <= hàng, r, c, 1, 0); 
+            changeSrcTest(c + 1 < cột, r, c, 0, 1); 
+        }
+    } 
+    moveMon = [...moveMon]
+}
+//6.
+function autoFightMon() {
+    // var o = [
+    //     [1, 5, 1, 2, 2], 
+    //     [1, 5, 0, 2, 1], 
+    //     [1, 5, 1, 2, 4], 
+    //     [1, 5, 0, 2, 4], 
+    // ];
+    listOfArrays = []; fakeTurn(); listOfArrays = []
+    
+    // 1 = Khó, 2 = Dễ
+    let difficulty = Math.random() < 0.5 ? 1 : 2; 
+    // console.log("Chế độ:", difficulty === 1 ? "Khó" : "Dễ");
+    
+    let chosenArray;
+    
+    if (difficulty === 2) {
+        // Chế độ dễ: chọn ngẫu nhiên
+        chosenArray = moveMon[Math.floor(Math.random() * moveMon.length)];
+    } else {
+        // Chế độ khó
+        let filtered = moveMon.filter(arr => arr[4] > 0);
+    
+        if (filtered.length === 0) {
+            // Nếu không có `c > 0`, chọn tất cả để xét `d`
+            filtered = moveMon;
+        }
+    
+        // Lọc mảng có `e` lớn nhất
+        let maxE = Math.max(...filtered.map(arr => arr[6]));
+        filtered = filtered.filter(arr => arr[6] === maxE);
+    
+        // Nếu nhiều hơn 1 mảng, xét tiếp `d`
+        if (filtered.length > 1) {
+            let maxD = Math.max(...filtered.map(arr => arr[5]));
+            filtered = filtered.filter(arr => arr[5] === maxD);
+        }
+    
+        // Chọn ngẫu nhiên trong nhóm đạt điều kiện cuối cùng
+        chosenArray = filtered[Math.floor(Math.random() * filtered.length)];
+    }
+    
+    // Trả về a, b
+    // console.log("Chọn mảng:", chosenArray);
+    // console.log("Kết quả:", chosenArray[0], chosenArray[1]);
+    currTile = board[chosenArray[0]][chosenArray[1]]; otherTile = board[chosenArray[0]+chosenArray[2]][chosenArray[1]+ chosenArray[3]]
+    moveMon = new Set()
+    function monsterFightFocus() {
+        const focus = (tile, cls, time) => { setTimeout(() => { getBox(tile.id).classList.toggle(cls) }, time) }
+        clearInterval(boardPointt.countdown);
+
+        setTimeout(() => {
+             focus(currTile, 'focus', 0)
+            setTimeout(() => {
+                focus(currTile, 'focus', 0); focus(otherTile, 'outFocus', 0);
+                focus(otherTile, 'outFocus', 800)
+
+
+                setTimeout(() => checkAdjacency(), 400); 
+            }, 1200)
+        }, 500)
+    }
+monsterFightFocus()
+}
