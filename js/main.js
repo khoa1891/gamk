@@ -35,7 +35,7 @@ let gameObj = { // gameObj.
         playerNameText: 0, monstersBody: [], monContainerArr: [], characterContainer: [],
         monsters: [], chairs: [], obstacles: [], // Chướng ngại vật tĩnh
         cursors: 0, winGame: null,
-    
+        exitPortals: [],
         C: 1,
         width: 1300, height: 800,
         // mũi tên trên đầu quái
@@ -93,6 +93,7 @@ function preload() {
     this.load.image('frame4', './img/ha44.png');
     this.load.image('frame5', './img/ha55.png');
     this.load.image('frame6', './img/ha66.png');
+    this.load.image('frame9999', './img/none.png');
 
 
     // nũ
@@ -109,6 +110,8 @@ function preload() {
     this.load.image('frame13', './img/ha170.png');
     this.load.image('frame14', './img/ha180.png');
     this.load.image('frame15', './img/ha190.png');
+
+ 
     // // vũ khí thủy
     // this.load.image('frame13', './img/ha170.png');
     // this.load.image('frame14', './img/ha180.png');
@@ -140,6 +143,24 @@ function preload() {
     // nhà
     this.load.image('house1', './img/ha401.png');
     this.load.image('house2', './img/ha402.png');
+
+
+        // vũ khí mộcmộc
+        this.load.image('frame37', './img/ha230.png');
+        this.load.image('frame38', './img/ha250.png');
+        this.load.image('frame39', './img/ha240.png');
+
+    // quái map 1
+    this.load.image('frame40', './img/ha418.png');
+    this.load.image('frame41', './img/ha419.png');
+    this.load.image('frame42', './img/ha420.png');
+
+    // exit
+    this.load.image('frame43', './img/ha426.png');
+
+    this.load.image('frame44', './img/ha427.png');
+
+
 
 
     // Tải sprite sheet
@@ -221,75 +242,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     // this.tempBackground.on('pointerdown', () => {
     //     console.log("haha"); // Khi nhấn vào vùng đỏ, in ra "haha"
     // });
-    var yy = 0
-    const currentMap = monsInF[gameObj.map.mapIndex];
-    for (const groupKey in currentMap) {
-        const group = currentMap[groupKey];
-        for (let i = 0; i < group.num; i++) {
-            const monster = this.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame1');
-            monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
-            // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
-            monster.setBounce(1);
-            monster.setCollideWorldBounds(true);
-            monster.setSize(35, 45)
-            monster.setScale(0.6);
-            monster.setOrigin(0.5, 0.5);
-            monster.setDepth(11)
-            monster.isAlive = true
-            monster.indec = yy
-            yy++
-            // monster.body.moves = false;
-            // monster.body.setImmovable(true); 
-            monster.obj = deepCopy(group)
-            monster.obj.level = monster.obj._level() // Lấy level từ getter
-            monster.obj.element = monster.obj._element()
-            // monster.level = deepCopy(group)._level() // Lấy level từ getter
-            // monster.element =  deepCopy(group)._element()
-            // monster.idle = group.idle
-            // monster.idleCloth = group.idleCloth
-            // monster.run = group.run
-            // monster.runCloth = group.runCloth
-
-            monster.isStopped = false; // Mặc định tất cả đều đang chạy
-
-
-            gameObj.map.monsters.push(monster);
-
-            // áo
-            let body = this.add.sprite(0, 0, 'body');
-            body.setSize(35, 45)
-            body.setScale(0.6);
-            body.setOrigin(0.5, 0.5);
-
-            gameObj.map.monstersBody.push(body)
-
-
-
-            // Group character parts into a container
-            let monContainer = this.add.container(400, 300, [body]);
-            gameObj.map.monContainerArr.push(monContainer)
-            monContainer.setDepth(12)
-            //   gameObj.map.characterContainer = this.add.container(400, 300, [body, hat, shirt]);
-
-            // Add physics body for the entire character
-            monBody = this.physics.add.existing(monContainer);
-            monContainer.body.setSize(35, 45).setCollideWorldBounds(true);
-
-
-            // // Tạo tên cho quái vật
-            // monster.monsterNameText = this.add.text(
-            //     monster.x,
-            //     monster.y - 50,
-            //     `${monster.name} | Lv ${monster.level}`,
-            //     // `${monster.name} ${i}`,
-            //     { fontSize: '12px', fill: '#ffffff' }
-            // ).setOrigin(0.5);
-
-
-            // Thêm thông tin quái vật vào mảng
-            // monsters2.push({ container: monsterContainer, nameText: monsterNameText });
-        }
-    }
+   
     this.input.keyboard.on('keydown-A', () => {
         gameObj.map.monsters.forEach((monster, index) => {
             if (monster.isStopped) {
@@ -350,9 +303,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     //     }
     // }}
     // Tỷ lệ thu nhỏ minimap (ví dụ: bản đồ chính lớn hơn minimap 4 lần)
-    const scale = 3;
-
-
+    npc_1()
 
     // ----------------------------------
     // Vẽ minimap
@@ -482,69 +433,36 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
 
 
-    // Tạo ghế
-    for (let i = 0; i < 3; i++) {
-        const chair = this.physics.add.sprite(200 + i * 200, 400, 'chair');
-        chair.setCollideWorldBounds(true);
-        chair.setBounce(0.2); // Thêm độ nảy cho ghế
-        chair.setDrag(400);
-        gameObj.map.chairs.push(chair);
-    }
+   
+    // tạo exit
+//     const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
 
-    // Tạo chướng ngại vật tĩnh
-    for (let i = 0; i < 2; i++) {
-        const obstacle = this.physics.add.staticImage(500 + i * 200, 300, 'house' + (i+1));
-        obstacle.setSize(80, 100)
-            obstacle.setScale(0.725);
-            obstacle.setOrigin(0.5, 0.5);
-        gameObj.map.obstacles.push(obstacle);
-    }
+// currentExitPositions.forEach(([x, y]) => {
+//     let exitPortal = this.physics.add.sprite(x, y, 'frame4');
+//     exitPortal.setDepth(10);
+//     exitPortal.setSize(35, 45);
+//     exitPortal.setScale(0.6);
+//     exitPortal.setCollideWorldBounds(true);
+//     exitPortal.setOrigin(0.5, 0.5);
+//     exitPortal.setDepth(11)
+//     exitPortal.anims.play('exitMap', true);
+//     exitPortal.body.setImmovable(true);
+
+//     gameObj.map.exitPortals.push(exitPortal);
+
+//     // Kiểm tra khi nhân vật chạm vào cổng
+//     this.physics.add.overlap(gameObj.map.player, exitPortal, () => {
+//         console.log("haha"); // Khi chạm vào cổng, in ra "haha"
+//     });
+// });
+
+
+
+  
 
     // Thiết lập điều khiển
     gameObj.map.cursors = this.input.keyboard.createCursorKeys();
 
-    // Thiết lập va chạm giữa quái vật và ghế
-    gameObj.map.monsters.forEach(monster => {
-        gameObj.map.chairs.forEach(chair => {
-            this.physics.add.collider(monster, chair, stopMonster);
-        });
-    });
-
-    // Thiết lập va chạm giữa nhân vật và ghế
-    gameObj.map.chairs.forEach(chair => {
-        this.physics.add.collider(gameObj.map.player, chair)// , stopPlayer);
-    });
-
-
-
-    // Thiết lập va chạm giữa nhân vật và quái vật (để đẩy quái)
-    gameObj.map.monsters.forEach(monster => {
-        this.physics.add.collider(gameObj.map.player, monster, pushMonster);
-    });
-
-    // Thiết lập va chạm giữa quái vật và chướng ngại vật tĩnh
-    gameObj.map.monsters.forEach(monster => {
-        gameObj.map.obstacles.forEach(obstacle => {
-            this.physics.add.collider(monster, obstacle);
-        });
-    });
-
-    // Thiết lập va chạm giữa nhân vật và chướng ngại vật tĩnh
-    gameObj.map.obstacles.forEach(obstacle => {
-        this.physics.add.collider(gameObj.map.player, obstacle);
-    });
-    // Thiết lập va chạm giữa các quái vật
-    for (let i = 0; i < gameObj.map.monsters.length; i++) {
-        for (let j = i + 1; j < gameObj.map.monsters.length; j++) {
-            this.physics.add.collider(gameObj.map.monsters[i], gameObj.map.monsters[j]);
-        }
-    }
-    // Thiết lập va chạm giữa các ghế
-    for (let i = 0; i < gameObj.map.chairs.length; i++) {
-        for (let j = i + 1; j < gameObj.map.chairs.length; j++) {
-            this.physics.add.collider(gameObj.map.chairs[i], gameObj.map.chairs[j]);
-        }
-    }
     // Làm cho quần áo di chuyển theo nhân vật
     // this.physics.world.on('worldstep', () => {
     //   gameObj.map.characterContainer.x = gameObj.map.player.x;
@@ -673,6 +591,282 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
 
 }
+
+
+function npc_1() {
+    // 🏗 Hàm tạo cổng dịch chuyển
+    const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
+    gameObj.map.exitPortals = []; // Xóa mảng cũ
+
+    currentExitPositions.forEach((exitData) => {
+        const [x, y] = exitData.pos;
+        const exitPortal = oo.physics.add.sprite(x, y, 'frame4');
+        // exitPortal.setImmovable(true); // Không bị đẩy
+        // exitPortal.play('exit'); // Chạy animation
+        exitPortal.toMap = exitData.toMap; // Map sẽ chuyển đến
+
+        exitPortal.setDepth(10);
+        exitPortal.setSize(35, 45);
+        exitPortal.setScale(0.6);
+        exitPortal.setCollideWorldBounds(true);
+        exitPortal.setOrigin(0.5, 0.5);
+        exitPortal.setDepth(11)
+        exitPortal.anims.play('exitMap', true);
+        exitPortal.body.setImmovable(true);
+    
+        gameObj.map.exitPortals.push(exitPortal);
+
+        // Xử lý chạm vào portal
+        oo.physics.add.overlap(gameObj.map.player, exitPortal, function() {
+            if (!exitPortal.touched) {
+                exitPortal.touched = true;  // Chỉ log một lần
+                // console.log("Haha"); // Debug kiểm tra
+                changeMap(exitPortal.toMap, exitData.spawnPos[0], exitData.spawnPos[1]); // Chuyển map + đặt nhân vật đúng vị trí
+            }
+        });
+
+    });
+
+    // tạo quái vật
+    var yy = 0
+    const currentMap = monsInF[gameObj.map.mapIndex];
+    for (const groupKey in currentMap) {
+        const group = currentMap[groupKey];
+        updateFrames(`runMon${groupKey}`, group.run);
+
+        for (let i = 0; i < group.num; i++) {
+            const monster = oo.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame42');
+            monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
+            // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
+            monster.setBounce(1);
+            monster.setCollideWorldBounds(true);
+            monster.setSize(35, 45)
+            monster.setScale(0.6);
+            monster.setOrigin(0.5, 0.5);
+            monster.setDepth(11)
+            monster.isAlive = true
+            monster.indec = yy
+            monster.monsterType = groupKey
+            yy++
+            // monster.body.moves = false;
+            // monster.body.setImmovable(true); 
+            monster.obj = deepCopy(group)
+            monster.obj.level = monster.obj.inf._level() // Lấy level từ getter
+            monster.obj.element = monster.obj.inf._element()
+            // monster.level = deepCopy(group)._level() // Lấy level từ getter
+            // monster.element =  deepCopy(group)._element()
+            // monster.idle = group.idle
+            // monster.idleCloth = group.idleCloth
+            // monster.run = group.run
+            // monster.runCloth = group.runCloth
+
+            monster.isStopped = false; // Mặc định tất cả đều đang chạy
+
+
+            gameObj.map.monsters.push(monster);
+
+            // // áo
+            // let body = this.add.sprite(0, 0, 'body');
+            // body.setSize(35, 45)
+            // body.setScale(0.6);
+            // body.setOrigin(0.5, 0.5);
+
+            // gameObj.map.monstersBody.push(body)
+
+
+
+            // // Group character parts into a container
+            // let monContainer = this.add.container(400, 300, [body]);
+            // gameObj.map.monContainerArr.push(monContainer)
+            // monContainer.setDepth(12)
+            // //   gameObj.map.characterContainer = this.add.container(400, 300, [body, hat, shirt]);
+
+            // // Add physics body for the entire character
+            // monBody = this.physics.add.existing(monContainer);
+            // monContainer.body.setSize(35, 45).setCollideWorldBounds(true);
+
+
+            // // Tạo tên cho quái vật
+            // monster.monsterNameText = this.add.text(
+            //     monster.x,
+            //     monster.y - 50,
+            //     `${monster.name} | Lv ${monster.level}`,
+            //     // `${monster.name} ${i}`,
+            //     { fontSize: '12px', fill: '#ffffff' }
+            // ).setOrigin(0.5);
+
+
+            // Thêm thông tin quái vật vào mảng
+            // monsters2.push({ container: monsterContainer, nameText: monsterNameText });
+        }
+    }
+
+
+    // tạo ghế
+    const currentChair = chairMap[gameObj.map.mapIndex - 1];
+    currentChair.forEach((exitData) => {
+        const [x, y] = exitData.pos;
+        const chair = oo.physics.add.sprite(x, y, exitData.img);
+
+        chair.setCollideWorldBounds(true);
+        chair.setBounce(0.5); // Thêm độ nảy cho ghế
+        chair.setDrag(300);
+
+        // chair.setDepth(10);
+        // chair.setSize(35, 45);
+        // chair.setScale(0.6);
+        // chair.setCollideWorldBounds(true);
+        // chair.setOrigin(0.5, 0.5);
+        // chair.setDepth(11)
+        // chair.anims.play('exitMap', true);
+        // chair.body.setImmovable(true);
+    
+        gameObj.map.chairs.push(chair);
+
+        // // Xử lý chạm vào portal
+        // oo.physics.add.overlap(gameObj.map.player, chair, function() {
+        //     if (!chair.touched) {
+        //         chair.touched = true;  // Chỉ log một lần
+        //         // console.log("Haha"); // Debug kiểm tra
+        //         changeMap(chair.toMap, x, y); // Chuyển map + đặt nhân vật đúng vị trí
+        //     }
+        // });
+    });
+    // tạo exit
+//     const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
+
+// currentExitPositions.forEach(([x, y]) => {
+//     let exitPortal = this.physics.add.sprite(x, y, 'frame4');
+//     exitPortal.setDepth(10);
+//     exitPortal.setSize(35, 45);
+//     exitPortal.setScale(0.6);
+//     exitPortal.setCollideWorldBounds(true);
+//     exitPortal.setOrigin(0.5, 0.5);
+//     exitPortal.setDepth(11)
+//     exitPortal.anims.play('exitMap', true);
+//     exitPortal.body.setImmovable(true);
+
+//     gameObj.map.exitPortals.push(exitPortal);
+
+//     // Kiểm tra khi nhân vật chạm vào cổng
+//     this.physics.add.overlap(gameObj.map.player, exitPortal, () => {
+//         console.log("haha"); // Khi chạm vào cổng, in ra "haha"
+//     });
+// });
+
+
+
+     // Tạo chướng ngại vật tĩnh
+ const obstacleChair = obstacleMap[gameObj.map.mapIndex - 1];
+ obstacleChair.forEach((exitData) => {
+     const [x, y] = exitData.pos;
+     const obstacle = oo.physics.add.staticImage(x, y, exitData.img);
+        obstacle.setSize(80, 100)
+            obstacle.setScale(0.725);
+            obstacle.setOrigin(0.5, 0.5);
+
+
+
+
+     // chair.setDepth(10);
+     // chair.setSize(35, 45);
+     // chair.setScale(0.6);
+     // chair.setCollideWorldBounds(true);
+     // chair.setOrigin(0.5, 0.5);
+     // chair.setDepth(11)
+     // chair.anims.play('exitMap', true);
+     // chair.body.setImmovable(true);
+ 
+     gameObj.map.obstacles.push(obstacle)
+
+     // // Xử lý chạm vào portal
+     // oo.physics.add.overlap(gameObj.map.player, chair, function() {
+     //     if (!chair.touched) {
+     //         chair.touched = true;  // Chỉ log một lần
+     //         // console.log("Haha"); // Debug kiểm tra
+     //         changeMap(chair.toMap, x, y); // Chuyển map + đặt nhân vật đúng vị trí
+     //     }
+     // });
+ });
+
+    // Thiết lập va chạm giữa quái vật và ghế
+    gameObj.map.monsters.forEach(monster => {
+        gameObj.map.chairs.forEach(chair => {
+            oo.physics.add.collider(monster, chair, stopMonster);
+        });
+    });
+
+    // Thiết lập va chạm giữa nhân vật và ghế
+    gameObj.map.chairs.forEach(chair => {
+        oo.physics.add.collider(gameObj.map.player, chair)// , stopPlayer);
+    });
+
+
+
+    // Thiết lập va chạm giữa nhân vật và quái vật (để đẩy quái)
+    gameObj.map.monsters.forEach(monster => {
+        oo.physics.add.collider(gameObj.map.player, monster, pushMonster);
+    });
+
+    // Thiết lập va chạm giữa quái vật và chướng ngại vật tĩnh
+    gameObj.map.monsters.forEach(monster => {
+        gameObj.map.obstacles.forEach(obstacle => {
+            oo.physics.add.collider(monster, obstacle);
+        });
+    });
+
+    // Thiết lập va chạm giữa nhân vật và chướng ngại vật tĩnh
+    gameObj.map.obstacles.forEach(obstacle => {
+        oo.physics.add.collider(gameObj.map.player, obstacle);
+    });
+    // Thiết lập va chạm giữa các quái vật
+    for (let i = 0; i < gameObj.map.monsters.length; i++) {
+        for (let j = i + 1; j < gameObj.map.monsters.length; j++) {
+            oo.physics.add.collider(gameObj.map.monsters[i], gameObj.map.monsters[j]);
+        }
+    }
+    // Thiết lập va chạm giữa các ghế
+    for (let i = 0; i < gameObj.map.chairs.length; i++) {
+        for (let j = i + 1; j < gameObj.map.chairs.length; j++) {
+            oo.physics.add.collider(gameObj.map.chairs[i], gameObj.map.chairs[j]);
+        }
+    }
+}
+
+
+function changeMap(newMapIndex, newX, newY) {
+    console.log(`Chuyển sang map ${newMapIndex}`);
+
+    gameObj.map.mapIndex = newMapIndex;
+
+    // Xóa quái và exit portals
+    gameObj.map.monsters.forEach(monster => monster.destroy());
+    gameObj.map.monsters = [];
+
+    gameObj.map.exitPortals.forEach(portal => portal.destroy());
+    gameObj.map.exitPortals = [];
+
+    gameObj.map.chairs.forEach(sprite => { sprite.destroy() });
+    gameObj.map.chairs = []
+
+    gameObj.map.obstacles.forEach(sprite => { sprite.destroy() });
+    gameObj.map.obstacles = [];
+    // gameObj.map.monsters.length = 0
+
+    // Cập nhật vị trí nhân vật
+    gameObj.map.player.setPosition(newX, newY);
+
+
+    
+    
+    npc_1() 
+   
+
+    // Load quái & exit portals mới
+    // spawnMonsters();
+    // spawnExitPortals();
+}
+
 function iii() {
     oo.input.keyboard.emit('keydown-M');
 }
@@ -746,6 +940,72 @@ gameObj.map.player.setVelocity(0, 0);
 
 
 }
+let frames = [11, 18];
+
+// Hàm cập nhật danh sách frame
+function updateFrames(animKey, frames) {
+    let anim = oo.anims.get(animKey);
+    
+    if (!anim) {
+        console.error(`Animation '${animKey}' không tồn tại!`);
+        return;
+    }
+
+    // Hủy animation cũ
+    oo.anims.remove(animKey);
+
+    // Tạo lại animation với frames mới
+    oo.anims.create({
+        key: animKey,         // Tên animation
+        frames: frames.map(frame => ({ key: `frame${frame}` })),  // Frames mới
+        frameRate: anim.frameRate,  // Giữ nguyên frameRate cũ
+        repeat: anim.repeat,       // Giữ nguyên repeat cũ
+    });
+
+}
+function clearAnimationFrames(animKey) {
+    let anim = oo.anims.get(animKey);
+    
+    if (!anim) {
+        console.error(`Animation '${animKey}' không tồn tại!`);
+        return;
+    }
+
+    // Xóa animation cũ
+    oo.anims.remove(animKey);
+
+    // Tạo lại animation với frame rỗng
+    oo.anims.create({
+        key: animKey,
+        frames: [],  // Không có frames
+        frameRate: 5,
+        repeat: -1
+    });
+
+    console.log(`Đã xóa frames của animation '${animKey}'`);
+}
+function hihi(aa, cc, dd, ee) {
+    updateFrames(aa, cc);
+    Object.defineProperty(charInF, dd, {
+        get: function () {
+            return aa
+        }
+    });
+    updateFrames(ee, cc);
+    Object.defineProperty(charInF, dd, {
+        get: function () {
+            return ee
+        }
+    });
+
+}
+function hihi2(aa, cc, dd, ee) {
+    updateFrames(aa, cc);
+    
+}
+// Gọi hàm để xóa frames của animation 'idle'
+// clearAnimationFrames('idle');
+
 // Hàm riêng để tạo các animation
 function createAnimations(scene) {
     // nhún đứng, đứng đi
@@ -834,15 +1094,18 @@ function createAnimations(scene) {
         repeat: -1
     });
 
+    
+  
     scene.anims.create({
         key: 'idleBlade',         // Tên animation
         frames: [
             { key: 'frame15' },
             { key: 'frame13' },
-        ],                          // Các frame của animation
+        ],   
         frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
         repeat: -1
     });
+    // updateFrames('idleBlade', [15, 13]);
 
     scene.anims.create({
         key: 'runBlade',         // Tên animation
@@ -850,6 +1113,7 @@ function createAnimations(scene) {
             { key: 'frame13' },
             { key: 'frame14' },
         ],                          // Các frame của animation
+        // frame: [],                       // Các frame của animationn
         frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
         repeat: -1
     });
@@ -863,6 +1127,20 @@ function createAnimations(scene) {
         frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
         repeat: -1
     });
+
+
+    scene.anims.create({
+        key: 'haha',         // Tên animation
+        // frames: [
+        //     { key: 'frame37' },
+        //     { key: 'frame38' },
+        // ],                          // Các frame của animation
+        frames: [], 
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+    
+    
 
     scene.anims.create({
         key: 'runMount',         // Tên animation
@@ -892,6 +1170,46 @@ function createAnimations(scene) {
             { key: 'frame28' },
             { key: 'frame29' },
             { key: 'frame30' },
+        ],                          // Các frame của animation
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+
+    // mon 1
+    scene.anims.create({
+        key: 'runMon1',         // Tên animation
+        frames: [],                          // Các frame của animation
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+     // mon 2
+     scene.anims.create({
+        key: 'runMon2',         // Tên animation
+        frames: [],                          // Các frame của animation
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+     // mon 3
+     scene.anims.create({
+        key: 'runMon3',         // Tên animation
+        frames: [],                          // Các frame của animation
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+     // mon 4
+     scene.anims.create({
+        key: 'runMon4',         // Tên animation
+        frames: [],                          // Các frame của animation
+        frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+        repeat: -1
+    });
+
+       // mon 4
+       scene.anims.create({
+        key: 'exitMap',         // Tên animation
+        frames: [
+            { key: 'frame43' },
+            { key: 'frame44' },
         ],                          // Các frame của animation
         frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
         repeat: -1
@@ -1008,7 +1326,7 @@ function simulatePointerDown(scene, x, y) {
     scene.input.pointerDownHandler(scene.input.activePointer);  // Gọi sự kiện thủ công
 }
 
-let isMoving 
+let isMoving, stopAni = true
 function update() {
     // isMoving = false
     // let vel = 160
@@ -1040,7 +1358,7 @@ function update() {
     // ----------------------
     if (isMoving) {
         mimi(charInF.RunNuz, charInF.RunCloth, charInF.RunWeapon,  charInF.RunMount, charInF.RunPet, charInF.RunWing);
-    } else {
+    } else if (isMoving == false) {
         mimi(charInF.IdleNuz, charInF.IdleCloth, charInF.IdleWeapon, charInF.IdleMount, charInF.RunPet, charInF.RunWing);
     }
     function mimi(a, b, c, d, e, f) {
@@ -1068,17 +1386,20 @@ function update() {
             //     monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
             // }
 
-            gameObj.map.monstersBody[index].anims.play('runCloth', true);
-            monster.anims.play('run', true);
-            gameObj.map.monContainerArr[index].setPosition(monster.x, monster.y);
+            // gameObj.map.monstersBody[index].anims.play('runCloth', true);
+            const animKey = `runMon${monster.monsterType}`;
+        monster.anims.play(animKey, true);
+
+            // monster.anims.play('runMon1', true);
+            // gameObj.map.monContainerArr[index].setPosition(monster.x, monster.y);
 
             // Kiểm tra hướng di chuyển và lật hình
             if (monster.body.velocity.x < 0) {
                 monster.flipX = true
-                gameObj.map.monContainerArr[index].setScale(-1, 1);
+                // gameObj.map.monContainerArr[index].setScale(-1, 1);
             } else if (monster.body.velocity.x > 0) {
                 monster.flipX = false
-                gameObj.map.monContainerArr[index].setScale(1, 1);
+                // gameObj.map.monContainerArr[index].setScale(1, 1);
             }
         }
     });
@@ -2257,4 +2578,22 @@ function autoFightMon() {
         }, 500)
     }
 monsterFightFocus()
+}
+
+
+function exitMapp() {
+    gameObj.map.monsters.forEach(sprite => {
+        sprite.destroy(); // Hủy từng sprite trong mảng
+    });
+    gameObj.map.monsters.length = 0;
+    
+    gameObj.map.obstacles.forEach(sprite => {
+        sprite.destroy(); // Hủy từng sprite trong mảng
+    });
+    gameObj.map.obstacles.length = 0;
+    
+    gameObj.map.chairs.forEach(sprite => {
+        sprite.destroy(); // Hủy từng sprite trong mảng
+    });
+    gameObj.map.chairs.length = 0;
 }

@@ -23,3 +23,66 @@
 // setActive(false)	Không	Không	Minimap bị tắt hoàn toàn.
 
 // setVisible(false) hoặc .setActive(false): Ẩn minimap và dừng mọi hoạt động.
+
+
+170: 13
+190: 15  13 cao 15 thấpthấp
+
+
+oo.anims.get('runBlade');updateFrames('idleBlade', [15, 13]);
+
+
+oo.anims.get('haha').frames
+
+
+
+
+
+
+
+
+
+oo.anims.get('haha').frames
+14:55:40.282 []
+14:55:41.591 endG.js:4 98289
+14:55:58.495 let ac= 37, bc =38
+let cc= [ac, bc]
+updateFrames('haha', cc);
+14:55:58.525 undefined
+14:56:02.770 oo.anims.get('haha').frames
+14:56:02.802 (2) [initialize, initialize]
+14:56:35.744 Object.defineProperty(charInF, 'IdleWeapon', {
+    get: function() {
+        return 'haha'
+    }
+});
+14:859 {inf: {…}, …}
+clearAnimationFrames('idleBlade');
+function clearAnimationFrames(animKey) {
+    let anim = oo.anims.get(animKey);
+    
+    if (!anim) {
+        console.error(`Animation '${animKey}' không tồn tại!`);
+        return;
+    }
+
+    // Xóa animation cũ
+    oo.anims.remove(animKey);
+
+    // Tạo lại animation với frame rỗng
+    oo.anims.create({
+        key: animKey,
+        frames: [],  // Không có frames
+        frameRate: 5,
+        repeat: -1
+    });
+
+    console.log(`Đã xóa frames của animation '${animKey}'`);
+}
+
+14:58:07.222 undefined
+14:58:10.635 clearAnimationFrames('idleBlade');
+14:58:10.637 VM1468:20 Đã xóa frames của animation 'idleBlade'
+function () {
+    updateFrames('haha', cc);
+}
