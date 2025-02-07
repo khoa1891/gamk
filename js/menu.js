@@ -185,8 +185,8 @@ function toggleMenu6() {
                 overlayBlack.classList.toggle("hiddennn")
             }
             document.querySelector('.containerGear').classList.toggle('hiddennn');
-            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu
-            document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc
+            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
+            document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc.toLocaleString('de-DE')
         }
         function toggleMenu2() {
             if (overlayB == 0) {
@@ -325,7 +325,7 @@ function toggleMenu3() {
           slot.style.backgroundImage = ``;
           slot.classList.add("empty");
         }
-      }
+      } // ///
     }
     // Thêm vật phẩm thử nghiệm
     // addItemToInventory(a[0]);
@@ -387,19 +387,22 @@ function toggleMenu3() {
     }
     function displayEquipment(slot) {
       if (equipment.áo) {
-        slotAo.textContent = equipment.áo.name;
+        // slotAo.textContent = equipment.áo.name;
         slotAo.classList.remove("empty");
         slotAo.onclick = () => showPopup(equipment.áo, null, "equipment");
       } else {
+
         slotAo.textContent = "Áo";
         slotAo.classList.add("empty");
         slotAo.onclick = null;
       }
       if (equipment.quần) {
-        slotQuan.textContent = equipment.quần.name;
+
+        // slotQuan.textContent = equipment.quần.name;
         slotQuan.classList.remove("empty");
         slotQuan.onclick = () => showPopup(equipment.quần, null, "equipment");
       } else {
+
         slotQuan.textContent = "Quần";
         slotQuan.classList.add("empty");
         slotQuan.onclick = null;
@@ -422,6 +425,7 @@ function toggleMenu3() {
       }
     }
     function equipItem(item, index) {
+      if (!item.sec.includes(gameObj.map.charr.obj.sec)) {return}
       const slot = item.loại === "áo" ? "áo" : "quần";
       if (equipment[slot]) {
         // Đưa trang bị cũ về hành trang
@@ -462,11 +466,20 @@ function toggleMenu3() {
         popupGear.style.display = "none";
     });
     let Shop1 = [
-     { loại: "hp", name: "máu 10", "số lượng": 1, cost: 100},
-      { loại: "mana", name: "mana 10", "số lượng": 1, cost: 100 },
-     { loại: "áo", name: "áo xanh", cost: 700},
-     { loại: "quần", name: "quần đỏ", cost: 550 },
-     { loại: "quần", name: "quần vàng", cost: 1000 },
+    //  { loại: "hp", name: "máu 10", "số lượng": 1, cost: 100},
+    //   { loại: "mana", name: "mana 10", "số lượng": 1, cost: 100 },
+    //  { loại: "áo", name: "áo xanh", cost: 700},
+    //  { loại: "quần", name: "quần đỏ", cost: 550 },
+    //  { loại: "quần", name: "quần vàng", cost: 1000 },
+
+    // { loại: "hp", name: "máu 10", "số lượng": 2, linkImg: './img/ha417.png', cost: 100},
+    { loại: "hp", name: "máu 10", "số lượng": 1, linkImg: './img/ha417.png', sec: ['male', 'female'], cost: 100},
+    // { loại: "mana", name: "mana 10", "số lượng": 100, linkImg: './img/ha417.png' , sec: ['male'], cost: 100},
+    { loại: "mana", name: "mana 10", "số lượng": 1, linkImg: './img/ha417.png' , sec: ['male', 'female'], cost: 100},
+   { loại: "quần", name: "quần xanh", linkImg: './img/ha410.png', level: 1, dame:10, armorMax:10, sec: ['male'], cost: 700 },
+   { loại: "áo", name: "áo đỏ", linkImg: './img/ha412.png', level: 1, dame:10, dodge:10, sec: ['male'], cost: 550 },
+   { loại: "áo", name: "áo vàng", linkImg: './img/ha413.png', level: 1, dame:10, armorMax:10, sec: ['female'], cost: 1000},
+   { loại: "áo", name: "áo hồng", linkImg: './img/ha417.png', level: 1, dame:10, hpMax:10, sec: ['male', 'female'], cost: 1000},
    ];
     function renderTableShop() {
         const container = document.getElementById("table-containerShop1")
@@ -476,11 +489,20 @@ function toggleMenu3() {
                 cell.className = 'cell';
                 cell.id = `slotShop1-${i}`
             //    cell.textContent = 'trống';
-                cell.textContent = Shop1[i-1].name
+                // cell.textContent = Shop1[i-1].name
+                cell.textContent = Shop1[i-1]["số lượng"] ? `x${Shop1[i-1]["số lượng"]}` : ''
                 container.appendChild(cell);
-                cell.onclick = () => showPopup(Shop1[i-1], i - 1, "shop", 1);
+                cell.onclick = () => showPopup(Shop1[i-1], i - 1, "shop", 1); // ///
+
+                // cell.classList.remove("empty");
+      
+                  cell.style.backgroundColor = '#ff2a3e'
+                  cell.style.backgroundImage = `url(${Shop1[i-1].linkImg})`;
+                  cell.style.backgroundPosition = '-2px -2px'
+                  cell.style.backgroundSize = '45px'
+
             }
-            document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu
+            document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
         }
 function shop1Board() {
     const container = document.getElementById('containerShop1');
@@ -497,14 +519,18 @@ function buyShopPopUp(item) {
             document.querySelector('.question-box-Shop').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
             let cost = item.cost
-            if (gameObj.map.charr.obj.xu >= cost) {
+            if (gameObj.map.charr.obj.xu >= cost && inventory.length < oht) {
                 gameObj.map.charr.obj.xu -= cost
                  modalGearText.textContent = "Chúc mừng bạn đã mua thành công vật phẩm này";
                 modalGearText.className = "success";
-                document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu
+                document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
               //console.log(item)
               addItemToInventory(item);
-            } else {
+            } else if (gameObj.map.charr.obj.xu >= cost && inventory.length >= oht) {
+              modalGearText.textContent = "Không còn ô trống để mua thêm vật phẩm!";
+              modalGearText.className = "error";
+            }
+            else  {
                 modalGearText.textContent = "Bạn không đủ đồng để mua vật phẩm!";
                 modalGearText.className = "error";
     }

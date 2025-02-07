@@ -86,3 +86,10 @@ function clearAnimationFrames(animKey) {
 function () {
     updateFrames('haha', cc);
 }
+
+
+map.setFillStyle(0x0f8d3d) // xanh lá
+map.setFillStyle(0xffa500) // cam 
+map.setFillStyle(0x2b46d1)  // xanh biển
+
+map.setSize(500, 300); 

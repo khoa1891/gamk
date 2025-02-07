@@ -6,3 +6,4 @@ gameObj.map.monn = new Character(mong)
 // iii()
 updateSkillNames2();
 },5000)
+setTimeout(()=> showPopupCity(cityName[gameObj.map.mapIndex - 1]), 2000)

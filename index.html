@@ -58,16 +58,36 @@
 
     <!-- Menu Button ≡ -->
     <style>
+        .popupCity {
+            position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 300px;
+    min-width: fit-content;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    /* white-space: nowrap; Ngăn chữ xuống hàng */
+    overflow: hidden;
+            opacity: 1;
+    visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
         #fightMon {
             left: 50%; transform: translateX(-50%); background: red;
         }
         #changeMon {
             right: 10px; background: red;
         }
+       
     </style>
     <div id="toggle-menu" class="menu-button" onclick="toggleMenuBoard()">Menu</div>
     <div id="fightMon" class="menu-buttonn hiddennn" onclick="fightMonn()">Đánh</div>
     <div id="changeMon" class="menu-buttonn hidennn">Đổi</div>
+    <div class="popupCity hiddennn"></div>
     <!-- Option Menu -->
     <div id="menu" class="menuBoard hiddennn">
         <button onclick="toggleMenu()">Hành trang</button>
@@ -80,6 +100,9 @@
         <button>Bản đồ</button>
         <button>Cài đặt</button>
     </div>
+
+
+   
     <div class="overlayBlack hiddennn"></div>
     <div class="overlayVio hiddennn "></div>
     <div class="overlayBl hiddennn"><span style="animation: bounce 0.4s infinite alternate ease-in-out;">Xin chờ...</span></div>
@@ -158,7 +181,7 @@
         </div>
     </div>
   <div class="popupGear" id="popupGear">
-    <div id="popup-contentGear" style="    white-space: pre-line;
+    <div id="popup-contentGear" style="   min-width: 115px; white-space: pre-line;
     height: 156px;
     overflow-y: auto;
     border: 1px solid #000;"></div>
@@ -285,6 +308,15 @@
 
 
 
+</div>
+
+<!-- popup npc -->
+   <!-- Bảng nổi -->
+   <div class="popupNPC hiddennn" id="popupNPC">
+    <button id="btnGiaoTiepNPC" onclick="showPopupNPC('m')">Giao tiếp</button>
+    <button id="btnNhiemVuNPC" onclick="showPopupNPC('m')">Nhiệm vụ</button>
+    <button id="btnMuaBanNPC" onclick="showPopupNPCBuy()">Mua bán</button>
+    <button class="close-btnNPC" onclick="showPopupNPC('m')">Đóng</button>
 </div>
 
 
@@ -735,3 +767,4 @@ position: absolute;
 <script src="./js/menu.js"></script>
 <script src="./js/endG.js"></script>
 </html>
+

@@ -35,9 +35,9 @@ let gameObj = { // gameObj.
         playerNameText: 0, monstersBody: [], monContainerArr: [], characterContainer: [],
         monsters: [], chairs: [], obstacles: [], // Chướng ngại vật tĩnh
         cursors: 0, winGame: null,
-        exitPortals: [],
-        C: 1,
-        width: 1300, height: 800,
+        exitPortals: [], npcs: [], 
+        C: 1,                                            
+        width: 1600, height: 1200,
         // mũi tên trên đầu quái
         monsterPresent: 0,
         monstersNear: [], // Lưu danh sách các quái vật gần
@@ -169,11 +169,12 @@ function preload() {
 }
 let onGame = false
 let joystickBase, joystick, cursors
+let map
 let lastDirection = null; 
 function create() {
     oo = this
     this.game.loop.targetFps = 60;
-    const map = this.add.rectangle(0, 0, gameObj.map.width, gameObj.map.height, 0xffa500);
+    map = this.add.rectangle(0, 0, gameObj.map.width, gameObj.map.height, 0xffa500);
     this.physics.world.setBounds(0, 0, gameObj.map.width, gameObj.map.height);
     map.setOrigin(0);
      // Tạo bản đồ chính
@@ -245,7 +246,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
    
     this.input.keyboard.on('keydown-A', () => {
         gameObj.map.monsters.forEach((monster, index) => {
-            if (monster.isStopped) {
+            if (monster.isStopped ) {
                 // Nếu đang dừng, cho chạy lại
                 monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
                 monster.isStopped = false;
@@ -253,7 +254,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 // Nếu đang chạy, dừng lại
                 monster.setVelocity(0, 0);
                 monster.isStopped = true;
-                gameObj.map.monstersBody[index].anims.play('idleCloth', true);
+                // gameObj.map.monstersBody[index].anims.play('idleCloth', true);
                 monster.anims.play('idle', true);
             }
         });
@@ -522,7 +523,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 // -------------------
 
                 gameObj.map.monsterPresent.setDepth(11)
-                gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setDepth(12);
+                // gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setDepth(12);
                 gameObj.map.player.setDepth(11)
                 gameObj.map.characterContainer.setDepth(12)
             onGame = false
@@ -558,11 +559,11 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 gameObj.map.monsterPresent.setDepth(16)
 
 
-                gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setPosition(gameObj.map.monsterPresent.x, gameObj.map.monsterPresent.y);
+                // gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setPosition(gameObj.map.monsterPresent.x, gameObj.map.monsterPresent.y);
 
                 gameObj.map.monsterPresent.flipX = true
-                gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setScale(-1, 1);
-                gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setDepth(17);
+                // gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setScale(-1, 1);
+                // gameObj.map.monContainerArr[gameObj.map.monsters.indexOf(gameObj.map.monsterPresent)].setDepth(17);
                 gameObj.map.player.flipX = false
                 gameObj.map.player.setDepth(16)
                 gameObj.map.characterContainer.setScale(1, 1);
@@ -594,6 +595,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
 
 function npc_1() {
+    map.setFillStyle(colorMap[gameObj.map.mapIndex - 1]) 
     // 🏗 Hàm tạo cổng dịch chuyển
     const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
     gameObj.map.exitPortals = []; // Xóa mảng cũ
@@ -621,7 +623,16 @@ function npc_1() {
             if (!exitPortal.touched) {
                 exitPortal.touched = true;  // Chỉ log một lần
                 // console.log("Haha"); // Debug kiểm tra
-                changeMap(exitPortal.toMap, exitData.spawnPos[0], exitData.spawnPos[1]); // Chuyển map + đặt nhân vật đúng vị trí
+                resetJoystick()
+                document.querySelector(".overlayBl").classList.toggle("hiddennn")
+                setTimeout(() => {
+                    changeMap(exitPortal.toMap, exitData.spawnPos[0], exitData.spawnPos[1]); // Chuyển map + đặt nhân vật đúng vị trí
+                }, 500)
+                setTimeout(() => {
+                    document.querySelector(".overlayBl").classList.toggle("hiddennn")
+                    setTimeout(()=> showPopupCity(cityName[gameObj.map.mapIndex - 1]), 2000)
+                    // changeMap(exitPortal.toMap, exitData.spawnPos[0], exitData.spawnPos[1])
+                }, 3000)
             }
         });
 
@@ -633,6 +644,8 @@ function npc_1() {
     for (const groupKey in currentMap) {
         const group = currentMap[groupKey];
         updateFrames(`runMon${groupKey}`, group.run);
+        // const [fr1, fr2] = group.frame;
+        // const [x, y] = group.run
 
         for (let i = 0; i < group.num; i++) {
             const monster = oo.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame42');
@@ -647,6 +660,7 @@ function npc_1() {
             monster.isAlive = true
             monster.indec = yy
             monster.monsterType = groupKey
+            monster.npc = false
             yy++
             // monster.body.moves = false;
             // monster.body.setImmovable(true); 
@@ -700,6 +714,63 @@ function npc_1() {
             // monsters2.push({ container: monsterContainer, nameText: monsterNameText });
         }
     }
+
+    // tạo npc
+    const currentNPC = NPC[gameObj.map.mapIndex - 1]
+    currentNPC.forEach((exitData, index) => {
+        const [x, y] = exitData.pos;
+        const [fr1, fr2] = exitData.frame;
+        const npc = oo.physics.add.sprite(x, y, 'frame1');
+
+        // npc.setBounce(1);
+        // npc.setCollideWorldBounds(true);
+        npc.setSize(35, 45)
+        npc.setScale(0.6);
+        npc.setOrigin(0.5, 0.5);
+        npc.setDepth(11).setImmovable(true);
+        npc.npc = true
+        npc.click = exitData.click
+        npc.isStopped = false; // Mặc định tất cả đều đang chạy
+
+        // npc.setVelocity(0, 0);
+        // oo.physics.world.on('update', () => {
+        //     npc.setVelocity(0, 0);
+        // });
+        
+
+        const fixedX = npc.x;
+const fixedY = npc.y;
+
+oo.events.on('update', () => {
+    npc.x = fixedX;
+    npc.y = fixedY;
+});
+
+
+
+
+        npc.monsterNameText = oo.add.text(
+            npc.x,
+            npc.y - 50,
+            `${exitData.name}`,
+            { fontSize: '12px', fill: '#ffffff' }
+        ).setOrigin(0.5).setDepth(11)
+        // npc.isAlive = true
+        // npc.npcType = groupKey
+
+        oo.anims.create({
+            key: `npc${index}`,
+            frames: [
+                { key: `frame${fr1}` },
+                { key: `frame${fr2}` },
+            ],                          // Các frame của animation
+            frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+            repeat: -1
+        });
+        npc.anims.play(`npc${index}`, true);
+    
+        gameObj.map.monsters.push(npc);
+    });
 
 
     // tạo ghế
@@ -840,8 +911,13 @@ function changeMap(newMapIndex, newX, newY) {
     gameObj.map.mapIndex = newMapIndex;
 
     // Xóa quái và exit portals
-    gameObj.map.monsters.forEach(monster => monster.destroy());
+    gameObj.map.monsters.forEach(monster =>  { if (monster.monsterNameText) {
+        monster.monsterNameText.destroy(); // Hủy tên của NPC
+    }; monster.destroy()});
     gameObj.map.monsters = [];
+
+    // gameObj.map.npcs.forEach(monster => {monster.destroy(); monster.monsterNameText.destroy()});
+    // gameObj.map.npcs = [];
 
     gameObj.map.exitPortals.forEach(portal => portal.destroy());
     gameObj.map.exitPortals = [];
@@ -1380,7 +1456,7 @@ function update() {
     //     monster.monsterNameText.setPosition(monster.x, monster.y - 50);
     // });
     gameObj.map.monsters.forEach((monster, index) => {
-        if (!monster.isStopped) {
+        if (!monster.isStopped && monster.npc == false) {
             // // Cập nhật quái vật di chuyển tự do
             // if (monster.body.velocity.x === 0 && monster.body.velocity.y === 0) {
             //     monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
@@ -1452,7 +1528,7 @@ function update() {
     gameObj.map.monstersNear = gameObj.map.monsters.filter(monster =>
         monster.active &&
         monster.visible &&
-        Phaser.Math.Distance.Between(gameObj.map.player.x, gameObj.map.player.y, monster.x, monster.y) < 100
+        Phaser.Math.Distance.Between(gameObj.map.player.x, gameObj.map.player.y, monster.x, monster.y) < 200
     );
 
     // Nếu có quái vật gần
@@ -1465,8 +1541,11 @@ function update() {
         gameObj.map.indicator.setVisible(true).setPosition(gameObj.map.monsterPresent.x, gameObj.map.monsterPresent.y - 25);
         // monsterNameDiv.style.display = 'block';
         // monsterNameDiv.innerText = gameObj.map.monsterPresent.name;
-        
-        onGame == false? document.getElementById("fightMon").classList.remove("hiddennn"): document.getElementById("fightMon").classList.add("hiddennn")
+        // console.log( gameObj.map.monsterPresent.npc)
+        onGame == false? (document.getElementById("fightMon").classList.remove("hiddennn"), 
+            document.getElementById("fightMon").innerText = 
+            gameObj.map.monsterPresent.npc?  'Giao tiếp': 'Đánh'): 
+            document.getElementById("fightMon").classList.add("hiddennn")
         if (gameObj.map.monstersNear.length > 1) {
             onGame == false?document.getElementById("changeMon").classList.remove("hiddennn"): document.getElementById("changeMon").classList.add("hiddennn")
         } else {
@@ -2102,7 +2181,11 @@ function slideCandyBoard() { // ✨
     }, 20)
 }
 function fightMonn() {
-    oo.input.keyboard.emit('keydown-M');
+    if (gameObj.map.monsterPresent.click) {
+        showPopupNPC(gameObj.map.monsterPresent.click)
+    } else {
+        oo.input.keyboard.emit('keydown-M');
+    }
 }
 
 //4. kiểm tra xem có tạo đc 4 viên liên tiếp ko
@@ -2596,4 +2679,49 @@ function exitMapp() {
         sprite.destroy(); // Hủy từng sprite trong mảng
     });
     gameObj.map.chairs.length = 0;
+}
+
+
+function showPopupCity(text) {
+    document.querySelector(".popupCity").classList.remove('hiddennn')
+    document.querySelector(".popupCity").innerText = text;
+    // Tự động ẩn sau 3 giây
+    setTimeout(() => {
+        document.querySelector(".popupCity").classList.add('hiddennn')
+    }, 3000);
+}
+
+// Hiển thị popup với nội dung truyền vào
+// showPopupCity("Thành phố Chồ Chí Minh");
+
+
+
+function showPopupNPC(buttons) {
+    // if (overlayB == 0) {
+    //     document.getElementById("toggle-menu").style.zIndex = 9
+    //     // document.querySelector(".menuBoard").classList.toggle("hiddennn")
+    //     overlayBlack.classList.remove("hiddennn")
+    //     overlayB = 1
+    // } else {
+    //     document.getElementById("toggle-menu").style.zIndex = 11
+    //     overlayB = 0
+    //     overlayBlack.classList.add("hiddennn")
+    // }
+    document.querySelector('.popupNPC').classList.toggle('hiddennn');
+    overlayBlack.classList.toggle("hiddennn")
+
+
+
+
+    // Hiện hoặc ẩn từng nút theo tham số truyền vào
+    document.getElementById("btnGiaoTiepNPC").style.display = buttons.includes('a') ? "block" : "none";
+    document.getElementById("btnNhiemVuNPC").style.display = buttons.includes('b') ? "block" : "none";
+    document.getElementById("btnMuaBanNPC").style.display = buttons.includes('c') ? "block" : "none";
+}
+
+
+function showPopupNPCBuy() {
+    showPopupNPC('m')
+
+    shop1Board()
 }

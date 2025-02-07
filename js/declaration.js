@@ -3,7 +3,7 @@ let charInF = {
         name: 'Kuln1891',
         sec: 'male', // hoặc 'female'
         element: 'hỏa',
-        xu: 0, kc: 0,
+        xu: 100000, kc: 0,
         level: 1, exp: 0, 
         dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
 
@@ -60,7 +60,7 @@ let monsInF = {
         1: {
             num: 10, // Số lượng quái
             run: [41, 42],
-            idle: [42, 42],
+            idle: [40, 42],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -127,7 +127,74 @@ let monsInF = {
         1: {
             num: 10, // Số lượng quái
             run: [41, 42],
-            idle: [42, 42],
+            idle: [40, 42],
+            inf: {
+                run: [40, 42],
+                idle: [41, 42],
+                level: null,
+                _level() {
+                    if (this.level === null) {
+                        this.level = Math.floor(Math.random() * 3) + 1; // Random từ 1 đến 3 một lần
+                    }
+                    return this.level;
+                },
+                element: null,
+                _element() {
+                    if (this.element === null) {
+                        var elements = ['kim', 'mộc', 'thủy', 'hỏa', 'thổ'];
+                        this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
+                    }
+                    return this.element;
+                },
+                name: 'Kuln1891',
+                sec: 'male', // hoặc 'female'
+                xu: 0, kc: 0,
+                exp: 0, 
+                dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
+        
+                hpMax:0, manaMax: 300, armorMax : 0,
+                hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
+                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+                potentialPoint: 0,
+                skillPoint: 0,
+            },
+        },
+        // 'quần_thể_2': {
+        //     name: 'tay sai cho Mỹ',
+        //     level: null,
+        //     _level() {
+        //         if (this.level === null) {
+        //             this.level = Math.floor(Math.random() * 3) + 3; // Random từ 3 đến 5 một lần
+        //         }
+        //         return this.level;
+        //     },
+        //     element: null,
+        //     _element() {
+        //         if (this.element === null) {
+        //             var elements = ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'];
+        //             this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
+        //         }
+        //         return this.element;
+        //     },
+        //     idle: 'idle',
+        //     idleCloth: 'idleCloth',
+        //     run: 'run',
+        //     runCloth: 'runCloth',
+        //     num: 7, // Số lượng quái
+        //     mi() {
+        //         return this.level;
+        //     },
+        //     aa: 0,
+        //     hpCur: 999999,
+        //     hpPoint: 0,
+        //     damePoint: 0, armorPoint: 0, dodgePoint: 0, S1p: 0, S2p: 0, S3p: 0
+        // }
+    },
+    3: {
+        1: {
+            num: 10, // Số lượng quái
+            run: [41, 42],
+            idle: [40, 42],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -191,7 +258,9 @@ let monsInF = {
         // }
     }
 };
-
+let cityName = [
+    'Thành phố Hồ Chí Minh', 'Tỉnh Bà Rịa - Vũng Tàu', ' Đồng Tháp'
+]
 let chairMap = [
     [{ pos: [100, 100], img: 'chair'}, { pos: [200, 200], img: 'chair'} ],
     [{ pos: [500, 500], img: 'chair'}, { pos: [600, 600], img: 'chair'} ],
@@ -202,23 +271,32 @@ let obstacleMap = [
     [{ pos: [400, 300], img: 'house1'}, { pos: [500, 300], img: 'house2'} ],
     [{ pos: [388, 100], img: 'house1'}, { pos: [200, 499], img: 'house2'} ]
 ]
+let NPC = [
+    [{ pos: [238, 288], frame: [40, 42], name: "Lucky", click: ['a', 'c']}] , //{ pos: [188, 188], frame: [188, 188]} ],
+    [{ pos: [188, 288], frame: [40, 42], name: "kiki", click: ['a', 'b', 'c']}] , //{ pos: [188, 188], frame: [188, 188]} ],
+    [{ pos: [188, 288], frame: [40, 42], name: "kaka", click: ['a']}]  //{ pos: [188, 188], frame: [188, 188]} ],
+]
 
 
 let exitMap = [
     [ 
-        { pos: [10, 10], toMap: 1, spawnPos: [100, 100] },  // Map 0 -> Map 1, nhân vật sẽ xuất hiện ở [100, 100]
-        { pos: [20, 200], toMap: 2, spawnPos: [444, 444] }  // Map 0 -> Map 2, nhân vật sẽ xuất hiện ở [200, 200]
+        { pos: [800, 1140], toMap: 2, spawnPos: [800, 100] },  // Map 0 -> Map 1, nhân vật sẽ xuất hiện ở [100, 100]
+        { pos: [1540, 600], toMap: 3, spawnPos: [80, 360] }  // Map 0 -> Map 2, nhân vật sẽ xuất hiện ở [200, 200]
     ],
     [ 
-        { pos: [450, 400], toMap: 2, spawnPos: [300, 300] },  // Map 2 -> Map 0, nhân vật sẽ xuất hiện ở [300, 300]
-        { pos: [500, 400], toMap: 2, spawnPos: [350, 350] }   // Map 2 -> Map 1, nhân vật sẽ xuất hiện ở [350, 350]
+        { pos: [800, 40], toMap: 1, spawnPos: [800, 1080] },  // Map 2 -> Map 0, nhân vật sẽ xuất hiện ở [300, 300]
+        { pos: [1540, 600], toMap: 3, spawnPos: [80, 900] }   // Map 2 -> Map 1, nhân vật sẽ xuất hiện ở [350, 350]
     ],
     [ 
-        { pos: [30, 30], toMap: 0, spawnPos: [50, 50] },    // Map 1 -> Map 0, nhân vật sẽ xuất hiện ở [50, 50]
-        { pos: [40, 40], toMap: 2, spawnPos: [250, 250] }   // Map 1 -> Map 2, nhân vật sẽ xuất hiện ở [250, 250]
+        { pos: [20, 300], toMap: 1, spawnPos: [1480, 600] },    // Map 1 -> Map 0, nhân vật sẽ xuất hiện ở [50, 50]
+        { pos: [20, 900], toMap: 2, spawnPos: [1480, 600] }   // Map 1 -> Map 2, nhân vật sẽ xuất hiện ở [250, 250]
     ]
     
 ];
+let colorMap = ['0x0f8d3d' , // xanh lá
+    '0xffa500', // cam
+    '0x2b46d1' // xanh biểnbiển
+]
 let skillGame = {
     'kim': {
         spe: 'Sát thương mạnh, phòng thủ tốt, tấn công sắc bén',
