@@ -30,7 +30,7 @@ const game = new Phaser.Game(config);
 let gameObj = { // gameObj.
     // map
     "map":{
-
+        monPos: 0, 
         player: 0, body: 0, weapon: 0, mount: 0, pet: 0, wing: 0,
         playerNameText: 0, monstersBody: [], monContainerArr: [], characterContainer: [],
         monsters: [], chairs: [], obstacles: [], // Chướng ngại vật tĩnh
@@ -248,14 +248,27 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
         gameObj.map.monsters.forEach((monster, index) => {
             if (monster.isStopped ) {
                 // Nếu đang dừng, cho chạy lại
-                monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
                 monster.isStopped = false;
+
+                if (monster.npc == true) {
+                    monster.setVelocity(0, 0);
+                    monster.anims.play(monster.name1, true);
+                } else {
+                    monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
+                    monster.anims.play(monster.name2, true);
+                }
             } else {
                 // Nếu đang chạy, dừng lại
                 monster.setVelocity(0, 0);
                 monster.isStopped = true;
                 // gameObj.map.monstersBody[index].anims.play('idleCloth', true);
-                monster.anims.play('idle', true);
+                // monster.anims.play('idle', true);
+
+                if (monster.npc == true) {
+                    monster.anims.play(monster.name1, true);
+                } else {
+                    monster.anims.play(monster.name1, true);
+                }
             }
         });
     });
@@ -478,6 +491,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     // vào trận và out trận
     this.input.keyboard.on('keydown-M', () => {
         if (this.isAtCorner) {
+            console.log(2, gameObj.map.monPos)
 
             clearInterval(boardPointt.countdown)
             document.querySelector(".overlayBl").classList.toggle("hiddennn")
@@ -487,9 +501,10 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 if (gameObj.map.winGame == true) {
                     gameObj.map.monsterPresent.isAlive = false
                     gameObj.map.monsterPresent.setPosition(-1000, -1000);
-                    setPos(gameObj.map.monsterPresent, gameObj.map.monsterPresent.initialPosition.x, gameObj.map.monsterPresent.initialPosition.y)
+                    setPos(gameObj.map.monsterPresent, gameObj.map.monPos.x, gameObj.map.monPos.y)
                 } else {
-                    gameObj.map.monsterPresent.setPosition(gameObj.map.monsterPresent.initialPosition.x, gameObj.map.monsterPresent.initialPosition.y);
+                    
+                    gameObj.map.monsterPresent.setPosition(gameObj.map.monPos.x, gameObj.map.monPos.y);
                 }
                 function setPos(mon, x, y) {
                     setTimeout(() => {
@@ -545,8 +560,10 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 // document.querySelector(".overlayVio").classList.toggle("hiddennn")
                 this.tempBackground.setVisible(true)
                 gameObj.map.player.initialPosition = { x: gameObj.map.player.x, y: gameObj.map.player.y };
-                gameObj.map.monsterPresent.initialPosition = { x: gameObj.map.monsterPresent.x, y: gameObj.map.monsterPresent.y };
+                gameObj.map.monPos = { x: gameObj.map.monsterPresent.x, y: gameObj.map.monsterPresent.y };
                 this.cameras.main.stopFollow();
+            console.log(1, gameObj.map.monPos)
+
                 const camera = this.cameras.main; // Camera hiện tại
                 // ------------
                 // --------------
@@ -641,13 +658,35 @@ function npc_1() {
     // tạo quái vật
     var yy = 0
     const currentMap = monsInF[gameObj.map.mapIndex];
+    let indec = 0
     for (const groupKey in currentMap) {
         const group = currentMap[groupKey];
         updateFrames(`runMon${groupKey}`, group.run);
-        // const [fr1, fr2] = group.frame;
+        const [fr1, fr2] = group.run;
+        const [fr3, fr4] = group.idle;
         // const [x, y] = group.run
 
         for (let i = 0; i < group.num; i++) {
+            oo.anims.create({
+                key: `npc_${indec}`,
+                frames: [
+                    { key: `frame${fr1}` },
+                    { key: `frame${fr2}` },
+                ],                          // Các frame của animation
+                frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+                repeat: -1
+            });
+            oo.anims.create({
+                key: `npc__${indec}`,
+                frames: [
+                    { key: `frame${fr3}` },
+                    { key: `frame${fr4}` },
+                ],                          // Các frame của animation
+                frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
+                repeat: -1
+            });
+            indec++
+
             const monster = oo.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame42');
             monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
             // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
@@ -657,6 +696,8 @@ function npc_1() {
             monster.setScale(0.6);
             monster.setOrigin(0.5, 0.5);
             monster.setDepth(11)
+            monster.name2 = `npc_${indec}`
+            monster.name1 = `npc__${indec}`
             monster.isAlive = true
             monster.indec = yy
             monster.monsterType = groupKey
@@ -721,6 +762,8 @@ function npc_1() {
         const [x, y] = exitData.pos;
         const [fr1, fr2] = exitData.frame;
         const npc = oo.physics.add.sprite(x, y, 'frame1');
+        npc.setVelocity(0, 0);
+
 
         // npc.setBounce(1);
         // npc.setCollideWorldBounds(true);
@@ -729,6 +772,7 @@ function npc_1() {
         npc.setOrigin(0.5, 0.5);
         npc.setDepth(11).setImmovable(true);
         npc.npc = true
+        npc.name1 = `npc${index}`
         npc.click = exitData.click
         npc.isStopped = false; // Mặc định tất cả đều đang chạy
 
@@ -738,13 +782,13 @@ function npc_1() {
         // });
         
 
-        const fixedX = npc.x;
-const fixedY = npc.y;
+//         const fixedX = npc.x;
+// const fixedY = npc.y;
 
-oo.events.on('update', () => {
-    npc.x = fixedX;
-    npc.y = fixedY;
-});
+// oo.events.on('update', () => {
+//     npc.x = fixedX;
+//     npc.y = fixedY;
+// });
 
 
 
@@ -874,10 +918,10 @@ oo.events.on('update', () => {
 
 
 
-    // Thiết lập va chạm giữa nhân vật và quái vật (để đẩy quái)
-    gameObj.map.monsters.forEach(monster => {
-        oo.physics.add.collider(gameObj.map.player, monster, pushMonster);
-    });
+    // // Thiết lập va chạm giữa nhân vật và quái vật (để đẩy quái)
+    // gameObj.map.monsters.forEach(monster => {
+    //     oo.physics.add.collider(gameObj.map.player, monster, pushMonster);
+    // });
 
     // Thiết lập va chạm giữa quái vật và chướng ngại vật tĩnh
     gameObj.map.monsters.forEach(monster => {
@@ -1844,7 +1888,10 @@ function destroyCandy(r,c,y,x) {
     }
     // ko có viên nào liên tiếp trùng src thì nghỉ khỏe, dừng hàm ngay
     if (listOfArrays.length == 0) { // boardPointt.click = true
-        useTurn();
+        setTimeout(()=>{  //llll
+            randomTimeMon()
+            useTurn() 
+        }, 500)
         return
     }
 
@@ -2184,6 +2231,7 @@ function fightMonn() {
     if (gameObj.map.monsterPresent.click) {
         showPopupNPC(gameObj.map.monsterPresent.click)
     } else {
+        resetJoystick()
         oo.input.keyboard.emit('keydown-M');
     }
 }
@@ -2415,7 +2463,10 @@ function useTurn(aa) {
         }
 
         aa == undefined ? boardPointt.remainingTurns-- : 1
+        if (boardPointt.remainingTurns === 0 && boardPointt.currentTurn === "Nhân vật") {
+            randomTimeMon()
 
+        }
         if (boardPointt.remainingTurns === 0) { // đổi lượt
             boardPointt.currentTurn = boardPointt.currentTurn === "Nhân vật" ? "Quái" : "Nhân vật";
             boardPointt.remainingTurns = 1;
@@ -2499,10 +2550,12 @@ const popupBoardGame = document.getElementById('popupBoardGame');
 
         // Đóng pop-up khi nhấn "Có" hoặc "Không"
         function yesBoardGame() {
-            clearInterval(boardPointt.countdown)
-            setTimeout(()=>oo.input.keyboard.emit('keydown-M'), 1500)
-            popupBoardGame.classList.add('hiddennn');
-            gameObj.map.charr.gainExp(gameObj.map.monn, false)
+            if (boardPointt.currentTurn == 'Nhân vật') {
+                clearInterval(boardPointt.countdown)
+                popupBoardGame.classList.add('hiddennn');
+                gameObj.map.charr.gainExp(gameObj.map.monn, false)
+                setTimeout(()=>oo.input.keyboard.emit('keydown-M'), 1500)
+            }
         }
 
         function noBoardGame() {
