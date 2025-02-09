@@ -653,8 +653,10 @@ this.armorCur = +this.armorCur.toFixed(2)
             +((this.obj.level - 1) * 3.4 + 10
                 + this.obj.armorPoint * 0.4).toFixed(2)
         // dame
-        this.obj.dame = +((this.obj.level - 1) * 6.8 + 20
-            + this.obj.damePoint * 0.8).toFixed(2)
+        // this.obj.dame = +((this.obj.level - 1) * 6.8 + 20
+        //     + this.obj.damePoint * 0.8).toFixed(2)  
+        this.obj.dame = +((this.obj.level - 1) * 8.5 + 25
+            + this.obj.damePoint * 1).toFixed(2)
         // né
         this.obj.dodge = +((this.obj.level - 1) * 0.23 + 0.35
             + this.obj.dodgePoint * 0.03).toFixed(2)
