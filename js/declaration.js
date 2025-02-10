@@ -66,7 +66,7 @@ let charInF = JSON.parse(localStorage.getItem("charInF")) ?? {
 let monsInF = {
     1: {
         'quái_1': {
-            num: 3, // Số lượng quái
+            num: 4, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
             img: ['ha420', 'ha419', 'ha418'],
@@ -102,7 +102,7 @@ let monsInF = {
             },
         },
         'quái_2': {
-            num: 10, // Số lượng quái
+            num: 5, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
             img: ['ha430', 'ha428', 'ha429'],
@@ -169,10 +169,47 @@ let monsInF = {
         // }
     },
     2: {
-        1: {
-            num: 10, // Số lượng quái
-            run: [41, 42],
-            idle: [40, 42],
+        'quái_1': {
+            num: 4, // Số lượng quái
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha420', 'ha419', 'ha418'],
+            inf: {
+                run: [40, 42],
+                idle: [41, 42],
+                level: null,
+                _level() {
+                    if (this.level === null) {
+                        this.level = Math.floor(Math.random() * 3) + 1; // Random từ 1 đến 3 một lần
+                    }
+                    return this.level;
+                },
+                element: null,
+                _element() {
+                    if (this.element === null) {
+                        var elements = ['kim', 'mộc', 'thủy', 'hỏa', 'thổ'];
+                        this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
+                    }
+                    return this.element;
+                },
+                name: 'Kuln1891',
+                sec: 'male', // hoặc 'female'
+                xu: 0, kc: 0,
+                exp: 0, 
+                dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
+        
+                hpMax:0, manaMax: 300, armorMax : 0,
+                hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
+                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+                potentialPoint: 0,
+                skillPoint: 0,
+            },
+        },
+        'quái_2': {
+            num: 5, // Số lượng quái
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha430', 'ha428', 'ha429'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -236,10 +273,47 @@ let monsInF = {
         // }
     },
     3: {
-        1: {
-            num: 10, // Số lượng quái
-            run: [41, 42],
-            idle: [40, 42],
+        'quái_1': {
+            num: 4, // Số lượng quái
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha420', 'ha419', 'ha418'],
+            inf: {
+                run: [40, 42],
+                idle: [41, 42],
+                level: null,
+                _level() {
+                    if (this.level === null) {
+                        this.level = Math.floor(Math.random() * 3) + 1; // Random từ 1 đến 3 một lần
+                    }
+                    return this.level;
+                },
+                element: null,
+                _element() {
+                    if (this.element === null) {
+                        var elements = ['kim', 'mộc', 'thủy', 'hỏa', 'thổ'];
+                        this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
+                    }
+                    return this.element;
+                },
+                name: 'Kuln1891',
+                sec: 'male', // hoặc 'female'
+                xu: 0, kc: 0,
+                exp: 0, 
+                dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
+        
+                hpMax:0, manaMax: 300, armorMax : 0,
+                hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
+                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+                potentialPoint: 0,
+                skillPoint: 0,
+            },
+        },
+        'quái_2': {
+            num: 5, // Số lượng quái
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha430', 'ha428', 'ha429'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -301,7 +375,7 @@ let monsInF = {
         //     hpPoint: 0,
         //     damePoint: 0, armorPoint: 0, dodgePoint: 0, S1p: 0, S2p: 0, S3p: 0
         // }
-    }
+    },
 };
 let cityName = [
     'Thành phố Hồ Chí Minh', 'Tỉnh Bà Rịa - Vũng Tàu', ' Đồng Tháp'
