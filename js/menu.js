@@ -114,7 +114,7 @@ function popupAvatar() {
         }
     
       
-        let oht = JSON.parse(localStorage.getItem("oht"))??6 ; // Số ô hiển thị
+        // let oht = JSON.parse(localStorage.getItem("oht"))??6 ; // Số ô hiển thị
         let op = "all"; // Giá trị hiện tại của dropdown
 const popupGear = document.getElementById("popupGear");
     const popupContentGear = document.getElementById("popup-contentGear");
@@ -171,7 +171,7 @@ function toggleMenu6() {
         // Hiển thị bảng các ô
         function renderTable() {
             tableContainer.innerHTML = '';
-            for (let i = 1; i <= oht; i++) {
+            for (let i = 1; i <= charInF.inf.oht; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.id = `slot-${i}`
@@ -227,19 +227,19 @@ function toggleMenu3() {
         }
         // Thêm một ô mới
         function addCell() {
-            let cost = 1000 + 500 * (oht - 6)
+            let cost = 1000 + 500 * (charInF.inf.oht - 6)
             document.querySelector('.question-box-Gear').style.display = 'block'
             document.querySelector('.question-text-Gear').textContent = `Bạn có muốn mua thêm ô, với giá ${cost} đồng không?`;
-            // oht++;
+            // charInF.inf.oht++;
             // renderTable();
         }
         function yesBtnCell() {
             document.querySelector('.question-box-Gear').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
-            let cost = 1000 + 500 * (oht - 6)
+            let cost = 1000 + 500 * (charInF.inf.oht - 6)
             if (gameObj.map.charr.obj.xu >= cost) {
                 gameObj.map.charr.obj.xu -= cost
-                oht++;
+                charInF.inf.oht++;
                modalGearText.textContent = "Chúc mừng bạn đã mở thành công 1 ô mới!";
                 modalGearText.className = "success";
                 renderTable();
@@ -298,14 +298,14 @@ function toggleMenu3() {
           // Nếu vật phẩm đã tồn tại, tăng số lượng
           let newTotal = existingItem["số lượng"] + item["số lượng"];
           existingItem["số lượng"] = Math.min(newTotal, 999);
-        } else if (charInF.inf.inventory.length < oht) {
+        } else if (charInF.inf.inventory.length < charInF.inf.oht) {
           // Thêm vật phẩm mới nếu còn chỗ
           item["số lượng"] = Math.min(item["số lượng"], 999);
           charInF.inf.inventory.push(item);
         }
       } else {
         // Xử lý vật phẩm không có số lượng
-        if (charInF.inf.inventory.length < oht) {
+        if (charInF.inf.inventory.length < charInF.inf.oht) {
           charInF.inf.inventory.push(item);
         }
       }
@@ -323,7 +323,7 @@ function toggleMenu3() {
         return 0;
       });
       // Hiển thị lên giao diệnoht
-      for (let i = 0; i < oht; i++) {
+      for (let i = 0; i < charInF.inf.oht; i++) {
         let slot = document.getElementById(`slot-${i + 1}`);
         if (charInF.inf.inventory[i]) {
           let item = charInF.inf.inventory[i];
@@ -536,18 +536,29 @@ function buyShopPopUp(item) {
     document.querySelector(".question-text-Shop").innerText= `Bạn có muốn mua vật phẩm: ${item.name}, với giá ${item.cost} đồng không?`
     document.querySelector(".yes-btnShop").onclick = () => yesBtnShop(item)
 }
+
+
+function toggleSaveGame() {
+  localStorage.setItem("charInF", JSON.stringify(charInF));
+// localStorage.setItem("inventory", JSON.stringify(inventory));
+// localStorage.setItem("oht", JSON.stringify(charInF.inf.oht));
+// localStorage.setItem("equipment", JSON.stringify(equipment));
+document.getElementById("saveGame").style.background = '#21af59';
+
+setTimeout(()=>{document.getElementById("saveGame").style.background = '#2980b9'}, 600)
+}
  function yesBtnShop(item) {
             document.querySelector('.question-box-Shop').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
             let cost = item.cost
-            if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length < oht) {
+            if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length < charInF.inf.oht) {
                 gameObj.map.charr.obj.xu -= cost
                  modalGearText.textContent = "Chúc mừng bạn đã mua thành công vật phẩm này";
                 modalGearText.className = "success";
                 document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
               //console.log(item)
               addItemToInventory(item);
-            } else if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length >= oht) {
+            } else if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length >= charInF.inf.oht) {
               modalGearText.textContent = "Không còn ô trống để mua thêm vật phẩm!";
               modalGearText.className = "error";
             }

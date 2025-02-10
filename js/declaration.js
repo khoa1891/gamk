@@ -1,6 +1,7 @@
 let charInF = JSON.parse(localStorage.getItem("charInF")) ?? {
     // let charInF = {
     inf: {
+        oht: 6,
         name: 'Kuln1891',
         sec: 'male', // hoặc 'female'
         element: 'hỏa',
@@ -100,11 +101,11 @@ let monsInF = {
                 skillPoint: 0,
             },
         },
-        'quái_1': {
+        'quái_2': {
             num: 10, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
-            img: ['ha420', 'ha419', 'ha418'],
+            img: ['ha430', 'ha428', 'ha429'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
