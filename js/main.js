@@ -160,13 +160,29 @@ function preload() {
 
     this.load.image('frame44', './img/ha427.png');
 
+    // bình máu
+    this.load.image('frame45', './img/ha421.png');
+    this.load.image('frame46', './img/ha422.png');
+
+
 
 
 
     // Tải sprite sheet
     // this.load.atlas('boyNuz', './img/boiNuzNuz.png', './img/boiNuz.json');
 
+    // let currentMap = 'map2'; // Ví dụ đang load map 2
+    let monsters = monsInF[gameObj.map.mapIndex]
+
+    // Load ảnh của quái trong map hiện tại
+    Object.values(monsters).forEach(monster => {
+            monster.img.forEach(mst => {
+                this.load.image(mst, `./img/${mst}.png`);
+            });
+    });
+    
 }
+
 let onGame = false
 let joystickBase, joystick, cursors
 let map
@@ -180,6 +196,7 @@ function create() {
      // Tạo bản đồ chính
      
     createAnimations(this)
+    createAnimationsss()
     createChar(this)
  
     this.input.keyboard.on('keydown-H', () => {
@@ -254,7 +271,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                     monster.setVelocity(0, 0);
                     monster.anims.play(monster.name1, true);
                 } else {
-                    monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
+                    monster.setVelocity(Phaser.Math.Between(-50, 50), Phaser.Math.Between(-50, 50));
                     monster.anims.play(monster.name2, true);
                 }
             } else {
@@ -407,7 +424,7 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
         var monster = gameObj.map.monsters[0]
         if (monster.isStopped) {
             // Nếu đang dừng, cho chạy lại
-            monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
+            monster.setVelocity(Phaser.Math.Between(-50, 50), Phaser.Math.Between(-50, 50));
             monster.isStopped = false;
         } else {
             // Nếu đang chạy, dừng lại
@@ -491,8 +508,6 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     // vào trận và out trận
     this.input.keyboard.on('keydown-M', () => {
         if (this.isAtCorner) {
-            console.log(2, gameObj.map.monPos)
-
             clearInterval(boardPointt.countdown)
             document.querySelector(".overlayBl").classList.toggle("hiddennn")
             setTimeout(() => {
@@ -562,7 +577,6 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
                 gameObj.map.player.initialPosition = { x: gameObj.map.player.x, y: gameObj.map.player.y };
                 gameObj.map.monPos = { x: gameObj.map.monsterPresent.x, y: gameObj.map.monsterPresent.y };
                 this.cameras.main.stopFollow();
-            console.log(1, gameObj.map.monPos)
 
                 const camera = this.cameras.main; // Camera hiện tại
                 // ------------
@@ -609,7 +623,28 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 
 
 }
+function createAnimationsss() {
+    
+    let monsters = monsInF[gameObj.map.mapIndex]
+    
+    Object.keys(monsters).forEach(monster => {
+        let [a, b, c] = monsters[monster].img
 
+        oo.anims.create({
+            key: `${monster}_run`,
+            frames: [{ key: a }, { key: b }],
+            frameRate: 6,
+            repeat: -1
+        });
+
+        oo.anims.create({
+            key: `${monster}_idle`,
+            frames: [{ key: a }, { key: c }],
+            frameRate: 5,
+            repeat: -1
+        });
+    });
+}
 
 function npc_1() {
     map.setFillStyle(colorMap[gameObj.map.mapIndex - 1]) 
@@ -659,66 +694,64 @@ function npc_1() {
     var yy = 0
     const currentMap = monsInF[gameObj.map.mapIndex];
     let indec = 0
-    for (const groupKey in currentMap) {
-        const group = currentMap[groupKey];
-        updateFrames(`runMon${groupKey}`, group.run);
-        const [fr1, fr2] = group.run;
-        const [fr3, fr4] = group.idle;
-        // const [x, y] = group.run
+    // for (const groupKey in currentMap) {
+    //     const group = currentMap[groupKey];
+    //     updateFrames(`runMon${groupKey}`, group.run);
+    //     const [fr1, fr2] = group.run;
+    //     const [fr3, fr4] = group.idle;
+    //     // const [x, y] = group.run
 
-        for (let i = 0; i < group.num; i++) {
-            oo.anims.create({
-                key: `npc_${indec}`,
-                frames: [
-                    { key: `frame${fr1}` },
-                    { key: `frame${fr2}` },
-                ],                          // Các frame của animation
-                frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
-                repeat: -1
-            });
-            oo.anims.create({
-                key: `npc__${indec}`,
-                frames: [
-                    { key: `frame${fr3}` },
-                    { key: `frame${fr4}` },
-                ],                          // Các frame của animation
-                frameRate: 5,              // Tốc độ chuyển động của animation (10 frame mỗi giây)
-                repeat: -1
-            });
-            indec++
+    //     for (let i = 0; i < group.num; i++) {
 
-            const monster = oo.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame42');
-            monster.setVelocity(Phaser.Math.Between(-70, 70), Phaser.Math.Between(-70, 70));
-            // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
-            monster.setBounce(1);
-            monster.setCollideWorldBounds(true);
-            monster.setSize(35, 45)
-            monster.setScale(0.6);
-            monster.setOrigin(0.5, 0.5);
-            monster.setDepth(11)
-            monster.name2 = `npc_${indec}`
-            monster.name1 = `npc__${indec}`
-            monster.isAlive = true
-            monster.indec = yy
-            monster.monsterType = groupKey
-            monster.npc = false
-            yy++
-            // monster.body.moves = false;
-            // monster.body.setImmovable(true); 
-            monster.obj = deepCopy(group)
-            monster.obj.level = monster.obj.inf._level() // Lấy level từ getter
-            monster.obj.element = monster.obj.inf._element()
-            // monster.level = deepCopy(group)._level() // Lấy level từ getter
-            // monster.element =  deepCopy(group)._element()
-            // monster.idle = group.idle
-            // monster.idleCloth = group.idleCloth
-            // monster.run = group.run
-            // monster.runCloth = group.runCloth
+    let monsters = monsInF[gameObj.map.mapIndex]
 
-            monster.isStopped = false; // Mặc định tất cả đều đang chạy
+    Object.keys(monsters).forEach(mst => {
+        for (let i = 0; i < monsters[mst].num; i++) {
+        const group = monsters[mst]
+        // const monster = oo.physics.add.sprite(100 + i * 100, Math.random() * 600, 'frame42');
+        const monster = oo.physics.add.sprite( Math.random() * 400, Math.random() * 600, 'frame43');
+        monster.setVelocity(Phaser.Math.Between(-50, 50), Phaser.Math.Between(-50, 50));
+        // monster.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
+        monster.setBounce(1);
+        monster.setCollideWorldBounds(true);
+        monster.setSize(35, 45)
+        monster.setScale(0.6);
+        monster.setOrigin(0.5, 0.5);
+        monster.setDepth(11)
+        monster.isAlive = true
+        monster.indec = yy
+        monster.npc = false
+        monster.name2 = `${mst}_run`
+        monster.name1 = `${mst}_idle`
+          // Chạy animation run ban đầu
+        //   console.log(`${mst}_run`)
+    monster.anims.play(`${mst}_run`, true)
+    // let pp = {
+    //     a: {num:2, b:'haha'},
+    //     bb: {num:8, b:'haha'}
+    // }
+    
+        // monster.body.moves = false;
+        // monster.body.setImmovable(true); 
+        monster.obj = deepCopy(group)
+        monster.obj.level = monster.obj.inf._level() // Lấy level từ getter
+        monster.obj.element = monster.obj.inf._element()
+        // monster.level = deepCopy(group)._level() // Lấy level từ getter
+        // monster.element =  deepCopy(group)._element()
+        // monster.idle = group.idle
+        // monster.idleCloth = group.idleCloth
+        // monster.run = group.run
+        // monster.runCloth = group.runCloth
+    
+        monster.isStopped = false; // Mặc định tất cả đều đang chạy
+    
+    
+        gameObj.map.monsters.push(monster);
 
+}
+    })
+       
 
-            gameObj.map.monsters.push(monster);
 
             // // áo
             // let body = this.add.sprite(0, 0, 'body');
@@ -753,8 +786,8 @@ function npc_1() {
 
             // Thêm thông tin quái vật vào mảng
             // monsters2.push({ container: monsterContainer, nameText: monsterNameText });
-        }
-    }
+        // }
+    // }
 
     // tạo npc
     const currentNPC = NPC[gameObj.map.mapIndex - 1]
@@ -919,9 +952,9 @@ function npc_1() {
 
 
     // // Thiết lập va chạm giữa nhân vật và quái vật (để đẩy quái)
-    // gameObj.map.monsters.forEach(monster => {
-    //     oo.physics.add.collider(gameObj.map.player, monster, pushMonster);
-    // });
+    gameObj.map.monsters.forEach(monster => {
+        if (monster.npc == false) oo.physics.add.collider(gameObj.map.player, monster, pushMonster);
+    });
 
     // Thiết lập va chạm giữa quái vật và chướng ngại vật tĩnh
     gameObj.map.monsters.forEach(monster => {
@@ -1507,8 +1540,8 @@ function update() {
             // }
 
             // gameObj.map.monstersBody[index].anims.play('runCloth', true);
-            const animKey = `runMon${monster.monsterType}`;
-        monster.anims.play(animKey, true);
+            // const animKey = `runMon${monster.monsterType}`;//////
+        // monster.anims.play(animKey, true);///////////
 
             // monster.anims.play('runMon1', true);
             // gameObj.map.monContainerArr[index].setPosition(monster.x, monster.y);

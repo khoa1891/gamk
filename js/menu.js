@@ -29,7 +29,8 @@ const infoDiv = document.querySelector('.infoCard');
 
   const excludedKeys = ['avatar',
     'armorCur', 'manaCur', 'manaMax', 'hpPoint', 'damePoint', 'armorPoint', 'dodgePoint',
-    'S1p', 'S2p', 'S3p', 'equipment', 'soulRockT', 'xuT', 'potentialPoint', 'skillPoint', 'exp', 'hpCur'
+    'S1p', 'S2p', 'S3p', 'equipment', 'soulRockT', 'xuT', 'potentialPoint', 'skillPoint', 'exp', 
+    'hpCur', 'equipment', 'inventory',  'skillPic'
 ];
 function popupInfoAvtar() {
   const displayMap = {
@@ -113,7 +114,7 @@ function popupAvatar() {
         }
     
       
-        let oht = 6; // Số ô hiển thị
+        let oht = JSON.parse(localStorage.getItem("oht"))??6 ; // Số ô hiển thị
         let op = "all"; // Giá trị hiện tại của dropdown
 const popupGear = document.getElementById("popupGear");
     const popupContentGear = document.getElementById("popup-contentGear");
@@ -128,7 +129,14 @@ const popupGear = document.getElementById("popupGear");
         const dropdownMenu = document.getElementById('dropdown-menu');
         const dropdownBtn = document.querySelector('.dropdown-btn');
         // document.querySelector('.container').style.display = 'none'
-         let equipment = { áo: null, quần: null };
+        //  let equipment = JSON.parse(localStorage.getItem("equipment")) ??{ áo: null, quần: null };
+      
+      
+      // Object.keys(equipment).forEach(key => {
+      //     if (equipment[key]) {  // Kiểm tra nếu không phải null
+      //         displayEquipment(key);
+      //     }
+      // });
          
 function toggleMenu5() {
 
@@ -185,8 +193,9 @@ function toggleMenu6() {
                 overlayBlack.classList.toggle("hiddennn")
             }
             document.querySelector('.containerGear').classList.toggle('hiddennn');
-            document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
-            document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc.toLocaleString('de-DE')
+            // document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
+            // document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc.toLocaleString('de-DE')
+            displayInventory()
         }
         function toggleMenu2() {
             if (overlayB == 0) {
@@ -203,6 +212,14 @@ function toggleMenu6() {
                 popupGear.style.display = "none";
             }
             document.getElementById('equipmentContainer').classList.toggle('hiddennn');
+
+
+          Object.keys(charInF.inf.equipment).forEach(key => {
+            if (charInF.inf.equipment[key]) {  // Kiểm tra nếu không phải null
+              displayEquipment(key);
+            }
+          });
+          gameObj.map.charr.setScore()
         }
 function toggleMenu3() {
     
@@ -270,32 +287,33 @@ function toggleMenu3() {
       { loại: "áo", name: "áo vàng", linkImg: './img/ha413.png', level: 1, dame:10, armorMax:10},
       { loại: "áo", name: "áo hồng", linkImg: './img/ha417.png', level: 1, dame:10, hpMax:10},
     ];
-    let inventory = []; // Hành trang
-    const maxSlots = 6; // Số ô tối đa trong hành trang
+    // let inventory =  JSON.parse(localStorage.getItem('inventory'))??[]; // Hành trang
+    ///////
+    // const oht = 6; // Số ô tối đa trong hành trang
     function addItemToInventory(item) {
       if (item["số lượng"]) {
         // Xử lý vật phẩm có số lượng
-        let existingItem = inventory.find((i) => i.name === item.name);
+        let existingItem = charInF.inf.inventory.find((i) => i.name === item.name);
         if (existingItem) {
           // Nếu vật phẩm đã tồn tại, tăng số lượng
           let newTotal = existingItem["số lượng"] + item["số lượng"];
           existingItem["số lượng"] = Math.min(newTotal, 999);
-        } else if (inventory.length < maxSlots) {
+        } else if (charInF.inf.inventory.length < oht) {
           // Thêm vật phẩm mới nếu còn chỗ
           item["số lượng"] = Math.min(item["số lượng"], 999);
-          inventory.push(item);
+          charInF.inf.inventory.push(item);
         }
       } else {
         // Xử lý vật phẩm không có số lượng
-        if (inventory.length < maxSlots) {
-          inventory.push(item);
+        if (charInF.inf.inventory.length < oht) {
+          charInF.inf.inventory.push(item);
         }
       }
       displayInventory()
     }
     function displayInventory() {
       // Ưu tiên "hp" và "mana"
-      inventory.sort((item1, item2) => {
+      charInF.inf.inventory.sort((item1, item2) => {
         if ((item1.loại === "hp" || item1.loại === "mana") && !(item2.loại === "hp" || item2.loại === "mana")) {
           return -1;
         }
@@ -304,11 +322,11 @@ function toggleMenu3() {
         }
         return 0;
       });
-      // Hiển thị lên giao diệnmaxSlots
-      for (let i = 0; i < maxSlots; i++) {
+      // Hiển thị lên giao diệnoht
+      for (let i = 0; i < oht; i++) {
         let slot = document.getElementById(`slot-${i + 1}`);
-        if (inventory[i]) {
-          let item = inventory[i];
+        if (charInF.inf.inventory[i]) {
+          let item = charInF.inf.inventory[i];
           // slot.textContent = item["số lượng"] ? `${item.name} (x${item["số lượng"]})` : item.name;
           slot.textContent = item["số lượng"] ? `x${item["số lượng"]}` : ''
           slot.onclick = () => showPopup(item, i, "inventory");
@@ -326,6 +344,9 @@ function toggleMenu3() {
           slot.classList.add("empty");
         }
       } // ///
+
+      document.getElementById('dongg').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
+      document.getElementById('vangg').innerText = gameObj.map.charr.obj.kc.toLocaleString('de-DE')
     }
     // Thêm vật phẩm thử nghiệm
     // addItemToInventory(a[0]);
@@ -379,47 +400,47 @@ function toggleMenu3() {
       if (item["số lượng"]) {
         item["số lượng"] -= 1;
         if (item["số lượng"] === 0) {
-          inventory.splice(index, 1);
+          charInF.inf.inventory.splice(index, 1);
         }
         displayInventory();
         closePopupMenu();
       }
     }
     function displayEquipment(slot) {
-      if (equipment.áo) {
-        // slotAo.textContent = equipment.áo.name;
+      if (charInF.inf.equipment.áo) {
+        // slotAo.textContent = charInF.inf.equipment.áo.name;
         slotAo.classList.remove("empty");
-        slotAo.onclick = () => showPopup(equipment.áo, null, "equipment");
+        slotAo.onclick = () => showPopup(charInF.inf.equipment.áo, null, "equipment");
       } else {
 
         slotAo.textContent = "Áo";
         slotAo.classList.add("empty");
         slotAo.onclick = null;
       }
-      if (equipment.quần) {
+      if (charInF.inf.equipment.quần) {
 
-        // slotQuan.textContent = equipment.quần.name;
+        // slotQuan.textContent = charInF.inf.equipment.quần.name;
         slotQuan.classList.remove("empty");
-        slotQuan.onclick = () => showPopup(equipment.quần, null, "equipment");
+        slotQuan.onclick = () => showPopup(charInF.inf.equipment.quần, null, "equipment");
       } else {
 
         slotQuan.textContent = "Quần";
         slotQuan.classList.add("empty");
         slotQuan.onclick = null;
       }
-      if (equipment[slot]) {
+      if (charInF.inf.equipment[slot]) {
         document.getElementById(`slot-${slot}`).textContent = "";
               document.getElementById(`slot-${slot}`).classList.add("trangBiColor")
-              document.getElementById(`slot-${slot}`).style.backgroundImage = `url(${equipment[slot].linkImg})`;
+              document.getElementById(`slot-${slot}`).style.backgroundImage = `url(${charInF.inf.equipment[slot].linkImg})`;
               document.getElementById(`slot-${slot}`).style.backgroundPosition = '3px 1px'
               document.getElementById(`slot-${slot}`).style.backgroundSize = '55px'
               
 
-          //  this.obj.equipment.forEach(item => {
-            gameObj.map.charr.obj.dame += equipment[slot].dame || 0;
-            gameObj.map.charr.obj.armorMax += equipment[slot].armorMax || 0;
-            gameObj.map.charr.obj.hpMax += equipment[slot].hpMax || 0;
-            gameObj.map.charr.obj.dodge += equipment[slot].dodge || 0;
+          //  this.obj.charInF.inf.charInF.inf.equipment.forEach(item => {
+            gameObj.map.charr.obj.dame += charInF.inf.equipment[slot].dame || 0;
+            gameObj.map.charr.obj.armorMax += charInF.inf.equipment[slot].armorMax || 0;
+            gameObj.map.charr.obj.hpMax += charInF.inf.equipment[slot].hpMax || 0;
+            gameObj.map.charr.obj.dodge += charInF.inf.equipment[slot].dodge || 0;
         // });
 
       }
@@ -427,20 +448,20 @@ function toggleMenu3() {
     function equipItem(item, index) {
       if (!item.sec.includes(gameObj.map.charr.obj.sec)) {return}
       const slot = item.loại === "áo" ? "áo" : "quần";
-      if (equipment[slot]) {
+      if (charInF.inf.equipment[slot]) {
         // Đưa trang bị cũ về hành trang
-        inventory.splice(index, 1);
-        inventory.splice(index, 0, equipment[slot]);
+        charInF.inf.inventory.splice(index, 1);
+        charInF.inf.inventory.splice(index, 0, charInF.inf.equipment[slot]);
         
-        gameObj.map.charr.obj.dame -= equipment[slot].dame || 0;
-        gameObj.map.charr.obj.armorMax -= equipment[slot].armorMax || 0;
-        gameObj.map.charr.obj.hpMax -= equipment[slot].hpMax || 0;
-        gameObj.map.charr.obj.dodge -= equipment[slot].dodge || 0;
+        gameObj.map.charr.obj.dame -= charInF.inf.equipment[slot].dame || 0;
+        gameObj.map.charr.obj.armorMax -= charInF.inf.equipment[slot].armorMax || 0;
+        gameObj.map.charr.obj.hpMax -= charInF.inf.equipment[slot].hpMax || 0;
+        gameObj.map.charr.obj.dodge -= charInF.inf.equipment[slot].dodge || 0;
 
-        equipment[slot] = item;
+        charInF.inf.equipment[slot] = item;
       } else {
-          equipment[slot] = item;
-          inventory.splice(index, 1);
+          charInF.inf.equipment[slot] = item;
+          charInF.inf.inventory.splice(index, 1);
       }
       displayInventory();
       displayEquipment(slot);
@@ -473,9 +494,9 @@ function toggleMenu3() {
     //  { loại: "quần", name: "quần vàng", cost: 1000 },
 
     // { loại: "hp", name: "máu 10", "số lượng": 2, linkImg: './img/ha417.png', cost: 100},
-    { loại: "hp", name: "máu 10", "số lượng": 1, linkImg: './img/ha417.png', sec: ['male', 'female'], cost: 100},
+    { loại: "hp", name: "máu 10", "số lượng": 1, linkImg: './img/ha421.png', sec: ['male', 'female'], cost: 100},
     // { loại: "mana", name: "mana 10", "số lượng": 100, linkImg: './img/ha417.png' , sec: ['male'], cost: 100},
-    { loại: "mana", name: "mana 10", "số lượng": 1, linkImg: './img/ha417.png' , sec: ['male', 'female'], cost: 100},
+    { loại: "mana", name: "mana 10", "số lượng": 1, linkImg: './img/ha422.png' , sec: ['male', 'female'], cost: 100},
    { loại: "quần", name: "quần xanh", linkImg: './img/ha410.png', level: 1, dame:10, armorMax:10, sec: ['male'], cost: 700 },
    { loại: "áo", name: "áo đỏ", linkImg: './img/ha412.png', level: 1, dame:10, dodge:10, sec: ['male'], cost: 550 },
    { loại: "áo", name: "áo vàng", linkImg: './img/ha413.png', level: 1, dame:10, armorMax:10, sec: ['female'], cost: 1000},
@@ -519,14 +540,14 @@ function buyShopPopUp(item) {
             document.querySelector('.question-box-Shop').style.display = 'none'
             document.querySelector('.modalGear').style.display = 'block'
             let cost = item.cost
-            if (gameObj.map.charr.obj.xu >= cost && inventory.length < oht) {
+            if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length < oht) {
                 gameObj.map.charr.obj.xu -= cost
                  modalGearText.textContent = "Chúc mừng bạn đã mua thành công vật phẩm này";
                 modalGearText.className = "success";
                 document.getElementById('xuShop1').innerText = gameObj.map.charr.obj.xu.toLocaleString('de-DE')
               //console.log(item)
               addItemToInventory(item);
-            } else if (gameObj.map.charr.obj.xu >= cost && inventory.length >= oht) {
+            } else if (gameObj.map.charr.obj.xu >= cost && charInF.inf.inventory.length >= oht) {
               modalGearText.textContent = "Không còn ô trống để mua thêm vật phẩm!";
               modalGearText.className = "error";
             }
@@ -549,11 +570,24 @@ function toggleMenu4() {
         overlayBlack.classList.toggle("hiddennn")
     }
     document.querySelector('.popup__contentSkill').classList.toggle('hiddennn');
-
+    
+    document.getElementById('skill1').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[0]}.png")`
+    document.getElementById('skill1').style.backgroundSize = '50px'
+    document.getElementById('skill2').style.backgroundSize = '50px'
+    document.getElementById('skill3').style.backgroundSize = '50px'
+    document.getElementById('skill2').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[1]}.png")`
+    document.getElementById('skill3').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[2]}.png")`
 }
 function toggleMenu42() {
   document.querySelector('.popup__contentSkill2').classList.toggle('hiddennn');
   document.getElementById("skillDescription22").innerHTML = 'Chạm kỹ năng để xem mô tả'
+
+  document.getElementById('skill12').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[0]}.png")`
+  document.getElementById('skill12').style.backgroundSize = '50px'
+  document.getElementById('skill22').style.backgroundSize = '50px'
+  document.getElementById('skill32').style.backgroundSize = '50px'
+  document.getElementById('skill22').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[1]}.png")`
+  document.getElementById('skill32').style.backgroundImage = `url("./img/ha${charInF.inf.skillPic[2]}.png")`
 
 }
 function noBtnShop() {

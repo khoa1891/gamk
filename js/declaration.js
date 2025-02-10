@@ -1,4 +1,5 @@
-let charInF = {
+let charInF = JSON.parse(localStorage.getItem("charInF")) ?? {
+    // let charInF = {
     inf: {
         name: 'Kuln1891',
         sec: 'male', // hoặc 'female'
@@ -9,12 +10,14 @@ let charInF = {
 
         hpMax:0, manaMax: 300, armorMax : 0,
         hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
-        S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+        S1p: 0, S2p: 0, S3p: 0, soulRockT: 0, soulRock: 0, xuT: 0,
         potentialPoint: 0,
         skillPoint: 0,
+        skillPic:[423, 424, 425],
+        equipment: { áo: null, quần: null },
+        inventory: []
     },
     get RunNuz() {
-       
         return this.inf.sec === 'male' ? 'run' : 'runG';
     },
     get IdleNuz() {
@@ -55,12 +58,53 @@ let charInF = {
 
 
 };
+// localStorage.setItem("charInF", JSON.stringify(charInF));
+// localStorage.setItem("inventory", JSON.stringify(inventory));
+// localStorage.setItem("oht", JSON.stringify(oht));
+// localStorage.setItem("equipment", JSON.stringify(equipment));
 let monsInF = {
     1: {
-        1: {
+        'quái_1': {
+            num: 3, // Số lượng quái
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha420', 'ha419', 'ha418'],
+            inf: {
+                run: [40, 42],
+                idle: [41, 42],
+                level: null,
+                _level() {
+                    if (this.level === null) {
+                        this.level = Math.floor(Math.random() * 3) + 1; // Random từ 1 đến 3 một lần
+                    }
+                    return this.level;
+                },
+                element: null,
+                _element() {
+                    if (this.element === null) {
+                        var elements = ['kim', 'mộc', 'thủy', 'hỏa', 'thổ'];
+                        this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
+                    }
+                    return this.element;
+                },
+                name: 'Kuln1891',
+                sec: 'male', // hoặc 'female'
+                xu: 0, kc: 0,
+                exp: 0, 
+                dame: 0, armorCur: 999999, manaCur: 9999, hpCur: 999999, dodge: 0,
+        
+                hpMax:0, manaMax: 300, armorMax : 0,
+                hpPoint: 0, damePoint: 0, armorPoint: 0, dodgePoint: 0, 
+                S1p: 0, S2p: 0, S3p: 0, equipment: [], soulRockT: 0, soulRock: 0, xuT: 0,
+                potentialPoint: 0,
+                skillPoint: 0,
+            },
+        },
+        'quái_1': {
             num: 10, // Số lượng quái
-            run: [41, 42],
-            idle: [40, 42],
+            // run: [41, 42],
+            // idle: [40, 42],
+            img: ['ha420', 'ha419', 'ha418'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -661,11 +705,23 @@ this.armorCur = +this.armorCur.toFixed(2)
         this.obj.dodge = +((this.obj.level - 1) * 0.23 + 0.35
             + this.obj.dodgePoint * 0.03).toFixed(2)
         // this.obj.equipment.forEach(item => {
-        //     this.obj.dame += item.dame || 0;
-        //     this.obj.armorMax += item.armorMax || 0;
-        //     this.obj.hpMax += item.hpMax || 0;
-        //     this.obj.dodge += item.dodge || 0;
+        //     Object.entries(this.obj.equipment).forEach(([key, value]) => {
+        //         if (value) {
+        //             this.obj.dame += item.dame || 0;
+        //             this.obj.armorMax += item.armorMax || 0;
+        //             this.obj.hpMax += item.hpMax || 0;
+        //             this.obj.dodge += item.dodge || 0;
+        //         }
         // });
+        Object.entries(this.obj.equipment).forEach(([key, value]) => {
+            if (value) {
+                // this.obj.dame = (this.obj.dame || 0) + (value.dame || 0);
+                this.obj.dame += (value.dame || 0);
+                this.obj.armorMax += (value.armorMax || 0);
+                this.obj.hpMax += + (value.hpMax || 0);
+                this.obj.dodge += (value.dodge || 0);
+            }
+        });
         this.obj.hpCur = getNum(this.obj.hpCur, this.obj.hpMax)
     }
     // Bảng khắc hệ
@@ -821,6 +877,7 @@ this.armorCur = +this.armorCur.toFixed(2)
         this.obj.level++; // Tăng cấp độ
         this.obj.skillPoint += 2.5; 
         this.obj.potentialPoint += 6; 
+        this.setScore()
     }
 
     // Nếu exp âm, giữ cấp độ hiện tại và đặt exp = 0
@@ -864,7 +921,10 @@ this.armorCur = +this.armorCur.toFixed(2)
     
 
 }
+let pp = JSON.parse(localStorage.getItem("pp")) || { i: 0 };  
 
+localStorage.setItem("pp", JSON.stringify(pp));  
+console.log(pp)
 
 function createBattleUI() {
     const body = document.body;
