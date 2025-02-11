@@ -168,12 +168,13 @@ let monsInF = {
         //     damePoint: 0, armorPoint: 0, dodgePoint: 0, S1p: 0, S2p: 0, S3p: 0
         // }
     },
+    
     2: {
         'quái_1': {
             num: 4, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
-            img: ['ha420', 'ha419', 'ha418'],
+            img: ['ha446', 'ha447', 'ha448'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -209,7 +210,7 @@ let monsInF = {
             num: 5, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
-            img: ['ha430', 'ha428', 'ha429'],
+            img: ['ha441', 'ha442', 'ha440'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -277,7 +278,7 @@ let monsInF = {
             num: 4, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
-            img: ['ha420', 'ha419', 'ha418'],
+            img: ['ha438', 'ha439', 'ha437'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -313,7 +314,7 @@ let monsInF = {
             num: 5, // Số lượng quái
             // run: [41, 42],
             // idle: [40, 42],
-            img: ['ha430', 'ha428', 'ha429'],
+            img: ['ha452', 'ha453', 'ha454'],
             inf: {
                 run: [40, 42],
                 idle: [41, 42],
@@ -376,6 +377,7 @@ let monsInF = {
         //     damePoint: 0, armorPoint: 0, dodgePoint: 0, S1p: 0, S2p: 0, S3p: 0
         // }
     },
+   
 };
 let cityName = [
     'Thành phố Hồ Chí Minh', 'Tỉnh Bà Rịa - Vũng Tàu', ' Đồng Tháp'

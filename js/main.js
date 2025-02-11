@@ -172,14 +172,20 @@ function preload() {
     // this.load.atlas('boyNuz', './img/boiNuzNuz.png', './img/boiNuz.json');
 
     // let currentMap = 'map2'; // Ví dụ đang load map 2
-    let monsters = monsInF[gameObj.map.mapIndex]
+    // let monsters = monsInF[gameObj.map.mapIndex]
+    
+    for (var i = 1; i<= Object.keys(monsInF).length; i++) {
+        console.log(monsInF, i, monsInF[i])
+    let monsters = monsInF[i]
 
-    // Load ảnh của quái trong map hiện tại
-    Object.values(monsters).forEach(monster => {
-            monster.img.forEach(mst => {
-                this.load.image(mst, `./img/${mst}.png`);
-            });
-    });
+        // Load ảnh của quái trong map hiện tại
+        Object.values(monsters).forEach(monster => {
+                monster.img.forEach(mst => {
+                    this.load.image(mst, `./img/${mst}.png`);
+                });
+        });
+
+    }
     
 }
 
@@ -625,25 +631,28 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
 }
 function createAnimationsss() {
     
-    let monsters = monsInF[gameObj.map.mapIndex]
+    // let monsters = monsInF[gameObj.map.mapIndex]
+    for (var i = 1; i<= Object.keys(monsInF).length; i++) {
+        let monsters = monsInF[i]
     
-    Object.keys(monsters).forEach(monster => {
-        let [a, b, c] = monsters[monster].img
-
-        oo.anims.create({
-            key: `${monster}_run`,
-            frames: [{ key: a }, { key: b }],
-            frameRate: 6,
-            repeat: -1
+        Object.keys(monsters).forEach(monster => {
+            let [a, b, c] = monsters[monster].img
+    
+            oo.anims.create({
+                key: `${monster}_run${i}`,
+                frames: [{ key: a }, { key: b }],
+                frameRate: 6,
+                repeat: -1
         });
-
+    
         oo.anims.create({
-            key: `${monster}_idle`,
-            frames: [{ key: a }, { key: c }],
-            frameRate: 5,
-            repeat: -1
+                key: `${monster}_idle${i}`,
+                frames: [{ key: a }, { key: c }],
+                frameRate: 5,
+                repeat: -1
+            });
         });
-    });
+    }
 }
 
 function npc_1() {
@@ -721,11 +730,11 @@ function npc_1() {
         monster.isAlive = true
         monster.indec = yy
         monster.npc = false
-        monster.name2 = `${mst}_run`
-        monster.name1 = `${mst}_idle`
+        monster.name2 = `${mst}_run${gameObj.map.mapIndex}`
+        monster.name1 = `${mst}_idle${gameObj.map.mapIndex}`
           // Chạy animation run ban đầu
-        //   console.log(`${mst}_run`)
-    monster.anims.play(`${mst}_run`, true)
+        //   console.log(`${mst}_run${gameObj.map.mapIndex}`)
+    monster.anims.play(`${mst}_run${gameObj.map.mapIndex}`, true)
     // let pp = {
     //     a: {num:2, b:'haha'},
     //     bb: {num:8, b:'haha'}
@@ -984,8 +993,8 @@ function npc_1() {
 
 function changeMap(newMapIndex, newX, newY) {
     console.log(`Chuyển sang map ${newMapIndex}`);
-
     gameObj.map.mapIndex = newMapIndex;
+    
 
     // Xóa quái và exit portals
     gameObj.map.monsters.forEach(monster =>  { if (monster.monsterNameText) {
@@ -1011,13 +1020,59 @@ function changeMap(newMapIndex, newX, newY) {
 
 
     
-    
+    // loadMonsterImages()
+    // createAnimationsss()
     npc_1() 
    
 
     // Load quái & exit portals mới
     // spawnMonsters();
     // spawnExitPortals();
+}
+
+function switchMap(newMap) {
+    // Xóa toàn bộ quái cũ
+    this.monsters.clear(true, true);
+
+    // Xóa ảnh cũ khỏi cache
+    let oldMonsters = this.mapsData[this.currentMap].monsters;
+    Object.values(oldMonsters).forEach(monster => {
+        monster.sprites.forEach(img => this.textures.remove(img));
+    });
+
+    // Cập nhật map hiện tại
+    this.currentMap = newMap;
+
+    // Load ảnh mới
+    this.loadMonsterImages();
+
+    // Khi load xong, tạo lại animation & spawn quái
+    this.load.once('complete', () => {
+        this.createAnimations();
+        this.spawnMonsters();
+    });
+
+    this.load.start(); // Bắt đầu load hình mới
+}
+
+// Load ảnh của quái trong map hiện tại
+function loadMonsterImages() {
+    // let monsters = this.mapsData[this.currentMap].monsters;
+
+    // Object.values(monsters).forEach(monster => {
+    //     monster.sprites.forEach(img => {
+    //         this.load.image(img, `path_to_images/${img}.png`);
+    //     });
+    // });
+
+    let monsters = monsInF[gameObj.map.mapIndex]
+
+    // Load ảnh của quái trong map hiện tại
+    Object.values(monsters).forEach(monster => {
+            monster.img.forEach(mst => {
+                oo.load.image(mst, `./img/${mst}.png`);
+            });
+    });
 }
 
 function iii() {
