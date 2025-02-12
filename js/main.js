@@ -30,7 +30,7 @@ const game = new Phaser.Game(config);
 let gameObj = { // gameObj.
     // map
     "map":{
-        monPos: 0, 
+        monPos: 0, tiles: [], isJoystick: true,
         player: 0, body: 0, weapon: 0, mount: 0, pet: 0, wing: 0,
         playerNameText: 0, monstersBody: [], monContainerArr: [], characterContainer: [],
         monsters: [], chairs: [], obstacles: [], // Chướng ngại vật tĩnh
@@ -164,6 +164,9 @@ function preload() {
     this.load.image('frame45', './img/ha421.png');
     this.load.image('frame46', './img/ha422.png');
 
+    this.load.image('frame47', './img/ha456.png'); // Đường dẫn đến ảnh 200x200px
+    this.load.image('frame48', './img/ha455.png'); // Đường dẫn đến ảnh 200x200px
+    this.load.image('frame49', './img/ha457.png'); // Đường dẫn đến ảnh 200x200px
 
 
 
@@ -200,6 +203,16 @@ function create() {
     this.physics.world.setBounds(0, 0, gameObj.map.width, gameObj.map.height);
     map.setOrigin(0);
      // Tạo bản đồ chính
+     const tileSize = 100;
+const cols = gameObj.map.width / tileSize;  // 8 cột
+const rows = gameObj.map.height / tileSize; // 6 hàng
+
+for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+        let tile = this.add.image(x * tileSize, y * tileSize, mapPic[gameObj.map.mapIndex-1]).setOrigin(0).setScale(0.5)
+    gameObj.map.tiles.push(tile); // Lưu vào mảng để thay đổi sau
+    }
+}
      
     createAnimations(this)
     createAnimationsss()
@@ -995,7 +1008,8 @@ function changeMap(newMapIndex, newX, newY) {
     console.log(`Chuyển sang map ${newMapIndex}`);
     gameObj.map.mapIndex = newMapIndex;
     
-
+  
+    changeAllTiles(mapPic[gameObj.map.mapIndex-1])
     // Xóa quái và exit portals
     gameObj.map.monsters.forEach(monster =>  { if (monster.monsterNameText) {
         monster.monsterNameText.destroy(); // Hủy tên của NPC
@@ -1032,7 +1046,7 @@ function changeMap(newMapIndex, newX, newY) {
 
 function switchMap(newMap) {
     // Xóa toàn bộ quái cũ
-    this.monsters.clear(true, true);
+    oo.monsters.clear(true, true);
 
     // Xóa ảnh cũ khỏi cache
     let oldMonsters = this.mapsData[this.currentMap].monsters;
@@ -1053,6 +1067,10 @@ function switchMap(newMap) {
     });
 
     this.load.start(); // Bắt đầu load hình mới
+}
+// Hàm đổi toàn bộ nền
+function changeAllTiles(newFrame) {
+    gameObj.map.tiles.forEach(tile => tile.setTexture(newFrame));
 }
 
 // Load ảnh của quái trong map hiện tại
@@ -2320,6 +2338,7 @@ function fightMonn() {
         showPopupNPC(gameObj.map.monsterPresent.click)
     } else {
         resetJoystick()
+        gameObj.map.isJoystick = false
         oo.input.keyboard.emit('keydown-M');
     }
 }
@@ -2403,7 +2422,7 @@ function reCreate() {
 
 
 function handleJoystickMove(pointer, scene) {
-    if (!pointer.isDown) return;
+    if (!gameObj.map.isJoystick || !pointer.isDown) return;
 
     let dx = pointer.x - joystickBase.x;
     let dy = pointer.y - joystickBase.y;
@@ -2642,7 +2661,7 @@ const popupBoardGame = document.getElementById('popupBoardGame');
                 clearInterval(boardPointt.countdown)
                 popupBoardGame.classList.add('hiddennn');
                 gameObj.map.charr.gainExp(gameObj.map.monn, false)
-                setTimeout(()=>oo.input.keyboard.emit('keydown-M'), 1500)
+                setTimeout(()=>{oo.input.keyboard.emit('keydown-M'), gameObj.map.isJoystick = true}, 1500)
             }
         }
 

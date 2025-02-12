@@ -346,36 +346,7 @@ let monsInF = {
                 skillPoint: 0,
             },
         },
-        // 'quần_thể_2': {
-        //     name: 'tay sai cho Mỹ',
-        //     level: null,
-        //     _level() {
-        //         if (this.level === null) {
-        //             this.level = Math.floor(Math.random() * 3) + 3; // Random từ 3 đến 5 một lần
-        //         }
-        //         return this.level;
-        //     },
-        //     element: null,
-        //     _element() {
-        //         if (this.element === null) {
-        //             var elements = ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'];
-        //             this.element = elements[Phaser.Math.Between(0, elements.length - 1)];
-        //         }
-        //         return this.element;
-        //     },
-        //     idle: 'idle',
-        //     idleCloth: 'idleCloth',
-        //     run: 'run',
-        //     runCloth: 'runCloth',
-        //     num: 7, // Số lượng quái
-        //     mi() {
-        //         return this.level;
-        //     },
-        //     aa: 0,
-        //     hpCur: 999999,
-        //     hpPoint: 0,
-        //     damePoint: 0, armorPoint: 0, dodgePoint: 0, S1p: 0, S2p: 0, S3p: 0
-        // }
+ 
     },
    
 };
@@ -391,6 +362,9 @@ let obstacleMap = [
     [{ pos: [188, 188], img: 'house1'}, { pos: [188, 188], img: 'house2'} ],
     [{ pos: [400, 300], img: 'house1'}, { pos: [500, 300], img: 'house2'} ],
     [{ pos: [388, 100], img: 'house1'}, { pos: [200, 499], img: 'house2'} ]
+]
+let mapPic = [
+    'frame47',  'frame48',  'frame49', 
 ]
 let NPC = [
     [{ pos: [238, 288], frame: [40, 42], name: "Lucky", click: ['a', 'c']}] , //{ pos: [188, 188], frame: [188, 188]} ],
@@ -943,6 +917,8 @@ this.armorCur = +this.armorCur.toFixed(2)
         target.obj.armorCur = 0
         target.obj.soulRockT = 0
         target.obj.xuT = 0
+
+        setTimeout(()=>gameObj.map.isJoystick = true, 3000)
         
 
      
