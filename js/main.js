@@ -169,6 +169,12 @@ function preload() {
     this.load.image('frame49', './img/ha457.png'); // Đường dẫn đến ảnh 200x200px
 
 
+    // map
+    this.load.image('bg', './img/ha458.png'); // Đường dẫn đến ảnh 200x200px
+    this.load.image('bg2', './img/ha460.png'); // Đường dẫn đến ảnh 200x200px
+
+
+
 
 
     // Tải sprite sheet
@@ -199,20 +205,29 @@ let lastDirection = null;
 function create() {
     oo = this
     this.game.loop.targetFps = 60;
-    map = this.add.rectangle(0, 0, gameObj.map.width, gameObj.map.height, 0xffa500);
-    this.physics.world.setBounds(0, 0, gameObj.map.width, gameObj.map.height);
-    map.setOrigin(0);
-     // Tạo bản đồ chính
-     const tileSize = 100;
-const cols = gameObj.map.width / tileSize;  // 8 cột
-const rows = gameObj.map.height / tileSize; // 6 hàng
+//     map = this.add.rectangle(0, 0, gameObj.map.width, gameObj.map.height, 0xffa500);
+//     this.physics.world.setBounds(0, 0, gameObj.map.width, gameObj.map.height);
+//     map.setOrigin(0);
+//      // Tạo bản đồ chính
+//      const tileSize = 100;
+// const cols = gameObj.map.width / tileSize;  // 8 cột
+// const rows = gameObj.map.height / tileSize; // 6 hàng
 
-for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-        let tile = this.add.image(x * tileSize, y * tileSize, mapPic[gameObj.map.mapIndex-1]).setOrigin(0).setScale(0.5)
-    gameObj.map.tiles.push(tile); // Lưu vào mảng để thay đổi sau
-    }
-}
+// for (let y = 0; y < rows; y++) {
+//     for (let x = 0; x < cols; x++) {
+//         let tile = this.add.image(x * tileSize, y * tileSize, mapPic[gameObj.map.mapIndex-1]).setOrigin(0).setScale(0.5)
+//     gameObj.map.tiles.push(tile); // Lưu vào mảng để thay đổi sau
+//     }
+// }
+
+ // Khởi tạo biến
+ let mapWidth = 1040, mapHeight = 640; // Kích thước bản đồ
+ let mapBackground = this.add.image(0, 0, 'bg').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight);
+ let overlayBackground = this.add.image(0, 0, 'bg2').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight).setDepth(11);
+    this.physics.world.setBounds(0, 0, mapWidth - 60, mapHeight -60);
+    // mapBackground.setOrigin(0);
+    // overlayBackground.setOrigin(0);
+
      
     createAnimations(this)
     createAnimationsss()
@@ -641,6 +656,19 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
     });
 
 
+//       // Cách 1: Dùng sự kiện tải xong
+//       this.load.on('complete', () => {
+//         let mong = gameObj.map.monsters[0]?.obj?.inf;
+//         if (mong) {
+//             console.log(98289);
+//             gameObj.map.monn = new Character(mong);
+//             updateSkillNames2();
+//         }
+// gameObj.map.charr = new Character(charInF.inf)
+// showPopupCity(cityName[gameObj.map.mapIndex - 1])
+
+//     });
+
 }
 function createAnimationsss() {
     
@@ -669,7 +697,7 @@ function createAnimationsss() {
 }
 
 function npc_1() {
-    map.setFillStyle(colorMap[gameObj.map.mapIndex - 1]) 
+    // map.setFillStyle(colorMap[gameObj.map.mapIndex - 1]) 
     // 🏗 Hàm tạo cổng dịch chuyển
     const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
     gameObj.map.exitPortals = []; // Xóa mảng cũ
@@ -2160,7 +2188,7 @@ function handsome() {
             key == 'yingyang' && pointChess[key] > 0? (gameObj.map.charr.upArmorCur(pointChess[key]), pointChess[key] = 0): 1
             key == 'sword' && pointChess[key] > 0? (gameObj.map.charr.fight(gameObj.map.monn, 0, pointChess[key]), pointChess[key] = 0): 1
             key == 'soulRock' && pointChess[key] > 0? (gameObj.map.charr.upSoulRockT(pointChess[key], gameObj.map.monn), pointChess[key] = 0): 1
-            key == 'gold' && pointChess[key] > 0? (gameObj.map.charr.upGold(pointChess[key]), pointChess[key] = 0): 1
+            key == 'gold' && pointChess[key] > 0? (gameObj.map.charr.upGold(pointChess[key], gameObj.map.monn), pointChess[key] = 0): 1
         });
     } else {
         Object.keys(pointChess).forEach(key => {
@@ -2169,7 +2197,7 @@ function handsome() {
             key == 'yingyang' && pointChess[key] > 0? (gameObj.map.monn.upArmorCur(pointChess[key]), pointChess[key] = 0): 1
             key == 'sword' && pointChess[key] > 0? (gameObj.map.monn.fight(gameObj.map.charr, 0, pointChess[key]), pointChess[key] = 0): 1
             key == 'soulRock' && pointChess[key] > 0? (gameObj.map.monn.upSoulRockT(pointChess[key], gameObj.map.charr), pointChess[key] = 0): 1
-            key == 'gold' && pointChess[key] > 0? (gameObj.map.monn.upGold(pointChess[key]), pointChess[key] = 0): 1
+            key == 'gold' && pointChess[key] > 0? (gameObj.map.monn.upGold(pointChess[key], gameObj.map.charr), pointChess[key] = 0): 1
         });
     }
     updateInfor()
@@ -2660,7 +2688,7 @@ const popupBoardGame = document.getElementById('popupBoardGame');
             if (boardPointt.currentTurn == 'Nhân vật') {
                 clearInterval(boardPointt.countdown)
                 popupBoardGame.classList.add('hiddennn');
-                gameObj.map.charr.gainExp(gameObj.map.monn, false)
+                gameObj.map.charr.gainExp(gameObj.map.monn, false, 1)
                 setTimeout(()=>{oo.input.keyboard.emit('keydown-M'), gameObj.map.isJoystick = true}, 1500)
             }
         }

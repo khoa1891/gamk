@@ -626,22 +626,22 @@ class Character {
         this.equipment.push(x)
         this.hpFunc()
     }
-    xu(a) {
-        if (a==undefined) {return this.obj.xu}
-        else if (a==2) {return +(this.obj.xu+a).toFixed(2)}
-        else {
-            if(this.obj.xu >= a) {this.obj.xu = +(this.obj.xu-a).toFixed(2); return this.obj.xu}
-            else {return false}
-        }
-    }
-    kc(a) {
-        if (a==undefined) {return this.obj.kc}
-        else if (a==2) {return +(this.obj.kc+a).toFixed(2)}
-        else {
-            if(this.obj.kc >= a) {this.obj.kc = +(this.obj.kc-a).toFixed(2); return this.obj.kc}
-            else {return false}
-        }
-    }
+    // xu(a) {
+    //     if (a==undefined) {return this.obj.xu}
+    //     else if (a==2) {return +(this.obj.xu+a).toFixed(2)}
+    //     else {
+    //         if(this.obj.xu >= a) {this.obj.xu = +(this.obj.xu-a).toFixed(2); return this.obj.xu}
+    //         else {return false}
+    //     }
+    // }
+    // kc(a) {
+    //     if (a==undefined) {return this.obj.kc}
+    //     else if (a==2) {return +(this.obj.kc+a).toFixed(2)}
+    //     else {
+    //         if(this.obj.kc >= a) {this.obj.kc = +(this.obj.kc-a).toFixed(2); return this.obj.kc}
+    //         else {return false}
+    //     }
+    // }
     useSkill(a, target) {
         const skill = this.skill[`S${a}`];
         if (this.obj.manaCur < skill.mana) {
@@ -706,13 +706,85 @@ class Character {
             else if (target.obj.level - this.obj.level == 0) {point = 0.65}
             a == undefined ? this.obj.soulRockT += point : this.obj.soulRockT += point * a
             this.obj.soulRockT = +this.obj.soulRockT.toFixed(2)
+        } else {
+            let point = 0
+            
+            if (target.obj.level - this.obj.level == -1) {point = 0.59}
+            else if (target.obj.level - this.obj.level == -2) {point = 0.54}
+            else if (target.obj.level - this.obj.level == -3) {point = 0.48}
+            else if (target.obj.level - this.obj.level >= -4) {point = 0.44}
+            // else if (target.obj.level - this.obj.level == 0) {point = 0.65}
+            a == undefined ? this.obj.soulRockT += point : this.obj.soulRockT += point * a
+            this.obj.soulRockT = +this.obj.soulRockT.toFixed(2)
         }
     }
-    upGold(a) {
-        a == undefined ? this.obj.xuT += 4.5 + (1.6 * (this.obj.level - 1)) :
-            this.obj.xuT += (4.5 + (1.6 * (this.obj.level - 1))) * a
-        this.obj.xuT = +this.obj.xuT.toFixed(2)
+    upGold(aa, target) {
+        // a == undefined ? this.obj.xuT += 4.5 + (1.6 * (this.obj.level - 1)) :
+        //     this.obj.xuT += (4.5 + (1.6 * (this.obj.level - 1))) * a
+        // this.obj.xuT = +this.obj.xuT.toFixed(2)
+        if (target.obj.level >= this.obj.level) {
+            let a = 0, b = 0
+            
+            if (target.obj.level - this.obj.level == 1) {a= 4.72; b = 0.15}
+            else if (target.obj.level - this.obj.level == 2) {a= 4.68; b = 0.2}
+            else if (target.obj.level - this.obj.level == 3) {a= 4.61; b = 0.25}
+            else if (target.obj.level - this.obj.level >= 4) {a= 4.55; b = 0.30}
+            else if (target.obj.level - this.obj.level == 0) {a= 4.5; b = 0}
+
+            // aa == undefined ? this.obj.xuT += a + ((1.6 + b) * (this.obj.level - 1)) :
+            //     this.obj.xuT += (a + ((1.6 + b) (this.obj.level - 1))) * aa
+            // this.obj.xuT = +this.obj.xuT.toFixed(2)
+            var lv = this.obj.level < 11 ? 0 : Math.floor((this.obj.level - 1) / 10) * 1.6 + bb
+            this.obj.xuT += aa == undefined ? a + lv : (a + lv) * aa
+            this.obj.xuT = +this.obj.xuT.toFixed(2)
+        } else {
+            let a = 0, b = 0
+            
+            if (target.obj.level - this.obj.level == -1) {a= 4.2828; b = -0.15}
+            else if (target.obj.level - this.obj.level == -2) {a= 4.32; b = -0.2}
+            else if (target.obj.level - this.obj.level == -3) {a= 4.39; b = -0.25}
+            else if (target.obj.level - this.obj.level <= -4) {a= 4.45; b = -0.30}
+            // else if (target.obj.level - this.obj.level == 0) {a= 4.5; b = 1.6}
+            // aa == undefined ? this.obj.xuT += a + ((1.6 - b) * (this.obj.level - 1)) :
+            //     this.obj.xuT += (a + ((1.6 - b) (this.obj.level - 1))) * aa
+            // this.obj.xuT = +this.obj.xuT.toFixed(2)
+           
+            var lv = this.obj.level < 11 ? 0 : Math.floor((this.obj.level - 1) / 10) * 1.6 + bb
+            this.obj.xuT += aa == undefined ? a + lv :(a + lv) * aa
+            this.obj.xuT = +this.obj.xuT.toFixed(2)
+        }
     }
+
+    // upGold(aa, target) {
+    //     let levelDiff = target.obj.level - this.obj.level;
+    //     let a, b;
+    
+    //     const values = [
+    //         { a: 4.5, b: 0 },   // levelDiff == 0
+    //         { a: 4.72, b: 0.15 }, // levelDiff == 1
+    //         { a: 4.68, b: 0.2 },  // levelDiff == 2
+    //         { a: 4.61, b: 0.25 }, // levelDiff == 3
+    //         { a: 4.55, b: 0.30 }  // levelDiff >= 4
+    //     ];
+        
+    //     const valuesNegative = [
+    //         { a: 4.2828, b: 0.15 }, // levelDiff == -1
+    //         { a: 4.32, b: 0.2 },     // levelDiff == -2
+    //         { a: 4.39, b: 0.25 },    // levelDiff == -3
+    //         { a: 4.45, b: 0.30 }     // levelDiff <= -4
+    //     ];
+    
+    //     if (levelDiff >= 0) {
+    //         ({ a, b } = values[Math.min(levelDiff, 4)]);
+    //         this.obj.xuT += (aa === undefined ? 1 : aa) * (a + ((1.6 + b) * (this.obj.level - 1)));
+    //     } else {
+    //         ({ a, b } = valuesNegative[Math.min(-levelDiff - 1, 3)]);
+    //         this.obj.xuT += (aa === undefined ? 1 : aa) * (a + ((1.6 - b) * (this.obj.level - 1)));
+    //     }
+    
+    //     this.obj.xuT = +this.obj.xuT.toFixed(2);
+    // }
+    
     upHp(a) {
         a == undefined ? this.obj.hpCur += 5.3 + (1.4 * (this.obj.level - 1)) :
             this.obj.hpCur += (5.3 + (1.4 * (this.obj.level - 1))) * a
@@ -848,21 +920,36 @@ this.armorCur = +this.armorCur.toFixed(2)
 
 
     // tính lv 
-    gainExp(target, isWin = true) {
+    gainExp(target, isWin = true, ppp) {
         let expGained = 0; // Khởi tạo exp thay đổi
     
         // Nếu thắng
         if (isWin) {
             if (target.obj.level >= this.obj.level + 4) {
                 expGained = 129; // Quái hơn bạn từ 4 cấp trở lên
+                this.obj.dame += 1.38
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 3) {
                 expGained = 122; // Quái hơn bạn 3 cấp
+                this.obj.dame += 1.25
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 2) {
                 expGained = 115; // Quái hơn bạn 2 cấp
+                this.obj.dame += 1.1
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 1) {
                 expGained = 108; // Quái hơn bạn 1 cấp
+                this.obj.dame += 0.9
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level) {
                 expGained = 100; // Quái cùng cấp
+                this.obj.dame += 0.7
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level - 1) {
                 expGained = 92; // Quái nhỏ hơn bạn 1 cấp
             } else if (target.obj.level === this.obj.level - 2) {
@@ -873,6 +960,7 @@ this.armorCur = +this.armorCur.toFixed(2)
                 expGained = 71; // Quái nhỏ hơn bạn 4 cấp trở xuống
             }
 
+            setTimeout(()=>showPopupWin(true, expGained, 0.178, this.obj.soulRockT, this.obj.xuT), 2000)
             this.obj.soulRock += this.obj.soulRockT
             this.obj.soulRock = +this.obj.soulRock.toFixed(2)
             this.obj.xu += this.obj.xuT
@@ -884,14 +972,29 @@ this.armorCur = +this.armorCur.toFixed(2)
             // Nếu thua
             if (target.obj.level >= this.obj.level + 4) {
                 expGained = -129; // Quái hơn bạn từ 4 cấp trở lên
+                this.obj.dame -= 1.38
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 3) {
                 expGained = -122; // Quái hơn bạn 3 cấp
+                this.obj.dame -= 1.25
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 2) {
                 expGained = -115; // Quái hơn bạn 2 cấp
+                this.obj.dame -= 1.1
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level + 1) {
                 expGained = -108; // Quái hơn bạn 1 cấp
+                this.obj.dame -= 0.9
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level) {
                 expGained = -100; // Quái cùng cấp
+                this.obj.dame -= 0.7
+                this.obj.dame = +this.obj.dame.toFixed(2)
+
             } else if (target.obj.level === this.obj.level - 1) {
                 expGained = -108; // Quái nhỏ hơn bạn 1 cấp
             } else if (target.obj.level === this.obj.level - 2) {
@@ -900,6 +1003,11 @@ this.armorCur = +this.armorCur.toFixed(2)
                 expGained = -122; // Quái nhỏ hơn bạn 3 cấp
             } else if (target.obj.level <= this.obj.level - 4) {
                 expGained = -129; // Quái nhỏ hơn bạn 4 cấp trở xuống
+            }
+            if (ppp == undefined) {setTimeout(()=>showPopupWin(false, -expGained, 0.21, this.obj.soulRockT, this.obj.xuT), 2000)}
+            else {
+                var lv = this.obj.level < 11 ? 120 : Math.floor((this.obj.level - 1) / 10) * 165 +120
+                setTimeout(()=>showPopupWin(false, -expGained, 0.21, 11, lv), 2000)
             }
             this.obj.hpCur = this.obj.hpMax
             gameObj.map.winGame = false

@@ -762,6 +762,64 @@ position: absolute;
     </div>
 
 
+        <!-- Nền mờ -->
+        <!-- <div id="overlay" class="overlay"> -->
+            <!-- Hộp kết quả -->
+            <div class="popupWin hiddennn">
+    <button class="close-btnGear" id="closeBtnWin" onclick="showPopupWin()">x</button>
+
+                <h2 id="popupWin-title">CHIẾN THẮNG</h2>
+                <p id="popupWin-exp">K.nghiệm: 0</p>
+                <p id="popupWin-dame">Dame: 0</p>
+                <p id="popupWin-soul">Đá hồn: 0</p>
+                <p id="popupWin-gold">Vàng: 0</p>
+                <p id="popupWin-code">Code: -</p>
+                <!-- <button class="close-btn" onclick="closePopup()">Đóng</button> -->
+                <script>
+                    // Hiển thị bảng
+                    function showPopupWin(isWin, exp, damage, soulStone, gold) {
+                        document.querySelector(".popupWin").classList.toggle("hiddennn")
+                        if (isWin != undefined) {
+
+                            // Lấy phần tử tiêu đề và đặt nội dung
+                            document.getElementById("popupWin-title").textContent = isWin ? "CHIẾN THẮNG" : "THẤT BẠI";
+                            document.getElementById("popupWin-title").style.color = isWin ? "#FFD700" : "#FF0000"; // Màu tiêu đề
+                        
+                            // Thêm dấu cộng hoặc trừ
+                            let sign = isWin ? "+" : "-";
+                        
+                            document.getElementById("popupWin-exp").textContent = `K.nghiệm: ${sign}${exp}`;
+                            document.getElementById("popupWin-dame").textContent = `Dame: ${sign}${damage}`;
+                            document.getElementById("popupWin-soul").textContent = `Đá hồn: ${sign}${soulStone}`;
+                            document.getElementById("popupWin-gold").textContent = `Vàng: ${sign}${gold}`;
+                        
+                            // Random code nếu thắng, nếu thua thì trừ vàng bằng đúng số vàng đã trừ
+                            let code = isWin ? getRandomCode() : `-${+(gold/3).toFixed(2)} vàng`;
+                            document.getElementById("popupWin-code").textContent = `Code: ${code}`;
+                        }
+
+}
+
+// Hàm random 1 trong 4 ký tự C, O, D, E
+function getRandomCode() {
+    let codes = ["C", "O", "D", "E"];
+    return `[...${codes[Math.floor(Math.random() * codes.length)]}...]`
+}
+            
+                    // Đóng bảng
+                    // function closePopup() {
+                    //     document.getElementById("overlay").style.display = "none";
+                    // }
+            
+                    // Test hiển thị (có thể gọi từ game)
+                    // setTimeout(() => {
+                    //     showPopupWin(true, 2000, 500, 5, 300) // Thắng
+                    // }, 2000);
+                </script>
+            </div>
+        <!-- </div> -->
+
+
 
 </body>
 <script src="./js/declaration.js"></script>
