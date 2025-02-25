@@ -372,19 +372,28 @@ let NPC = [
     [{ pos: [188, 288], frame: [40, 42], name: "kaka", click: ['a']}]  //{ pos: [188, 188], frame: [188, 188]} ],
 ]
 
+let bigMap = [
+    [1040, 640, 'bg', 'bg2'],
+    [1440, 880, 'bg3', 'bg4'],
+    [840, 1240, 'bg5', 'bg6'],
+    // [{ pos: [238, 288], frame: [40, 42], name: "Lucky", click: ['a', 'c']}] , //{ pos: [188, 188], frame: [188, 188]} ],
+    // [{ pos: [188, 288], frame: [40, 42], name: "kiki", click: ['a', 'b', 'c']}] , //{ pos: [188, 188], frame: [188, 188]} ],
+    // [{ pos: [188, 288], frame: [40, 42], name: "kaka", click: ['a']}]  //{ pos: [188, 188], frame: [188, 188]} ],
+]
+
 
 let exitMap = [
     [ 
-        { pos: [800, 1140], toMap: 2, spawnPos: [800, 100] },  // Map 0 -> Map 1, nhân vật sẽ xuất hiện ở [100, 100]
-        { pos: [1540, 600], toMap: 3, spawnPos: [80, 360] }  // Map 0 -> Map 2, nhân vật sẽ xuất hiện ở [200, 200]
+        { pos: [12*40 -30, 15*40], toMap: 2, spawnPos: [695, 94] },  // Map 0 -> Map 1, nhân vật sẽ xuất hiện ở [100, 100]
+        { pos: [25*40, 10*40-45], toMap: 3, spawnPos: [134, 335] }  // Map 0 -> Map 2, nhân vật sẽ xuất hiện ở [200, 200]
     ],
     [ 
-        { pos: [800, 40], toMap: 1, spawnPos: [800, 1080] },  // Map 2 -> Map 0, nhân vật sẽ xuất hiện ở [300, 300]
-        { pos: [1540, 600], toMap: 3, spawnPos: [80, 900] }   // Map 2 -> Map 1, nhân vật sẽ xuất hiện ở [350, 350]
+        { pos: [700, 40], toMap: 1, spawnPos: [550, 514] },  // Map 2 -> Map 0, nhân vật sẽ xuất hiện ở [300, 300]
+        { pos: [1540, 560], toMap: 3, spawnPos: [133, 900] }   // Map 2 -> Map 1, nhân vật sẽ xuất hiện ở [350, 350]
     ],
     [ 
-        { pos: [20, 300], toMap: 1, spawnPos: [1480, 600] },    // Map 1 -> Map 0, nhân vật sẽ xuất hiện ở [50, 50]
-        { pos: [20, 900], toMap: 2, spawnPos: [1480, 600] }   // Map 1 -> Map 2, nhân vật sẽ xuất hiện ở [250, 250]
+        { pos: [20, 345], toMap: 1, spawnPos: [924, 364] },    // Map 1 -> Map 0, nhân vật sẽ xuất hiện ở [50, 50]
+        { pos: [20, 910], toMap: 2, spawnPos: [1308, 533] }   // Map 1 -> Map 2, nhân vật sẽ xuất hiện ở [250, 250]
     ]
     
 ];

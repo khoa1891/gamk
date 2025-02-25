@@ -30,6 +30,7 @@ const game = new Phaser.Game(config);
 let gameObj = { // gameObj.
     // map
     "map":{
+        overlayBackground: null, mapBackground: null,
         monPos: 0, tiles: [], isJoystick: true,
         player: 0, body: 0, weapon: 0, mount: 0, pet: 0, wing: 0,
         playerNameText: 0, monstersBody: [], monContainerArr: [], characterContainer: [],
@@ -173,6 +174,14 @@ function preload() {
     this.load.image('bg', './img/ha458.png'); // Đường dẫn đến ảnh 200x200px
     this.load.image('bg2', './img/ha460.png'); // Đường dẫn đến ảnh 200x200px
 
+    this.load.image('bg3', './img/ha459.png'); // Đường dẫn đến ảnh 200x200px
+    this.load.image('bg4', './img/ha461.png'); // Đường dẫn đến ảnh 200x200px
+
+    this.load.image('bg5', './img/ha462.png'); // Đường dẫn đến ảnh 200x200px
+    this.load.image('bg6', './img/ha463.png'); // Đường dẫn đến ảnh 200x200px
+
+
+
 
 
 
@@ -221,12 +230,10 @@ function create() {
 // }
 
  // Khởi tạo biến
- let mapWidth = 1040, mapHeight = 640; // Kích thước bản đồ
- let mapBackground = this.add.image(0, 0, 'bg').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight);
- let overlayBackground = this.add.image(0, 0, 'bg2').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight).setDepth(11);
-    this.physics.world.setBounds(0, 0, mapWidth - 60, mapHeight -60);
-    // mapBackground.setOrigin(0);
-    // overlayBackground.setOrigin(0);
+//  let mapWidth = 1040, mapHeight = 640; // Kích thước bản đồ
+//  let mapBackground = this.add.image(0, 0, 'bg').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight);
+//  let overlayBackground = this.add.image(0, 0, 'bg2').setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight).setDepth(15);
+//     this.physics.world.setBounds(40, 0, mapWidth - 70, mapHeight -60);
 
      
     createAnimations(this)
@@ -473,8 +480,8 @@ this.loadingText = this.add.text(400, 300, 'Đang tải...', {
      // Tạo joystick
      joystickBase = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height - 100, 50, 0x000000, 0.3).setInteractive();
      joystick = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height - 100, 25, 0xffffff, 0.5).setInteractive();
-     joystickBase.setScrollFactor(0);
-     joystick.setScrollFactor(0);
+     joystickBase.setScrollFactor(0).setDepth(16)
+     joystick.setScrollFactor(0).setDepth(16)
 
      // Sự kiện joystick
     // Điều khiển joystick
@@ -697,6 +704,17 @@ function createAnimationsss() {
 }
 
 function npc_1() {
+    if (gameObj.map.overlayBackground) {
+        gameObj.map.overlayBackground.destroy(); gameObj.map.overlayBackground.destroy();
+    }
+
+    let mapWidth = bigMap[gameObj.map.mapIndex - 1][0], mapHeight = bigMap[gameObj.map.mapIndex - 1][1]; // Kích thước bản đồ
+    gameObj.map.mapBackground = oo.add.image(0, 0, bigMap[gameObj.map.mapIndex - 1][2]).setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight);
+    gameObj.map.overlayBackground = oo.add.image(0, 0, bigMap[gameObj.map.mapIndex - 1][3]).setOrigin(0, 0).setDisplaySize(mapWidth, mapHeight).setDepth(15);
+       oo.physics.world.setBounds(40, 0, mapWidth - 70, mapHeight -60);
+
+
+
     // map.setFillStyle(colorMap[gameObj.map.mapIndex - 1]) 
     // 🏗 Hàm tạo cổng dịch chuyển
     const currentExitPositions = exitMap[gameObj.map.mapIndex - 1] || [];
@@ -728,6 +746,7 @@ function npc_1() {
                 resetJoystick()
                 document.querySelector(".overlayBl").classList.toggle("hiddennn")
                 setTimeout(() => {
+                    resetJoystick()
                     changeMap(exitPortal.toMap, exitData.spawnPos[0], exitData.spawnPos[1]); // Chuyển map + đặt nhân vật đúng vị trí
                 }, 500)
                 setTimeout(() => {
