@@ -705,7 +705,7 @@ function createAnimationsss() {
 
 function npc_1() {
     if (gameObj.map.overlayBackground) {
-        gameObj.map.overlayBackground.destroy(); gameObj.map.overlayBackground.destroy();
+        gameObj.map.overlayBackground.destroy(); gameObj.map.mapBackground.destroy();
     }
 
     let mapWidth = bigMap[gameObj.map.mapIndex - 1][0], mapHeight = bigMap[gameObj.map.mapIndex - 1][1]; // Kích thước bản đồ
